@@ -46,6 +46,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   const HomeSearchBar(),
 
                   const SizedBox(height: 12),
+
+                  /// 🥛 Section title
                   SectionHeader(
                     title: 'Dairy Products',
                     onViewAll: () {
@@ -53,7 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
 
-                  /// 🧀 Category icons (Milk, Ghee, etc.)
+                  /// 🧀 Category icons
                   CategoryHorizontalList(
                     selectedCategory: selectedCategory,
                     onCategorySelected: (category) {
@@ -75,60 +77,41 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const SizedBox(height: 24),
 
-                /// ⭐ MOST POPULAR PRODUCTS
-                SectionHeader(
+                  /// ⭐ MOST POPULAR PRODUCTS
+                  SectionHeader(
                     title: 'Most Popular Products',
                     onViewAll: () {
                       debugPrint('View all popular products');
                     },
-                ),
+                  ),
 
-                  /// 🥛 Section header
+                  const SizedBox(height: 12),
 
-
-                  /// 🛒 Product cards
-                  // SizedBox(
-                  //   height: 330,
-                  //   child: ListView.separated(
-                  //     scrollDirection: Axis.horizontal,
-                  //     padding: const EdgeInsets.symmetric(horizontal: 16),
-                  //     itemCount: products.length,
-                  //     separatorBuilder: (_, __) =>
-                  //     const SizedBox(width: 20),
-                  //     itemBuilder: (_, index) {
-                  //       return ProductCard(
-                  //         product: products[index],
-                  //       );
-                  //     },
-                  //   ),
-                  // ),
-
-                  const SizedBox(height: 40),
-
+                  /// 🛒 Popular product cards
                   SizedBox(
                     height: 330,
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: popularProducts.length,
-                      separatorBuilder: (_, __) => const SizedBox(width: 20),
-
-                      // 👇 index is defined HERE
+                      separatorBuilder: (_, __) =>
+                      const SizedBox(width: 20),
                       itemBuilder: (context, index) {
                         return ProductCard(
-                          product: popularProducts[index], // ✅ VALID
+                          product: popularProducts[index],
                         );
                       },
                     ),
                   ),
 
+                  const SizedBox(height: 40),
                 ],
               ),
             ),
           ),
         ],
       ),
-      bottomNavigationBar: const BottomNavBar(),
     );
   }
 }
+
