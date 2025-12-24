@@ -20,65 +20,75 @@ class _FilterHorizontalListState extends State<FilterHorizontalList> {
     '2 Liter',
   ];
 
+  IconData _getIcon(String filter) {
+    switch (filter) {
+      case 'Filter':
+        return Icons.tune;
+      case '500 ml':
+        return Icons.local_drink;
+      case '20% off':
+      case '50% off':
+        return Icons.percent;
+      case 'Combo':
+        return Icons.layers;
+      case '2 Liter':
+        return Icons.water_drop;
+      default:
+        return Icons.circle;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 47,
+      height: 44,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 12),
-        itemBuilder: (_, index) {
+        separatorBuilder: (context, index) => const SizedBox(width: 10),
+        itemBuilder: (context, index) {
           final filter = filters[index];
-          final isSelected = filter == selectedFilter;
+          final bool isSelected = filter == selectedFilter;
 
           return GestureDetector(
             onTap: () {
               setState(() => selectedFilter = filter);
-
-              // 🔗 BACKEND HOOK (later)
               debugPrint('Selected filter: $filter');
             },
             child: Container(
-              height: 31,
+              height: 32,
               padding: const EdgeInsets.symmetric(horizontal: 14),
               decoration: BoxDecoration(
-                color: Colors.white,
+                color: AppColors.white,
                 borderRadius: BorderRadius.circular(16),
-                border: isSelected
-                    ? Border.all(color: AppColors.primary, width: 1)
-                    : null,
-                boxShadow: const [
+
+                /// 🔹 subtle selected feedback (same look)
+                boxShadow: [
                   BoxShadow(
-                    color: Color(0x3F000000),
-                    blurRadius: 8,
-                    offset: Offset(0, 2),
+                    color: AppColors.black.withValues(
+                      alpha: isSelected ? 0.18 : 0.15,
+                    ),
+                    blurRadius: 6,
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  /// ICON (optional)
-                  if (filter == 'Filter')
-                    const Padding(
-                      padding: EdgeInsets.only(right: 6),
-                      child: Icon(
-                        Icons.tune,
-                        size: 16,
-                        color: Color(0xFF2D2D2D),
-                      ),
-                    ),
-
+                  Icon(
+                    _getIcon(filter),
+                    size: 16,
+                    color: const Color(0xFF2D2D2D),
+                  ),
+                  const SizedBox(width: 6),
                   Text(
                     filter,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
-                      color: isSelected
-                          ? AppColors.primary
-                          : const Color(0xFF2D2D2D),
+                      color: Color(0xFF2D2D2D),
                     ),
                   ),
                 ],

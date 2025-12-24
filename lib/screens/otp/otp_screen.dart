@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../home/home_screen.dart';
 import '../login/login_bottom_sheet.dart';
+import '../navigation/main_navigation.dart';
 
 class OtpScreen extends StatefulWidget {
   final String mobileNumber;
@@ -159,11 +160,14 @@ class _OtpScreenState extends State<OtpScreen> {
                       ? () {
                     Navigator.pushAndRemoveUntil(
                       context,
-                      MaterialPageRoute(builder: (_) => const HomeScreen()),
-                          (route) => false, // ⛔ remove OTP, Login, Onboarding
+                      MaterialPageRoute(
+                        builder: (_) => const MainNavigation(),
+                      ),
+                          (route) => false, // clears Splash, Login, OTP
                     );
                   }
                       : null,
+
 
                   child: Text(
                     'VERIFY OTP',
