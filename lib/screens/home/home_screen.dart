@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/banner_carousel.dart';
-import '../../ui/widgets/bottom_nav_bar.dart';
+
 import '../../ui/widgets/category_horizontal_list.dart';
 import '../../ui/widgets/filter_horizontal_list.dart';
 import '../../ui/widgets/home_search_bar.dart';
