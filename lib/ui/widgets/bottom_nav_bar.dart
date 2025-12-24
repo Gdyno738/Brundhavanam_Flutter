@@ -2,76 +2,88 @@ import 'package:flutter/material.dart';
 import '../common/app_colors.dart';
 
 class BottomNavBar extends StatelessWidget {
-  const BottomNavBar({super.key});
+  final int currentIndex;
+  final Function(int) onTap;
 
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 100,
-      width: double.infinity,
-      color: AppColors.white,
-      child: Column(
-        children: [
-          const SizedBox(height: 30),
-
-          Row(
-            children: [
-              _NavItem(
-                label: 'Home',
-                isActive: true,
-              ),
-              _NavItem(
-                label: 'Rent Cow',
-              ),
-              _NavItem(
-                label: 'Products',
-              ),
-              _NavItem(
-                label: 'Cart',
-              ),
-              _NavItem(
-                label: 'Profile',
-              ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-/// 🔹 Single nav item widget
-class _NavItem extends StatelessWidget {
-  final String label;
-  final bool isActive;
-
-  const _NavItem({
-    required this.label,
-    this.isActive = false,
+  const BottomNavBar({
+    super.key,
+    required this.currentIndex,
+    required this.onTap,
   });
 
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
+  Widget _navItem({
+    required int index,
+    required String icon,
+    required String label,
+  }) {
+    final isActive = index == currentIndex;
+
+    return GestureDetector(
+      onTap: () => onTap(index),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
         children: [
-          const SizedBox(
+          Image.asset(
+            icon,
             width: 24,
             height: 24,
-            // 👉 Replace with Icon/Image later
+            color: isActive ? AppColors.primary : AppColors.grey,
           ),
           const SizedBox(height: 4),
           Text(
             label,
             style: TextStyle(
               fontSize: 10,
-              fontFamily: 'Inter',
-              fontWeight: isActive ? FontWeight.w500 : FontWeight.w400,
-              color: isActive
-                  ? AppColors.primaryDark
-                  : AppColors.grey,
+              fontWeight: FontWeight.w500,
+              color: isActive ? AppColors.primary : AppColors.grey,
             ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 72,
+      decoration: BoxDecoration(
+        color: AppColors.white,
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.shadow,
+            blurRadius: 8,
+            offset: const Offset(0, -2),
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        children: [
+          _navItem(
+            index: 0,
+            icon: 'assets/icons/home.png',
+            label: 'Home',
+          ),
+          _navItem(
+            index: 1,
+            icon: 'assets/icons/rent_cow.png',
+            label: 'Rent Cow',
+          ),
+          _navItem(
+            index: 2,
+            icon: 'assets/icons/products.png',
+            label: 'Products',
+          ),
+          _navItem(
+            index: 3,
+            icon: 'assets/icons/cart.png',
+            label: 'Cart',
+          ),
+          _navItem(
+            index: 4,
+            icon: 'assets/icons/profile.png',
+            label: 'Profile',
           ),
         ],
       ),
