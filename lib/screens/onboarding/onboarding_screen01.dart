@@ -139,23 +139,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
 
-              /// SKIP (FLOATING)
-              Positioned(
-                right: 20,
-                top: height * 0.58,
-                child: GestureDetector(
-                  onTap: _skip,
-                  child: const Text(
-                    'Skip',
-                    style: TextStyle(
-                      color: AppColors.grey,
-                      fontSize: 20,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
               /// WHITE CONTENT PANEL
               Positioned(
                 top: height * 0.55,
@@ -183,15 +166,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        /// TITLE
-                        Text(
-                          data.title,
-                          style: const TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            height: 1.25,
-                            color: AppColors.black,
-                          ),
+                        Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            /// TITLE
+                            Expanded(
+                              child: Text(
+                                data.title,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                  height: 1.25,
+                                  color: AppColors.black,
+                                ),
+                              ),
+                            ),
+                            if (!isLast)
+                              Padding(
+                                padding: const EdgeInsets.only(left: 16.0),
+                                child: GestureDetector(
+                                  onTap: _skip,
+                                  child: const Text(
+                                    'Skip',
+                                    style: TextStyle(
+                                      color: AppColors.grey,
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
                         ),
 
                         const SizedBox(height: 14),
