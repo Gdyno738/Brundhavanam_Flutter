@@ -1,14 +1,10 @@
 import 'package:flutter/material.dart';
 import '../../models/product.dart';
+import '../../screens/products/product_details_screen.dart';
 import '../common/app_colors.dart';
 
 
-
-import 'package:flutter/material.dart';
-import '../common/app_colors.dart';
-import '../../models/product.dart';
-
-class ProductCard extends StatelessWidget {
+class ProductCard extends StatefulWidget {
   final Product product;
 
   const ProductCard({
@@ -17,130 +13,193 @@ class ProductCard extends StatelessWidget {
   });
 
   @override
+  State<ProductCard> createState() => _ProductCardState();
+}
+
+class _ProductCardState extends State<ProductCard> {
+  bool isWishlisted = false;
+
+  void _toggleWishlist() {
+    setState(() {
+      isWishlisted = !isWishlisted;
+    });
+
+    debugPrint(
+      isWishlisted
+          ? 'Added to wishlist: ${widget.product.title}'
+          : 'Removed from wishlist: ${widget.product.title}',
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      width: 185,
-      decoration: BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(
-          color: AppColors.lightGrey,
-          width: 0.5,
+    return GestureDetector(
+      onTap: () {
+        /// 👉 OPEN PRODUCT DETAILS
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) =>
+                ProductDetailsScreen(product: widget.product),
+          ),
+        );
+      },
+      child: Container(
+        width: 185,
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppColors.lightGrey,
+            width: 0.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadow,
+              blurRadius: 8,
+            ),
+          ],
         ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 8,
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          /// 🖼 Product Image
-          ClipRRect(
-            borderRadius: const BorderRadius.vertical(
-              top: Radius.circular(16),
-            ),
-            child: Image.network(
-              product.image,
-              height: 185,
-              width: double.infinity,
-              fit: BoxFit.cover,
-            ),
-          ),
-
-          const SizedBox(height: 8),
-
-          /// 🧴 Size
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              product.size,
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.primary,
-              ),
-            ),
-          ),
-
-          /// 📝 Title
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              product.title,
-              style: TextStyle(
-                fontSize: 14,
-                color: AppColors.black,
-                fontWeight: FontWeight.w400,
-              ),
-            ),
-          ),
-
-          /// 💬 Description
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Text(
-              product.description,
-              style: TextStyle(
-                fontSize: 10,
-                color: AppColors.grey,
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 6),
-
-          /// 💰 Prices
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Row(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// 🖼 IMAGE + WISHLIST
+            Stack(
               children: [
-                Text(
-                  '₹${product.originalPrice}',
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: AppColors.grey,
-                    decoration: TextDecoration.lineThrough,
+                ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
+                  child: Image.network(
+                    widget.product.image,
+                    height: 185,
+                    width: double.infinity,
+                    fit: BoxFit.cover,
                   ),
                 ),
-                const SizedBox(width: 6),
-                Text(
-                  '₹${product.price}',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.black,
-                    fontWeight: FontWeight.w500,
+
+                /// 🔖 WISHLIST ICON (BOTTOM LEFT)
+                Positioned(
+                  left: 8,
+                  bottom: 8,
+                  child: GestureDetector(
+                    onTap: _toggleWishlist,
+                    child: Container(
+                      padding: const EdgeInsets.all(6),
+                      decoration: BoxDecoration(
+                        color: AppColors.white,
+                        borderRadius: BorderRadius.circular(8),
+                        boxShadow: const [
+                          BoxShadow(
+                            color: Colors.black26,
+                            blurRadius: 4,
+                          ),
+                        ],
+                      ),
+                      child: Icon(
+                        isWishlisted
+                            ? Icons.bookmark
+                            : Icons.bookmark_border,
+                        size: 20,
+                        color: AppColors.primary, // ✅ GREEN
+                      ),
+                    ),
                   ),
                 ),
               ],
             ),
-          ),
 
-          const Spacer(),
+            const SizedBox(height: 8),
 
-          /// 🛒 Add to Cart Button
-          Container(
-            height: 44,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.vertical(
-                bottom: Radius.circular(16),
+            /// 🧴 SIZE
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                widget.product.size,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: AppColors.primary,
+                ),
               ),
             ),
-            child: const Text(
-              'Add to Cart',
-              style: TextStyle(
-                color: AppColors.white,
-                fontSize: 16,
-                fontWeight: FontWeight.w600,
+
+            /// 📝 TITLE
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                widget.product.title,
+                style: const TextStyle(
+                  fontSize: 14,
+                  color: AppColors.black,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
-          ),
-        ],
+
+            /// 💬 DESCRIPTION
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Text(
+                widget.product.description,
+                style: const TextStyle(
+                  fontSize: 10,
+                  color: AppColors.grey,
+                ),
+              ),
+            ),
+
+            const SizedBox(height: 6),
+
+            /// 💰 PRICE
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Row(
+                children: [
+                  Text(
+                    '₹${widget.product.originalPrice}',
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.grey,
+                      decoration: TextDecoration.lineThrough,
+                    ),
+                  ),
+                  const SizedBox(width: 6),
+                  Text(
+                    '₹${widget.product.price}',
+                    style: const TextStyle(
+                      fontSize: 12,
+                      color: AppColors.black,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+
+            const Spacer(),
+
+            /// 🛒 ADD TO CART
+            Container(
+              height: 44,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                color: AppColors.primary,
+                borderRadius: BorderRadius.vertical(
+                  bottom: Radius.circular(16),
+                ),
+              ),
+              child: const Text(
+                'Add to Cart',
+                style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-

@@ -3,24 +3,21 @@ import '../common/app_colors.dart';
 
 class CategoryHorizontalList extends StatelessWidget {
   final String selectedCategory;
-  final Function(String) onCategorySelected;
+  final Function(String)? onCategorySelected;
+  final Function(String)? onCategoryTap;
+  final bool enableNavigation;
 
-   const CategoryHorizontalList({
+  const CategoryHorizontalList({
     super.key,
     required this.selectedCategory,
-    required this.onCategorySelected,
+    this.onCategorySelected,
+    this.onCategoryTap,
+    this.enableNavigation = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    final categories = [
-      'Milk',
-      'Ghee',
-      'Curd',
-      'Paneer',
-      'Cheese',
-      'Butter',
-    ];
+    final categories = ['Milk', 'Ghee', 'Curd', 'Paneer', 'Cheese', 'Butter'];
 
     return SizedBox(
       height: 105,
@@ -34,7 +31,13 @@ class CategoryHorizontalList extends StatelessWidget {
           final isSelected = category == selectedCategory;
 
           return GestureDetector(
-            onTap: () => onCategorySelected(category),
+            onTap: () {
+              if (enableNavigation && onCategoryTap != null) {
+                onCategoryTap!(category);
+              } else if (onCategorySelected != null) {
+                onCategorySelected!(category);
+              }
+            },
             child: Column(
               children: [
                 Container(
