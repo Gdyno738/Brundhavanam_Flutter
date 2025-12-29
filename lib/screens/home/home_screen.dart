@@ -1,14 +1,23 @@
+import 'package:brundhavanam_app/screens/category/category_products_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../data/dummy_products.dart';
+import '../../data/dummy_reviews.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/banner_carousel.dart';
-
+import '../../ui/widgets/become_partner_card.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
+import '../../ui/widgets/contact_support_section.dart';
+import '../../ui/widgets/farm_video_banner.dart';
 import '../../ui/widgets/filter_horizontal_list.dart';
+import '../../ui/widgets/full_width_banner.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
+import '../../ui/widgets/reviews_horizontal_list.dart';
 import '../../ui/widgets/section_header.dart';
+import '../../ui/widgets/farm_to_home_section.dart';
+import '../../ui/widgets/why_trust_us_section.dart';
+import '../products/products_screen.dart';
 import 'sections/location_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -30,7 +39,13 @@ class _HomeScreenState extends State<HomeScreen> {
           /// ✅ SAFE FOR NOTCH / STATUS BAR
           SafeArea(
             bottom: false,
-            child: const LocationHeader(),
+            child: const LocationHeader(
+              title: 'DLF Cyber City',
+              subtitle: 'Indira Nagar, Gachibowli, Hyder...',
+              showBack: false,
+            ),
+
+
           ),
 
           /// ✅ REST OF SCREEN
@@ -59,11 +74,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   CategoryHorizontalList(
                     selectedCategory: selectedCategory,
                     onCategorySelected: (category) {
-                      setState(() {
-                        selectedCategory = category;
-                      });
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryProductsScreen(category: category)
+                        ),
+                      );
                     },
                   ),
+
 
                   const SizedBox(height: 20),
 
@@ -75,7 +94,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   /// 🔘 Filters
                   const FilterHorizontalList(),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 20),
 
                   /// ⭐ MOST POPULAR PRODUCTS
                   SectionHeader(
@@ -85,7 +104,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     },
                   ),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 20),
 
                   /// 🛒 Popular product cards
                   SizedBox(
@@ -94,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: popularProducts.length,
-                      separatorBuilder: (_, __) =>
+                      separatorBuilder: (_,__) =>
                       const SizedBox(width: 20),
                       itemBuilder: (context, index) {
                         return ProductCard(
@@ -104,7 +123,69 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 40),
+                  const SizedBox(height: 20),
+
+                  /// 🟩 FULL WIDTH PROMO BANNER
+                  const FullWidthBanner(),
+
+                  const SizedBox(height: 20),
+
+                  /// 🌱 FARM TO HOME TEXT
+                  const FarmToHomeSection(),
+
+                  const SizedBox(height: 20),
+
+                  FarmVideoBanner(
+                    videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const WhyTrustUsSection(),
+
+                  const SizedBox(height: 20),
+
+                  ContactSupportSection(),
+                  const SizedBox(height: 20),
+
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Become Partner',
+                      style: const TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  const BecomePartnerCard(),
+
+                  const SizedBox(height: 20),
+
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'What our clients say',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  ReviewsHorizontalList(reviews: dummyReviews),
+
+                  const SizedBox(height: 20),
+
                 ],
               ),
             ),
@@ -114,4 +195,3 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 }
-

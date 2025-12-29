@@ -2,7 +2,20 @@ import 'package:flutter/material.dart';
 import '../../../ui/common/app_colors.dart';
 
 class LocationHeader extends StatelessWidget {
-  const LocationHeader({super.key});
+  final String title;
+  final String subtitle;
+  final bool showBack;
+  final bool showDropdown;
+  final VoidCallback? onBack;
+
+  const LocationHeader({
+    super.key,
+    required this.title,
+    required this.subtitle,
+    this.showBack = false,
+    this.showDropdown = true,
+    this.onBack,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -25,7 +38,6 @@ class LocationHeader extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-
           /// APP NAME
           const Text(
             'Brundhavanam',
@@ -40,50 +52,62 @@ class LocationHeader extends StatelessWidget {
 
           const SizedBox(height: 12),
 
-          /// LOCATION + ACTION ICONS
+          /// HEADER ROW
           Row(
             children: [
+              if (showBack)
+                GestureDetector(
+                  onTap: onBack,
+                  child: const Padding(
+                    padding: EdgeInsets.only(right: 8),
+                    child: Icon(
+                      Icons.arrow_back_ios_new,
+                      size: 18,
+                      color: AppColors.white,
+                    ),
+                  ),
+                ),
 
-              /// LOCATION TEXT
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-
                     Row(
                       children: [
-                        const Text(
-                          'DLF Cyber City',
-                          style: TextStyle(
+                        Text(
+                          title,
+                          style: const TextStyle(
                             color: AppColors.white,
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        const SizedBox(width: 4),
-                        const Icon(
-                          Icons.keyboard_arrow_down,
-                          color: AppColors.white,
-                          size: 20,
-                        ),
+                        if (showDropdown) ...[
+                          const SizedBox(width: 4),
+                          const Icon(
+                            Icons.keyboard_arrow_down,
+                            color: AppColors.white,
+                            size: 20,
+                          ),
+                        ],
                       ],
                     ),
 
-                    const SizedBox(height: 2),
-
-                    const Text(
-                      'Indira Nagar, Gachibowli, Hyder...',
-                      style: TextStyle(
-                        color: AppColors.white,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                    if (subtitle.isNotEmpty) ...[
+                      const SizedBox(height: 2),
+                      Text(
+                        subtitle,
+                        style: const TextStyle(
+                          color: AppColors.white,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
+                    ],
                   ],
                 ),
               ),
 
-              /// ICONS (SEARCH / NOTIFICATION / PROFILE)
               Row(
                 children: [
                   _icon(Icons.search),

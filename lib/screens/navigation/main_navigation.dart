@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import '../../ui/common/app_colors.dart';
-import '../../ui/widgets/bottom_nav_bar.dart';
 import '../../screens/home/home_screen.dart';
+import '../../screens/products/products_screen.dart';
+import '../../ui/widgets/bottom_nav_bar.dart';
 import '../placeholder_screen.dart';
 
 class MainNavigation extends StatefulWidget {
@@ -12,30 +12,42 @@ class MainNavigation extends StatefulWidget {
 }
 
 class _MainNavigationState extends State<MainNavigation> {
-  int _currentIndex = 0;
+  int currentIndex = 0;
 
-  final List<Widget> _screens = const [
-    HomeScreen(),
-    PlaceholderScreen(title: 'Rent Cow'),
-    PlaceholderScreen(title: 'Products'),
-    PlaceholderScreen(title: 'Cart'),
-    PlaceholderScreen(title: 'Profile'),
-  ];
+  late final List<Widget> pages;
 
-  void _onTabSelected(int index) {
-    setState(() {
-      _currentIndex = index;
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    pages = [
+      const HomeScreen(), // 0 → Home
+
+      const Placeholder(), // 1 → Rent Cow (future)
+
+      ProductsScreen(     // 2 → Products ✅ FIXED
+        initialCategory: 'Products',
+        onBackToHome: () {
+          setState(() => currentIndex = 0);
+        },
+      ),
+
+      const Placeholder(), // 3 → Cart
+      const Placeholder(), // 4 → Profile
+    ];
+  }
+
+  void switchTab(int index) {
+    setState(() => currentIndex = index);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
-      body: _screens[_currentIndex],
+      body: pages[currentIndex],
       bottomNavigationBar: BottomNavBar(
-        currentIndex: _currentIndex,
-        onTap: _onTabSelected,
+        currentIndex: currentIndex,
+        onTap: switchTab,
       ),
     );
   }
