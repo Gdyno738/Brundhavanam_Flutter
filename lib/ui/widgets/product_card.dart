@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
 import '../../models/product.dart';
+import '../../providers/cart_provider.dart';
 import '../../screens/products/product_details_screen.dart';
 import '../common/app_colors.dart';
-
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -34,8 +36,8 @@ class _ProductCardState extends State<ProductCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      /// 👉 OPEN PRODUCT DETAILS
       onTap: () {
-        /// 👉 OPEN PRODUCT DETAILS
         Navigator.push(
           context,
           MaterialPageRoute(
@@ -83,6 +85,7 @@ class _ProductCardState extends State<ProductCard> {
                   left: 8,
                   bottom: 8,
                   child: GestureDetector(
+                    behavior: HitTestBehavior.translucent, // ✅ prevents card tap
                     onTap: _toggleWishlist,
                     child: Container(
                       padding: const EdgeInsets.all(6),
@@ -101,7 +104,7 @@ class _ProductCardState extends State<ProductCard> {
                             ? Icons.bookmark
                             : Icons.bookmark_border,
                         size: 20,
-                        color: AppColors.primary, // ✅ GREEN
+                        color: AppColors.primary,
                       ),
                     ),
                   ),
@@ -179,24 +182,71 @@ class _ProductCardState extends State<ProductCard> {
             const Spacer(),
 
             /// 🛒 ADD TO CART
-            Container(
-              height: 44,
-              alignment: Alignment.center,
-              decoration: const BoxDecoration(
-                color: AppColors.primary,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(16),
-                ),
-              ),
-              child: const Text(
-                'Add to Cart',
-                style: TextStyle(
-                  color: AppColors.white,
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
-              ),
+            Consumer<CartProvider>(
+              builder: (context, cart, _) {
+                final inCart = cart.isInCart(widget.product);
+
+                if (!inCart) {
+                  /// ADD TO CART BUTTON
+                  return GestureDetector(
+                    onTap: () {
+                      cart.addToCart(widget.product);
+                    },
+                    child: Container(
+                      height: 44,
+                      alignment: Alignment.center,
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary,
+                        borderRadius: BorderRadius.vertical(
+                          bottom: Radius.circular(16),
+                        ),
+                      ),
+                      child: const Text(
+                        'Add to Cart',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  );
+                }
+
+                /// ➕➖ QUANTITY CONTROLS
+                return Container(
+                  height: 44,
+                  decoration: const BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(16),
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      IconButton(
+                        icon: const Icon(Icons.remove, color: Colors.white),
+                        onPressed: () => cart.decrease(widget.product),
+                      ),
+                      Text(
+                        cart.quantity(widget.product).toString(),
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.add, color: Colors.white),
+                        onPressed: () => cart.increase(widget.product),
+                      ),
+                    ],
+                  ),
+                );
+              },
             ),
+
           ],
         ),
       ),

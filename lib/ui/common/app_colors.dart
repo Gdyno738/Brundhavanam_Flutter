@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppColors {
-  AppColors._(); // prevents instantiation
+  AppColors._();
 
   /// Primary Brand Colors
   static const Color primary = Color(0xFF049150);
@@ -17,8 +17,8 @@ class AppColors {
   /// Backgrounds
   static const Color scaffoldBackground = white;
 
-  /// Shadows & Overlay
-  static Color shadow = black.withOpacity(0.15);
-  static Color glossWhite = white.withOpacity(0.08);
-  static Color glossBlack = black.withOpacity(0.05);
+  /// Shadows & Overlay (FIXED)
+  static Color shadow = black.withValues(alpha: 0.15);
+  static Color glossWhite = white.withValues(alpha: 0.08);
+  static Color glossBlack = black.withValues(alpha: 0.05);
 }

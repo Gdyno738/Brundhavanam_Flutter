@@ -209,7 +209,7 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
                   child: IgnorePointer(
                     child: AnimatedBuilder(
                       animation: _controller,
-                      builder: (_, __) {
+                      builder: (_, _) {
                         return FractionalTranslation(
                           translation:
                           Offset(-1 + (_controller.value * 2), 0),

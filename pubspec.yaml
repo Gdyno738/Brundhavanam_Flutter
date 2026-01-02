@@ -33,6 +33,8 @@ dependencies:
     sdk: flutter
   video_player: ^2.8.2
 
+  provider: ^6.1.2
+
 
 
   # The following adds the Cupertino Icons font to your application.
@@ -77,6 +79,9 @@ flutter:
      - assets/bannerImages/partner_bg.jpg
      - assets/images/cow_overlay.png
      - assets/images/grass_strip.png
+     - assets/icons/edit.png
+     - assets/icons/star_outlined.png
+     - assets/images/map_placeholder.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

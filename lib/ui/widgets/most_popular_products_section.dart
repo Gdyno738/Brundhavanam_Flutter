@@ -29,7 +29,7 @@ class MostPopularProductsSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: popularProducts.length,
-            separatorBuilder: (_, __) => const SizedBox(width: 20),
+            separatorBuilder: (_, _) => const SizedBox(width: 20),
             itemBuilder: (context, index) {
               return ProductCard(
                 product: popularProducts[index],
