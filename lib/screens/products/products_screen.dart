@@ -9,7 +9,7 @@ import '../home/sections/location_header.dart';
 
 class ProductsScreen extends StatefulWidget {
   final String initialCategory;
-  final VoidCallback onBackToHome;
+  final VoidCallback? onBackToHome;
 
   const ProductsScreen({
     super.key,
@@ -50,8 +50,9 @@ class _ProductsScreenState extends State<ProductsScreen>
               subtitle: '',
               showBack: true,
               showDropdown: false,
-              onBack: widget.onBackToHome, // ✅ CORRECT FIX
+              onBack: widget.onBackToHome ?? () => Navigator.pop(context),
             ),
+
           ),
 
           const SizedBox(height: 12),
@@ -69,9 +70,9 @@ class _ProductsScreenState extends State<ProductsScreen>
                 context,
                 PageRouteBuilder(
                   transitionDuration: const Duration(milliseconds: 300),
-                  pageBuilder: (_, __, ___) =>
+                  pageBuilder: (_, _, _) =>
                       CategoryProductsScreen(category: category),
-                  transitionsBuilder: (_, animation, __, child) {
+                  transitionsBuilder: (_, animation, _, child) {
                     return SlideTransition(
                       position: Tween(
                         begin: const Offset(1, 0),

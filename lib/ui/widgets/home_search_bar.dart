@@ -3,66 +3,73 @@ import '../../ui/common/app_colors.dart';
 
 class HomeSearchBar extends StatelessWidget {
   final VoidCallback? onMicTap;
-  final VoidCallback? onSearchTap;
+  final ValueChanged<String>? onSearchChanged;
+  final EdgeInsetsGeometry? margin;
+  final TextEditingController? controller;
+  final FocusNode? focusNode;
 
   const HomeSearchBar({
     super.key,
     this.onMicTap,
-    this.onSearchTap,
+    this.onSearchChanged,
+    this.margin,
+    this.controller,
+    this.focusNode,
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      margin: margin ?? const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
       height: 48,
       padding: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         color: AppColors.white,
         borderRadius: BorderRadius.circular(24),
-        border: Border.all(color: const Color(0xFFBABABA)),
-        boxShadow: const [
+        border: Border.all(color: AppColors.lightGrey),
+        boxShadow: [
           BoxShadow(
-            color: Color(0x5B000000),
+            color: AppColors.shadow,
             blurRadius: 4,
-            offset: Offset(0, 1),
+            offset: const Offset(0, 1),
           ),
         ],
       ),
       child: Row(
         children: [
-          /// 🔍 LEFT SEARCH ICON
-          GestureDetector(
-            onTap: onSearchTap,
-            child: const Icon(
-              Icons.search,
-              size: 22,
-              color: Color(0xFF7B7777),
-            ),
+          const Icon(
+            Icons.search,
+            size: 22,
+            color: AppColors.grey,
           ),
-
           const SizedBox(width: 12),
 
-          /// SEARCH TEXT
-          const Expanded(
-            child: Text(
-              'Search',
-              style: TextStyle(
-                color: Color(0xFF7B7777),
+          /// 🔤 TEXT FIELD (FOCUS WORKS)
+          Expanded(
+            child: TextField(
+              controller: controller,
+              focusNode: focusNode,
+              autofocus: false,
+              onChanged: onSearchChanged,
+              decoration: const InputDecoration(
+                hintText: 'Search',
+                border: InputBorder.none,
+                isDense: true,
+              ),
+              style: const TextStyle(
+                color: AppColors.black,
                 fontSize: 16,
-                fontFamily: 'Inter',
-                fontWeight: FontWeight.w400,
               ),
             ),
           ),
 
-          /// 🎤 RIGHT MIC ICON (CLICKABLE)
-          GestureDetector(
+          InkWell(
             onTap: onMicTap,
+            borderRadius: BorderRadius.circular(20),
             child: const Icon(
               Icons.mic,
               size: 22,
-              color: Color(0xFF7B7777),
+              color: AppColors.grey,
             ),
           ),
         ],

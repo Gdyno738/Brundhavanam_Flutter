@@ -25,7 +25,7 @@ class CategoryHorizontalList extends StatelessWidget {
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 18),
+        separatorBuilder: (_, _) => const SizedBox(width: 18),
         itemBuilder: (_, index) {
           final category = categories[index];
           final isSelected = category == selectedCategory;

@@ -17,7 +17,7 @@ import '../../ui/widgets/reviews_horizontal_list.dart';
 import '../../ui/widgets/section_header.dart';
 import '../../ui/widgets/farm_to_home_section.dart';
 import '../../ui/widgets/why_trust_us_section.dart';
-import '../products/products_screen.dart';
+
 import 'sections/location_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -113,7 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: popularProducts.length,
-                      separatorBuilder: (_,__) =>
+                      separatorBuilder: (_,_) =>
                       const SizedBox(width: 20),
                       itemBuilder: (context, index) {
                         return ProductCard(

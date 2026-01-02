@@ -19,12 +19,14 @@ class LocationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final topPadding = MediaQuery.of(context).padding.top;
+
     return Container(
-      padding: const EdgeInsets.only(
-        top: 20,
-        left: 16,
-        right: 16,
-        bottom: 10,
+      padding: EdgeInsets.fromLTRB(
+        16,
+        topPadding + 12,
+        16,
+        10,
       ),
       decoration: BoxDecoration(
         color: AppColors.primary,
@@ -38,7 +40,6 @@ class LocationHeader extends StatelessWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          /// APP NAME
           const Text(
             'Brundhavanam',
             style: TextStyle(
@@ -46,18 +47,16 @@ class LocationHeader extends StatelessWidget {
               fontSize: 22,
               fontFamily: 'DynaPuff',
               fontWeight: FontWeight.w500,
-              letterSpacing: 0.22,
             ),
           ),
 
           const SizedBox(height: 12),
 
-          /// HEADER ROW
           Row(
             children: [
               if (showBack)
                 GestureDetector(
-                  onTap: onBack,
+                  onTap: onBack ?? () => Navigator.pop(context),
                   child: const Padding(
                     padding: EdgeInsets.only(right: 8),
                     child: Icon(
@@ -82,28 +81,21 @@ class LocationHeader extends StatelessWidget {
                             fontWeight: FontWeight.w600,
                           ),
                         ),
-                        if (showDropdown) ...[
-                          const SizedBox(width: 4),
+                        if (showDropdown)
                           const Icon(
                             Icons.keyboard_arrow_down,
                             color: AppColors.white,
-                            size: 20,
                           ),
-                        ],
                       ],
                     ),
-
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 2),
+                    if (subtitle.isNotEmpty)
                       Text(
                         subtitle,
                         style: const TextStyle(
                           color: AppColors.white,
                           fontSize: 12,
-                          fontWeight: FontWeight.w500,
                         ),
                       ),
-                    ],
                   ],
                 ),
               ),
@@ -128,11 +120,9 @@ class LocationHeader extends StatelessWidget {
     );
   }
 
+
+
   Widget _icon(IconData icon) {
-    return Icon(
-      icon,
-      color: AppColors.white,
-      size: 24,
-    );
+    return Icon(icon, color: AppColors.white, size: 24);
   }
 }

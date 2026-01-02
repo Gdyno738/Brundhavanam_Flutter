@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
-import '../common/app_colors.dart';
 
 class FarmVideoBanner extends StatefulWidget {
   final String videoUrl;
@@ -22,13 +21,15 @@ class _FarmVideoBannerState extends State<FarmVideoBanner> {
   void initState() {
     super.initState();
 
-    _controller = VideoPlayerController.network(widget.videoUrl)
+    _controller = VideoPlayerController.networkUrl(
+      Uri.parse(widget.videoUrl),
+    )
       ..initialize().then((_) {
         setState(() {});
         _controller
           ..setLooping(true)
-          ..setVolume(0) // 🔇 start muted
-          ..play();
+          ..setVolume(0); // 🔇 muted
+        // ❌ DO NOT play here (starts paused)
       });
   }
 
@@ -38,7 +39,7 @@ class _FarmVideoBannerState extends State<FarmVideoBanner> {
     super.dispose();
   }
 
-  /// ▶ Play / Pause on tap
+  /// ▶ Play / Pause
   void _togglePlayPause() {
     setState(() {
       _controller.value.isPlaying
@@ -57,40 +58,53 @@ class _FarmVideoBannerState extends State<FarmVideoBanner> {
 
   @override
   Widget build(BuildContext context) {
+    final reelHeight = MediaQuery
+        .of(context)
+        .size
+        .height * 0.75;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(40),
+        borderRadius: BorderRadius.circular(24),
         child: _controller.value.isInitialized
             ? GestureDetector(
           onTap: _togglePlayPause,
           child: Stack(
             alignment: Alignment.center,
             children: [
-              AspectRatio(
-                aspectRatio: _controller.value.aspectRatio,
-                child: VideoPlayer(_controller),
+              SizedBox(
+                height: reelHeight,
+                width: double.infinity,
+                child: FittedBox(
+                  fit: BoxFit.cover,
+                  child: SizedBox(
+                    width: _controller.value.size.width,
+                    height: _controller.value.size.height,
+                    child: VideoPlayer(_controller),
+                  ),
+                ),
               ),
 
-              /// ▶ Play icon when paused
+              /// ▶ Play icon (initially visible)
               if (!_controller.value.isPlaying)
                 Container(
                   decoration: BoxDecoration(
                     color: Colors.black.withValues(alpha: 0.4),
                     shape: BoxShape.circle,
                   ),
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(14),
                   child: const Icon(
                     Icons.play_arrow,
                     color: Colors.white,
-                    size: 40,
+                    size: 44,
                   ),
                 ),
 
-              /// 🔊 Mute / Unmute button
+              /// 🔊 Volume
               Positioned(
-                top: 12,
-                right: 12,
+                top: 16,
+                right: 16,
                 child: GestureDetector(
                   onTap: _toggleMute,
                   child: Container(
@@ -100,7 +114,9 @@ class _FarmVideoBannerState extends State<FarmVideoBanner> {
                       shape: BoxShape.circle,
                     ),
                     child: Icon(
-                      isMuted ? Icons.volume_off : Icons.volume_up,
+                      isMuted
+                          ? Icons.volume_off
+                          : Icons.volume_up,
                       color: Colors.white,
                       size: 20,
                     ),
@@ -110,9 +126,9 @@ class _FarmVideoBannerState extends State<FarmVideoBanner> {
             ],
           ),
         )
-            : const SizedBox(
-          height: 200,
-          child: Center(child: CircularProgressIndicator()),
+            : SizedBox(
+          height: reelHeight,
+          child: const Center(child: CircularProgressIndicator()),
         ),
       ),
     );
