@@ -1,10 +1,11 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
-import '../category/category_products_screen.dart';
+// import '../category/category_products_screen.dart';
 import '../home/sections/location_header.dart';
 
 class ProductsScreen extends StatefulWidget {
@@ -23,29 +24,29 @@ class ProductsScreen extends StatefulWidget {
 
 class _ProductsScreenState extends State<ProductsScreen>
     with AutomaticKeepAliveClientMixin {
-  late String selectedCategory;
+
+  String? selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    selectedCategory = widget.initialCategory;
+    selectedCategory = 'ALL'; // 👈 start with category grid
   }
 
   @override
   bool get wantKeepAlive => true;
 
+  bool get showCategoryGrid => selectedCategory == null;
+
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// 🔝 HEADER
-          SafeArea(
-            bottom: false,
-            child: LocationHeader(
+        LocationHeader(
               title: 'Products',
               subtitle: '',
               showBack: true,
@@ -53,60 +54,94 @@ class _ProductsScreenState extends State<ProductsScreen>
               onBack: widget.onBackToHome ?? () => Navigator.pop(context),
             ),
 
-          ),
 
           const SizedBox(height: 12),
-
-          /// 🔍 SEARCH
           const HomeSearchBar(),
-
           const SizedBox(height: 12),
 
-          /// 🧀 CATEGORY → OPENS NEW SCREEN
           CategoryHorizontalList(
-            selectedCategory: selectedCategory,
+            selectedCategory: selectedCategory ?? '',
             onCategorySelected: (category) {
-              Navigator.push(
-                context,
-                PageRouteBuilder(
-                  transitionDuration: const Duration(milliseconds: 300),
-                  pageBuilder: (_, _, _) =>
-                      CategoryProductsScreen(category: category),
-                  transitionsBuilder: (_, animation, _, child) {
-                    return SlideTransition(
-                      position: Tween(
-                        begin: const Offset(1, 0),
-                        end: Offset.zero,
-                      ).animate(animation),
-                      child: child,
-                    );
-                  },
-                ),
-              );
+              setState(() {
+                selectedCategory = category;
+              });
             },
           ),
 
           const SizedBox(height: 16),
 
-          /// 🛒 PRODUCTS GRID
           Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: popularProducts.length,
-              gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.65,
-              ),
-              itemBuilder: (_, index) {
-                return ProductCard(product: popularProducts[index]);
-              },
-            ),
+            child: showCategoryGrid
+                ? _buildCategoryGrid()
+                : _buildProductsGrid(),
           ),
         ],
       ),
     );
   }
+
+  Widget _buildCategoryGrid() {
+    final categories = ['Milk', 'Ghee', 'Curd', 'Paneer', 'Cheese', 'Butter'];
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: categories.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.60,
+      ),
+      itemBuilder: (_, index) {
+        final category = categories[index];
+
+        return GestureDetector(
+          onTap: () {
+            setState(() {
+              selectedCategory = category;
+            });
+          },
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.primary,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            alignment: Alignment.center,
+            child: Text(
+              category,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  Widget _buildProductsGrid() {
+    final products = selectedCategory == null || selectedCategory == 'ALL'
+        ? popularProducts
+        : popularProducts
+        .where((p) => p.category == selectedCategory)
+        .toList();
+
+
+    return GridView.builder(
+      padding: const EdgeInsets.all(16),
+      itemCount: products.length,
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        crossAxisSpacing: 16,
+        mainAxisSpacing: 16,
+        childAspectRatio: 0.65,
+      ),
+      itemBuilder: (_, index) {
+        return ProductCard(product: products[index]);
+      },
+    );
+  }
 }
+

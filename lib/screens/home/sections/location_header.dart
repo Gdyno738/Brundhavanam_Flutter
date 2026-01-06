@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../../../ui/common/app_colors.dart';
+import '../../chat/chat_screen.dart';
+import '../../wishlist/wish_list_screen.dart';
+import '../../goshala/goshala_info_screen.dart';
 
 class LocationHeader extends StatelessWidget {
   final String title;
@@ -19,110 +23,172 @@ class LocationHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topPadding = MediaQuery.of(context).padding.top;
+    final double topInset = MediaQuery.of(context).padding.top;
 
-    return Container(
-      padding: EdgeInsets.fromLTRB(
-        16,
-        topPadding + 12,
-        16,
-        10,
+    return AnnotatedRegion<SystemUiOverlayStyle>(
+      value: SystemUiOverlayStyle(
+        statusBarColor: AppColors.primary, // 🔥 THIS REMOVES WHITE BAR
+        statusBarIconBrightness: Brightness.light,
+        statusBarBrightness: Brightness.dark, // iOS
       ),
-      decoration: BoxDecoration(
-        color: AppColors.primary,
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.primaryDark,
-            width: 0.5,
+      child: MediaQuery.removePadding(
+        context: context,
+        removeTop: true,
+        child: Container(
+          width: double.infinity,
+          color: AppColors.primary,
+          padding: EdgeInsets.fromLTRB(
+            16,
+            topInset + 12,
+            16,
+            12,
           ),
-        ),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Text(
-            'Brundhavanam',
-            style: TextStyle(
-              color: AppColors.white,
-              fontSize: 22,
-              fontFamily: 'DynaPuff',
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-
-          const SizedBox(height: 12),
-
-          Row(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              if (showBack)
-                GestureDetector(
-                  onTap: onBack ?? () => Navigator.pop(context),
-                  child: const Padding(
-                    padding: EdgeInsets.only(right: 8),
-                    child: Icon(
-                      Icons.arrow_back_ios_new,
-                      size: 18,
-                      color: AppColors.white,
-                    ),
-                  ),
-                ),
-
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          title,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        if (showDropdown)
-                          const Icon(
-                            Icons.keyboard_arrow_down,
-                            color: AppColors.white,
-                          ),
-                      ],
-                    ),
-                    if (subtitle.isNotEmpty)
-                      Text(
-                        subtitle,
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 12,
-                        ),
-                      ),
-                  ],
+              const Text(
+                'Brundhavanam',
+                style: TextStyle(
+                  color: AppColors.white,
+                  fontSize: 22,
+                  fontFamily: 'DynaPuff',
+                  fontWeight: FontWeight.w500,
                 ),
               ),
 
+              const SizedBox(height: 12),
+
               Row(
                 children: [
-                  _icon(Icons.search),
-                  const SizedBox(width: 14),
-                  _icon(Icons.notifications_none),
-                  const SizedBox(width: 14),
-                  const CircleAvatar(
-                    radius: 12,
-                    backgroundImage:
-                    NetworkImage('https://placehold.co/24x24'),
+                  if (showBack)
+                    GestureDetector(
+                      onTap: onBack ?? () => Navigator.pop(context),
+                      child: const Padding(
+                        padding: EdgeInsets.only(right: 8),
+                        child: Icon(
+                          Icons.arrow_back,
+                          size: 22,
+                          color: AppColors.white,
+                        ),
+                      ),
+                    ),
+
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Text(
+                              title,
+                              style: const TextStyle(
+                                color: AppColors.white,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                            if (showDropdown)
+                              const Icon(
+                                Icons.keyboard_arrow_down,
+                                color: AppColors.white,
+                              ),
+                          ],
+                        ),
+                        if (subtitle.isNotEmpty)
+                          Text(
+                            subtitle,
+                            style: const TextStyle(
+                              color: AppColors.white,
+                              fontSize: 12,
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
+
+                  Row(
+                    children: [
+                      _iconButton(
+                        context,
+                        iconPath: 'assets/icons/chat.png',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const ChatScreen()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 14),
+                      _iconButton(
+                        context,
+                        iconPath: 'assets/icons/wishlist.png',
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const WishlistScreen()),
+                          );
+                        },
+                      ),
+                      const SizedBox(width: 14),
+                      _profileButton(
+                        context,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (_) => const GoshalaInfoScreen()),
+                          );
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
             ],
           ),
-        ],
+        ),
       ),
     );
   }
 
+  Widget _iconButton(
+      BuildContext context, {
+        required String iconPath,
+        required VoidCallback onTap,
+      }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.all(4),
+        child: Image.asset(
+          iconPath,
+          width: 24,
+          height: 24,
+          color: AppColors.white,
+        ),
+      ),
+    );
+  }
 
-
-  Widget _icon(IconData icon) {
-    return Icon(icon, color: AppColors.white, size: 24);
+  Widget _profileButton(
+      BuildContext context, {
+        required VoidCallback onTap,
+      }) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(24),
+      onTap: onTap,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: Image.asset(
+          'assets/icons/cow.png',
+          width: 24,
+          height: 24,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 }

@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/about_us_section.dart';
 import '../../ui/widgets/most_popular_products_section.dart';
 import '../home/sections/location_header.dart';
@@ -34,21 +35,17 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   Widget build(BuildContext context) {
     final product = widget.product;
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// 🔝 HEADER
-          SafeArea(
-            bottom: false,
-            child: LocationHeader(
+        LocationHeader(
               title: product.title,
               subtitle: '',
               showBack: true,
               showDropdown: false,
               onBack: () => Navigator.pop(context),
             ),
-          ),
+
 
           Expanded(
             child: SingleChildScrollView(

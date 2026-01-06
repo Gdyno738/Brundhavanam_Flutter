@@ -14,15 +14,17 @@ class _BannerCarouselState extends State<BannerCarousel> {
   int _currentIndex = 0;
   Timer? _timer;
 
+  /// ✅ LOCAL ASSET IMAGES
   final List<String> banners = [
-    'https://www.shutterstock.com/image-photo/dairy-products-milk-cheese-cottage-260nw-1891082131.jpg',
-    'https://www.shutterstock.com/image-photo/dairy-products-bottles-milk-cottage-600nw-2591130589.jpg',
-    'https://www.shutterstock.com/search/dairy-products-banner',
+    'assets/bannerImages/banner1.png',
+    'assets/bannerImages/banner2.png',
+    'assets/bannerImages/banner3.png',
   ];
 
   @override
   void initState() {
     super.initState();
+
     _timer = Timer.periodic(const Duration(seconds: 3), (_) {
       if (!_controller.hasClients) return;
 
@@ -49,9 +51,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        /// BANNER
+        /// 🖼️ BANNER
         SizedBox(
-          height: 133,
+          height: 150,
           child: PageView.builder(
             controller: _controller,
             itemCount: banners.length,
@@ -63,15 +65,9 @@ class _BannerCarouselState extends State<BannerCarousel> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: ClipRRect(
                   borderRadius: BorderRadius.circular(24),
-                  child: Image.network(
+                  child: Image.asset(
                     banners[index],
                     fit: BoxFit.cover,
-                    loadingBuilder: (_, child, progress) {
-                      if (progress == null) return child;
-                      return const Center(
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      );
-                    },
                   ),
                 ),
               );
@@ -81,7 +77,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
 
         const SizedBox(height: 12),
 
-        /// DOT INDICATOR
+        /// 🔘 DOT INDICATOR
         Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: List.generate(
@@ -94,7 +90,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
               decoration: BoxDecoration(
                 color: _currentIndex == index
                     ? AppColors.primary
-                    : const Color(0xFFD9D9D9),
+                    : AppColors.lightGrey,
                 borderRadius: BorderRadius.circular(8),
               ),
             ),

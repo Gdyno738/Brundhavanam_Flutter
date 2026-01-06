@@ -1,35 +1,24 @@
-
 import 'package:flutter/material.dart';
-
-import '../../data/dummy_products.dart';
+import '../../data/dummy_categories.dart';
 import '../../ui/common/app_colors.dart';
-import '../../ui/widgets/home_search_bar.dart';
-import '../../ui/widgets/product_card.dart';
+import '../../ui/widgets/category_card.dart';
 import '../home/sections/location_header.dart';
+import 'category_products_screen.dart';
 
-class CategoryProductsScreen extends StatelessWidget {
-  final String category;
-
-  const CategoryProductsScreen({
-    super.key,
-    required this.category,
-  });
+class CategoryGridScreen extends StatelessWidget {
+  const CategoryGridScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final filteredProducts = popularProducts
-        .where((p) => p.category == category)
-        .toList();
-
     return Scaffold(
       backgroundColor: AppColors.white,
       body: Column(
         children: [
-          /// HEADER → CATEGORY NAME
+          /// HEADER
           SafeArea(
             bottom: false,
             child: LocationHeader(
-              title: category, // 👈 Selected category name
+              title: 'Categories',
               subtitle: '',
               showBack: true,
               showDropdown: false,
@@ -37,29 +26,35 @@ class CategoryProductsScreen extends StatelessWidget {
             ),
           ),
 
-
-          const SizedBox(height: 12),
-
-          /// SEARCH (REUSED)
-          const HomeSearchBar(),
-
           const SizedBox(height: 16),
 
-          /// PRODUCTS OF THIS CATEGORY
+          /// CATEGORY GRID
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
-              itemCount: filteredProducts.length,
+              itemCount: categories.length,
               gridDelegate:
               const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.60,
+                childAspectRatio: 0.75,
               ),
-              itemBuilder: (_, index) {
-                return ProductCard(
-                  product: filteredProducts[index],
+              itemBuilder: (context, index) {
+                final category = categories[index];
+
+                return CategoryCard(
+                  category: category,
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => CategoryProductsScreen(
+                          category: category.name,
+                        ),
+                      ),
+                    );
+                  },
                 );
               },
             ),
