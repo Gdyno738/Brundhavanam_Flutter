@@ -3,6 +3,7 @@ import '../../screens/home/home_screen.dart';
 import '../../screens/products/products_screen.dart';
 import '../../ui/widgets/bottom_nav_bar.dart';
 import '../placeholder_screen.dart';
+import '../rentcow/RentCowScreen.dart';
 
 class MainNavigation extends StatefulWidget {
   const MainNavigation({super.key});
@@ -23,7 +24,7 @@ class _MainNavigationState extends State<MainNavigation> {
     pages = [
       const HomeScreen(), // 0 → Home
 
-      const Placeholder(), // 1 → Rent Cow (future)
+      const RentCowScreen(), // 1 → Rent Cow (future)
 
       ProductsScreen(     // 2 → Products ✅ FIXED
         initialCategory: 'Products',

@@ -77,6 +77,19 @@ flutter:
      - assets/bannerImages/partner_bg.jpg
      - assets/images/cow_overlay.png
      - assets/images/grass_strip.png
+     - assets/images/rentcow_banner.png
+     - assets/images/rentcowsmall02.png
+     - assets/images/cow360_1.png
+     - assets/images/gir.jpg
+     - assets/images/Sahiwal.png
+     - assets/images/Tharparkar.jpg
+     - assets/images/phonepe.png
+     - assets/images/gpay.png
+     - assets/images/paytm.png
+     - assets/images/upi.png
+
+
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
