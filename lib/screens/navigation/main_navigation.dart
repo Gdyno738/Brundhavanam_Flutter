@@ -3,6 +3,9 @@ import 'package:flutter/material.dart';
 import '../../ui/widgets/bottom_nav_bar.dart';
 import '../../screens/home/home_screen.dart';
 import '../../screens/products/products_screen.dart';
+import '../../ui/widgets/bottom_nav_bar.dart';
+import '../placeholder_screen.dart';
+import '../rentcow/RentCowScreen.dart';
 import '../../screens/cart/cart_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 import '../../screens/placeholder_screen.dart';
@@ -30,6 +33,10 @@ class MainNavigationState extends State<MainNavigation> {
   void initState() {
     super.initState();
 
+    pages = [
+      const HomeScreen(), // 0 → Home
+
+      const RentCowScreen(), // 1 → Rent Cow (future)
     currentIndex = widget.initialIndex;
 
     pages = [
