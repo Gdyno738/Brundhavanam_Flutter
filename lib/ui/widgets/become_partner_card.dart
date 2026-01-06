@@ -3,7 +3,12 @@ import 'package:flutter/material.dart';
 import '../common/app_colors.dart';
 
 class BecomePartnerCard extends StatefulWidget {
-  const BecomePartnerCard({super.key});
+  final VoidCallback onDonateTap;
+
+  const BecomePartnerCard({
+    super.key,
+    required this.onDonateTap,
+  });
 
   @override
   State<BecomePartnerCard> createState() => _BecomePartnerCardState();
@@ -40,7 +45,7 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
               ),
             ),
 
-            /// 🌿 GRASS STRIP (BACKGROUND)
+            /// 🌿 GRASS STRIP
             Positioned(
               bottom: 0,
               left: 0,
@@ -52,7 +57,7 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
               ),
             ),
 
-            /// 🧊 GLASS CARD (RIGHT)
+            /// 🧊 GLASS CARD
             Positioned(
               right: 12,
               top: 16,
@@ -64,12 +69,14 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
                 child: AnimatedOpacity(
                   duration: const Duration(milliseconds: 700),
                   opacity: _animate ? 1 : 0,
-                  child: const _GlassPartnerCard(),
+                  child: _GlassPartnerCard(
+                    onDonateTap: widget.onDonateTap,
+                  ),
                 ),
               ),
             ),
 
-            /// 🐄 COW IMAGE (OVERLAPS GLASS)
+            /// 🐄 COW IMAGE
             Positioned(
               left: -10,
               bottom: 0,
@@ -83,7 +90,7 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
 }
 
 ////////////////////////////////////////////////////////////////
-/// 🐄 BREATHING COW ANIMATION
+/// 🐄 BREATHING COW
 ////////////////////////////////////////////////////////////////
 class _BreathingCow extends StatefulWidget {
   const _BreathingCow();
@@ -136,10 +143,14 @@ class _BreathingCowState extends State<_BreathingCow>
 }
 
 ////////////////////////////////////////////////////////////////
-/// 🧊 GLASS CARD WITH LIGHT SWEEP
+/// 🧊 GLASS CARD
 ////////////////////////////////////////////////////////////////
 class _GlassPartnerCard extends StatefulWidget {
-  const _GlassPartnerCard();
+  final VoidCallback onDonateTap;
+
+  const _GlassPartnerCard({
+    required this.onDonateTap,
+  });
 
   @override
   State<_GlassPartnerCard> createState() => _GlassPartnerCardState();
@@ -153,7 +164,6 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
   @override
   void initState() {
     super.initState();
-
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
@@ -181,7 +191,6 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
           builder: (_, __) {
             return Stack(
               children: [
-                /// MAIN GLASS CARD
                 Container(
                   width: 198,
                   padding: const EdgeInsets.all(10),
@@ -201,15 +210,17 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
                       ),
                     ],
                   ),
-                  child: const _GlassContent(),
+                  child: _GlassContent(
+                    onDonateTap: widget.onDonateTap,
+                  ),
                 ),
 
-                /// ✨ LIGHT REFLECTION SWEEP
+                /// ✨ LIGHT SWEEP
                 Positioned.fill(
                   child: IgnorePointer(
                     child: AnimatedBuilder(
                       animation: _controller,
-                      builder: (_, __) {
+                      builder: (_, _) {
                         return FractionalTranslation(
                           translation:
                           Offset(-1 + (_controller.value * 2), 0),
@@ -246,7 +257,11 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
 /// 📝 GLASS CONTENT
 ////////////////////////////////////////////////////////////////
 class _GlassContent extends StatelessWidget {
-  const _GlassContent();
+  final VoidCallback onDonateTap;
+
+  const _GlassContent({
+    required this.onDonateTap,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -278,9 +293,7 @@ class _GlassContent extends StatelessWidget {
 
         /// 💚 DONATE BUTTON
         ElevatedButton(
-          onPressed: () {
-            debugPrint('Donate button tapped');
-          },
+          onPressed: onDonateTap,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.white,
             elevation: 3,

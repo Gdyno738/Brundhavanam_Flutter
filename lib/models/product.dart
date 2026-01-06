@@ -1,5 +1,5 @@
 class Product {
-
+  final String id; // ✅ NEW
   final String image;
   final String title;
   final String description;
@@ -9,19 +9,15 @@ class Product {
   final String category;
   final double rating;
 
-
-
   Product({
-
+    required this.id, // ✅ NEW
     required this.image,
     required this.title,
     required this.description,
     required this.size,
     required this.price,
-    required this.rating,
     required this.originalPrice,
     required this.category,
+    required this.rating,
   });
-
 }
-

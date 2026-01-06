@@ -1,5 +1,8 @@
+import 'dart:convert';
 import 'package:flutter/material.dart';
 import '../common/app_colors.dart';
+import '../../data/dummy_categories.dart';
+import '../../models/category_item.dart';
 
 class CategoryHorizontalList extends StatelessWidget {
   final String selectedCategory;
@@ -17,25 +20,23 @@ class CategoryHorizontalList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final categories = ['Milk', 'Ghee', 'Curd', 'Paneer', 'Cheese', 'Butter'];
-
     return SizedBox(
       height: 105,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: categories.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 18),
+        separatorBuilder: (_, _) => const SizedBox(width: 18),
         itemBuilder: (_, index) {
-          final category = categories[index];
-          final isSelected = category == selectedCategory;
+          final CategoryItem category = categories[index];
+          final bool isSelected = category.name == selectedCategory;
 
           return GestureDetector(
             onTap: () {
               if (enableNavigation && onCategoryTap != null) {
-                onCategoryTap!(category);
+                onCategoryTap!(category.name);
               } else if (onCategorySelected != null) {
-                onCategorySelected!(category);
+                onCategorySelected!(category.name);
               }
             },
             child: Column(
@@ -51,15 +52,15 @@ class CategoryHorizontalList extends StatelessWidget {
                           : Colors.transparent,
                       width: 2,
                     ),
-                    image: const DecorationImage(
-                      image: NetworkImage('https://placehold.co/64x64'),
+                    image: DecorationImage(
+                      image: _buildImageProvider(category.image),
                       fit: BoxFit.cover,
                     ),
                   ),
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  category,
+                  category.name,
                   style: TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -74,5 +75,15 @@ class CategoryHorizontalList extends StatelessWidget {
         },
       ),
     );
+  }
+
+  /// ✅ Handles BOTH network & base64 images safely
+  ImageProvider _buildImageProvider(String image) {
+    if (image.startsWith('data:image')) {
+      final base64Str = image.split(',').last;
+      return MemoryImage(base64Decode(base64Str));
+    } else {
+      return NetworkImage(image);
+    }
   }
 }

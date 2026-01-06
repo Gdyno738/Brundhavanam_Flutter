@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/screens/navigation/main_navigation.dart';
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../otp/otp_screen.dart';
@@ -170,14 +171,32 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
           const SizedBox(height: 12),
 
           /// SKIP
-          const Text(
-            'Skip',
-            style: TextStyle(
-              color: AppColors.primary,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
+          GestureDetector(
+            onTap: () {
+              final parentContext = widget.rootContext;
+
+              // Close bottom sheet
+              Navigator.pop(context);
+
+              // Navigate after sheet closes
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                Navigator.pushAndRemoveUntil(
+                  parentContext,
+                  MaterialPageRoute(builder: (_) => const MainNavigation()),
+                      (route) => false, // 🔥 clears login stack
+                );
+              });
+            },
+            child: const Text(
+              'Skip',
+              style: TextStyle(
+                color: AppColors.primary,
+                fontSize: 16,
+                fontWeight: FontWeight.w400,
+              ),
             ),
           ),
+
 
           const Spacer(),
 

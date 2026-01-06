@@ -2,7 +2,8 @@ import '../models/product.dart';
 
 final List<Product> popularProducts = [
   Product(
-    image: 'https://placehold.co/185x185',
+    id:'milk_001',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpOKQJfpoon8pRe8VS5hmhTY_M8K5nNBC_lQ&s',
     title: 'Low-Fat Buffalo Milk',
     description: 'Rich taste with reduced fat',
     size: '500 ml',
@@ -13,7 +14,8 @@ final List<Product> popularProducts = [
   ),
 
   Product(
-    image: 'https://placehold.co/185x185',
+    id:'ghee_001',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQg3NdixlXaP4cahCgeflru6uYN87lexCts0Q&s',
     title: 'Pure Cow Ghee',
     description: 'Traditional & aromatic',
     size: '250 ml',
@@ -24,7 +26,8 @@ final List<Product> popularProducts = [
   ),
 
   Product(
-    image: 'https://placehold.co/185x185',
+    id:'curd_001',
+    image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTor0w2qoLmzqEJOGm9IP7AwcHPWIA-4K2ivg&s',
     title: 'Fresh Curd',
     description: 'Naturally fermented',
     size: '500 ml',
