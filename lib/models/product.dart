@@ -1,4 +1,5 @@
 class Product {
+  final String id; // ✅ NEW
   final String image;
   final String title;
   final String description;
@@ -9,28 +10,14 @@ class Product {
   final double rating;
 
   Product({
+    required this.id, // ✅ NEW
     required this.image,
     required this.title,
     required this.description,
     required this.size,
     required this.price,
-    required this.rating,
     required this.originalPrice,
     required this.category,
+    required this.rating,
   });
-
-  /// 🔑 IMPORTANT FOR CART QUANTITY
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Product &&
-        other.title == title &&
-        other.price == price &&
-        other.category == category;
-  }
-
-  @override
-  int get hashCode =>
-      title.hashCode ^ price.hashCode ^ category.hashCode;
 }

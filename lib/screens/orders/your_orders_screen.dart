@@ -236,7 +236,7 @@ class _OrderCard extends StatelessWidget {
                         order.price.replaceAll(RegExp(r'[^\d.]'), ''),
                       ),
                       category: 'Reorder',
-                      rating: 4.5,
+                      rating: 4.5, id: 'milk_001',
                     );
 
                     context.read<CartProvider>().addToCart(product);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../data/dummy_products.dart';
 import '../../data/dummy_reviews.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/banner_carousel.dart';
 import '../../ui/widgets/become_partner_card.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
@@ -17,6 +18,9 @@ import '../../ui/widgets/reviews_horizontal_list.dart';
 import '../../ui/widgets/section_header.dart';
 import '../../ui/widgets/farm_to_home_section.dart';
 import '../../ui/widgets/why_trust_us_section.dart';
+
+import '../category/category_grid_screen.dart';
+import '../navigation/main_navigation.dart';
 
 import 'sections/location_header.dart';
 
@@ -32,23 +36,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// ✅ SAFE FOR NOTCH / STATUS BAR
-          SafeArea(
-            bottom: false,
-            child: const LocationHeader(
-              title: 'DLF Cyber City',
-              subtitle: 'Indira Nagar, Gachibowli, Hyder...',
-              showBack: false,
-            ),
-
-
+          LocationHeader(
+            title: 'DLF',
+            subtitle: 'Indira Nagar, Gachibowli',
+            showBack: false,
+            showDropdown: true,
           ),
 
-          /// ✅ REST OF SCREEN
+
+
+
+    /// ✅ REST OF SCREEN
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -66,9 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   SectionHeader(
                     title: 'Dairy Products',
                     onViewAll: () {
-                      debugPrint('View all dairy products');
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const CategoryGridScreen(),
+                        ),
+                      );
                     },
+
                   ),
+
+
+
 
                   /// 🧀 Category icons
                   CategoryHorizontalList(
@@ -100,28 +110,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   SectionHeader(
                     title: 'Most Popular Products',
                     onViewAll: () {
-                      debugPrint('View all popular products');
+                      MainNavigation.navKey.currentState?.switchTab(2);
                     },
                   ),
+
 
                   const SizedBox(height: 20),
 
                   /// 🛒 Popular product cards
                   SizedBox(
-                    height: 330,
+                    height: 317, // ✅ enough for full ProductCard
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       itemCount: popularProducts.length,
-                      separatorBuilder: (_,_) =>
-                      const SizedBox(width: 20),
+                      separatorBuilder: (_, _) => const SizedBox(width: 20),
                       itemBuilder: (context, index) {
-                        return ProductCard(
-                          product: popularProducts[index],
+                        return SizedBox(
+                          width: 185, // ✅ FIXED CARD WIDTH
+                          child: ProductCard(
+                            product: popularProducts[index],
+                          ),
                         );
                       },
                     ),
                   ),
+
 
                   const SizedBox(height: 20),
 
@@ -163,14 +177,19 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   const SizedBox(height: 20),
 
-                  const BecomePartnerCard(),
+                  BecomePartnerCard(
+                    onDonateTap: () {
+                      MainNavigation.navKey.currentState?.switchTab(4); // 👈 Donate tab
+                    },
+                  ),
+
 
                   const SizedBox(height: 20),
 
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'What our clients say',
+                      'What our customers say',
                       style: TextStyle(
                         color: AppColors.black,
                         fontSize: 16,

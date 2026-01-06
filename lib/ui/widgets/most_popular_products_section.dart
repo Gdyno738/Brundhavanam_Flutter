@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../data/dummy_products.dart';
+import '../../screens/navigation/main_navigation.dart';
+
 import '../widgets/product_card.dart';
 import '../widgets/section_header.dart';
 
@@ -11,28 +13,27 @@ class MostPopularProductsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-
-        /// HEADER
         SectionHeader(
-          title: 'Most Popular Product',
-          onViewAll: () {
-            debugPrint('View all popular products');
-          },
+          title: 'Most Popular Products',
+          onViewAll: () {MainNavigation.navKey.currentState?.switchTab(2);},
         ),
 
         const SizedBox(height: 12),
 
-        /// PRODUCT LIST
         SizedBox(
-          height: 330,
+          height: 330, // ✅ correct height
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
+            physics: const BouncingScrollPhysics(),
             padding: const EdgeInsets.symmetric(horizontal: 16),
             itemCount: popularProducts.length,
-            separatorBuilder: (_, _) => const SizedBox(width: 20),
-            itemBuilder: (context, index) {
-              return ProductCard(
-                product: popularProducts[index],
+            separatorBuilder: (_, __) => const SizedBox(width: 20),
+            itemBuilder: (_, index) {
+              return SizedBox(
+                width: 185, // ✅ THIS FIXES EVERYTHING
+                child: ProductCard(
+                  product: popularProducts[index],
+                ),
               );
             },
           ),
