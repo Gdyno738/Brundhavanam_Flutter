@@ -5,6 +5,7 @@ import 'package:brundhavanam_app/screens/profile/settings/settings_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../home/sections/location_header.dart';
 import '../navigation/main_navigation.dart';
 import '../orders/your_orders_screen.dart';
@@ -21,13 +22,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: SafeArea(
-        child: Column(
-          children: [
-            /// 🔝 HEADER
-            LocationHeader(
+    return BaseScreen(
+      child: Column(
+        children: [
+          LocationHeader(
               title: 'Your profile',
               subtitle: '',
               showBack: true,
@@ -131,7 +129,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ],
         ),
-      ),
+
     );
   }
 

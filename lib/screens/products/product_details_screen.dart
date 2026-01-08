@@ -9,6 +9,8 @@ import '../../ui/widgets/about_us_section.dart';
 import '../../ui/widgets/most_popular_products_section.dart';
 import '../home/sections/location_header.dart';
 
+import '../popularproducts/popular_products_screen.dart';
+
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
 
@@ -38,14 +40,14 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     return BaseScreen(
       child: Column(
         children: [
-        LocationHeader(
-              title: product.title,
-              subtitle: '',
-              showBack: true,
-              showDropdown: false,
-              onBack: () => Navigator.pop(context),
-            ),
-
+          /// 🔝 HEADER
+          LocationHeader(
+            title: product.title,
+            subtitle: '',
+            showBack: true,
+            showDropdown: false,
+            onBack: () => Navigator.pop(context),
+          ),
 
           Expanded(
             child: SingleChildScrollView(
@@ -66,7 +68,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                   const SizedBox(height: 16),
 
-                  /// 🐄 NAME + SIZE
+                  /// 🐄 TITLE + SIZE
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -84,7 +86,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
 
-                  const SizedBox(height: 6),
+                  const SizedBox(height: 8),
 
                   /// 💰 PRICE + RATING
                   Row(
@@ -123,34 +125,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     product.description,
                     style: const TextStyle(
                       fontSize: 14,
-                      height: 1.4,
+                      height: 1.5,
                       color: AppColors.grey,
                     ),
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
-                  /// 🛒 ADD TO CART BUTTON
+                  /// 🛒 ADD TO CART / QUANTITY
                   Consumer<CartProvider>(
-                    builder: (context, cart, _) {
+                    builder: (_, cart, __) {
                       final isInCart = cart.isInCart(product);
                       final qty = cart.quantity(product);
 
-                      /// 🛒 IF NOT IN CART → ADD TO CART
+                      /// ADD TO CART
                       if (!isInCart) {
                         return SizedBox(
                           width: double.infinity,
-                          height: 50,
+                          height: 52,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(14),
+                                borderRadius: BorderRadius.circular(16),
                               ),
                             ),
-                            onPressed: () {
-                              cart.addToCart(product);
-                            },
+                            onPressed: () => cart.addToCart(product),
                             child: const Text(
                               'Add to Cart',
                               style: TextStyle(
@@ -163,36 +163,39 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         );
                       }
 
-                      /// ➖ qty ➕ IF ALREADY IN CART
+                      /// ➖➕ QUANTITY CONTROLLER (IMPROVED UI)
                       return Container(
-                        height: 50,
+                        height: 52,
                         decoration: BoxDecoration(
                           color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(14),
+                          borderRadius: BorderRadius.circular(30),
+                          boxShadow: [
+                            BoxShadow(
+                              color: AppColors.shadow,
+                              blurRadius: 8,
+                            ),
+                          ],
                         ),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            /// ➖
-                            IconButton(
-                              onPressed: () => cart.decrease(product),
-                              icon: const Icon(Icons.remove, color: Colors.white),
+                            _qtyButton(
+                              icon: Icons.remove,
+                              onTap: () => cart.decrease(product),
                             ),
 
-                            /// QTY
                             Text(
                               qty.toString(),
                               style: const TextStyle(
-                                color: Colors.white,
+                                color: AppColors.white,
                                 fontSize: 18,
                                 fontWeight: FontWeight.w600,
                               ),
                             ),
 
-                            /// ➕
-                            IconButton(
-                              onPressed: () => cart.increase(product),
-                              icon: const Icon(Icons.add, color: Colors.white),
+                            _qtyButton(
+                              icon: Icons.add,
+                              onTap: () => cart.increase(product),
                             ),
                           ],
                         ),
@@ -200,15 +203,27 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     },
                   ),
 
-                  const SizedBox(height: 24),
+                  const SizedBox(height: 28),
 
                   /// 🧾 ABOUT US
                   const AboutUsSection(),
 
                   const SizedBox(height: 24),
 
-                  /// 🔥 MOST POPULAR PRODUCTS
-                  const MostPopularProductsSection(),
+                  /// 🔥 MOST POPULAR
+
+                  MostPopularProductsSection(
+                    onViewAll: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MostPopularProductsScreen(),
+                        ),
+                      );
+                    },
+                  ),
+
+
 
 
                   const SizedBox(height: 32),
@@ -221,31 +236,79 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
     );
   }
 
-  /// 🔽 SIZE DROPDOWN
+  /// 🔽 SIZE DROPDOWN (THEMED)
   Widget _sizeDropdown() {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 12),
       decoration: BoxDecoration(
-        color: const Color(0xFFE6E6E6),
-        borderRadius: BorderRadius.circular(8),
-        border: Border.all(color: const Color(0xFFD6D6D6)),
+        color: AppColors.lightGrey,
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.grey),
       ),
-      child: DropdownButton<String>(
-        value: selectedSize,
-        underline: const SizedBox(),
-        icon: const Icon(Icons.keyboard_arrow_down),
-        items: sizes.map((size) {
-          return DropdownMenuItem(
-            value: size,
-            child: Text(
-              size,
-              style: const TextStyle(fontSize: 14),
-            ),
-          );
-        }).toList(),
-        onChanged: (value) {
-          setState(() => selectedSize = value!);
-        },
+      child: DropdownButtonHideUnderline(
+        child: DropdownButton<String>(
+          value: selectedSize,
+          icon: const Icon(
+            Icons.keyboard_arrow_down,
+            color: AppColors.black,
+          ),
+          dropdownColor: AppColors.white, // ✅ dropdown background
+          borderRadius: BorderRadius.circular(14), // ✅ rounded popup
+          items: sizes.map((size) {
+            return DropdownMenuItem<String>(
+              value: size,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 6,
+                ),
+                child: Row(
+                  children: [
+                    Icon(
+                      Icons.local_drink,
+                      size: 16,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(width: 10),
+                    Text(
+                      size,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }).toList(),
+          onChanged: (value) {
+            setState(() => selectedSize = value!);
+          },
+        ),
+      ),
+    );
+  }
+
+
+  /// ➖➕ ROUND BUTTON
+  Widget _qtyButton({
+    required IconData icon,
+    required VoidCallback onTap,
+  }) {
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(30),
+      child: Container(
+        width: 56,
+        height: 52,
+        alignment: Alignment.center,
+        child: Icon(
+          icon,
+          color: AppColors.white,
+          size: 22,
+        ),
       ),
     );
   }

@@ -1,133 +1,93 @@
-import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
+
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
-// import '../category/category_products_screen.dart';
 import '../home/sections/location_header.dart';
+import '../navigation/main_navigation.dart'; // ✅ ADD THIS
 
 class ProductsScreen extends StatefulWidget {
-  final String initialCategory;
-  final VoidCallback? onBackToHome;
+  final String? initialCategory;
 
   const ProductsScreen({
     super.key,
-    required this.initialCategory,
-    required this.onBackToHome,
+    this.initialCategory,
   });
 
   @override
   State<ProductsScreen> createState() => _ProductsScreenState();
 }
 
-class _ProductsScreenState extends State<ProductsScreen>
-    with AutomaticKeepAliveClientMixin {
-
+class _ProductsScreenState extends State<ProductsScreen> {
   String? selectedCategory;
 
   @override
   void initState() {
     super.initState();
-    selectedCategory = 'ALL'; // 👈 start with category grid
+    selectedCategory = widget.initialCategory; // null = ALL
   }
 
   @override
-  bool get wantKeepAlive => true;
-
-  bool get showCategoryGrid => selectedCategory == null;
-
-
-  @override
   Widget build(BuildContext context) {
-    super.build(context);
-
-    return BaseScreen(
-      child: Column(
-        children: [
-        LocationHeader(
+    return PopScope(
+      canPop: false, // ⛔ prevent default pop
+      onPopInvokedWithResult: (didPop, result) {
+        _goHome();
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Column(
+          children: [
+            /// 🔝 HEADER
+            LocationHeader(
               title: 'Products',
               subtitle: '',
               showBack: true,
               showDropdown: false,
-              onBack: widget.onBackToHome ?? () => Navigator.pop(context),
+              onBack: _goHome, // ✅ BACK TO HOME
             ),
 
+            const SizedBox(height: 12),
+            const HomeSearchBar(),
+            const SizedBox(height: 12),
 
-          const SizedBox(height: 12),
-          const HomeSearchBar(),
-          const SizedBox(height: 12),
+            /// 🏷 CATEGORY LIST
+            CategoryHorizontalList(
+              selectedCategory: selectedCategory ?? 'ALL',
+              onCategorySelected: (category) {
+                setState(() {
+                  selectedCategory = category == 'ALL' ? null : category;
+                });
+              },
+            ),
 
-          CategoryHorizontalList(
-            selectedCategory: selectedCategory ?? '',
-            onCategorySelected: (category) {
-              setState(() {
-                selectedCategory = category;
-              });
-            },
-          ),
+            const SizedBox(height: 16),
 
-          const SizedBox(height: 16),
-
-          Expanded(
-            child: showCategoryGrid
-                ? _buildCategoryGrid()
-                : _buildProductsGrid(),
-          ),
-        ],
+            /// 🧺 PRODUCTS
+            Expanded(child: _buildProductsGrid()),
+          ],
+        ),
       ),
     );
   }
 
-  Widget _buildCategoryGrid() {
-    final categories = ['Milk', 'Ghee', 'Curd', 'Paneer', 'Cheese', 'Butter'];
-
-    return GridView.builder(
-      padding: const EdgeInsets.all(16),
-      itemCount: categories.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        crossAxisSpacing: 16,
-        mainAxisSpacing: 16,
-        childAspectRatio: 0.60,
-      ),
-      itemBuilder: (_, index) {
-        final category = categories[index];
-
-        return GestureDetector(
-          onTap: () {
-            setState(() {
-              selectedCategory = category;
-            });
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              color: AppColors.primary,
-              borderRadius: BorderRadius.circular(16),
-            ),
-            alignment: Alignment.center,
-            child: Text(
-              category,
-              style: const TextStyle(
-                color: Colors.white,
-                fontSize: 18,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ),
-        );
-      },
-    );
+  void _goHome() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final navState = MainNavigation.navKey.currentState;
+      if (navState != null && navState.mounted) {
+        navState.switchTab(0);
+      }
+    });
   }
 
   Widget _buildProductsGrid() {
-    final products = selectedCategory == null || selectedCategory == 'ALL'
+    final products = selectedCategory == null
         ? popularProducts
         : popularProducts
         .where((p) => p.category == selectedCategory)
         .toList();
-
 
     return GridView.builder(
       padding: const EdgeInsets.all(16),
@@ -144,4 +104,3 @@ class _ProductsScreenState extends State<ProductsScreen>
     );
   }
 }
-

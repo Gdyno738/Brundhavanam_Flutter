@@ -5,12 +5,14 @@ import '../../chat/chat_screen.dart';
 import '../../wishlist/wish_list_screen.dart';
 import '../../goshala/goshala_info_screen.dart';
 
-class LocationHeader extends StatelessWidget {
+class LocationHeader extends StatefulWidget {
   final String title;
   final String subtitle;
   final bool showBack;
   final bool showDropdown;
+  final bool showLocationIcon;
   final VoidCallback? onBack;
+  final VoidCallback? onLocationTap; // ✅ NEW
 
   const LocationHeader({
     super.key,
@@ -18,18 +20,50 @@ class LocationHeader extends StatelessWidget {
     required this.subtitle,
     this.showBack = false,
     this.showDropdown = true,
+    this.showLocationIcon = false,
     this.onBack,
+    this.onLocationTap,
   });
+
+  @override
+  State<LocationHeader> createState() => _LocationHeaderState();
+}
+
+class _LocationHeaderState extends State<LocationHeader>
+    with SingleTickerProviderStateMixin {
+  late AnimationController _arrowController;
+
+  @override
+  void initState() {
+    super.initState();
+    _arrowController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 250),
+    );
+  }
+
+  void _handleLocationTap() {
+    if (widget.showDropdown) {
+      _arrowController.forward();
+    }
+    widget.onLocationTap?.call();
+  }
+
+  @override
+  void dispose() {
+    _arrowController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     final double topInset = MediaQuery.of(context).padding.top;
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle(
-        statusBarColor: AppColors.primary, // 🔥 THIS REMOVES WHITE BAR
+      value: const SystemUiOverlayStyle(
+        statusBarColor: AppColors.primary,
         statusBarIconBrightness: Brightness.light,
-        statusBarBrightness: Brightness.dark, // iOS
+        statusBarBrightness: Brightness.dark,
       ),
       child: MediaQuery.removePadding(
         context: context,
@@ -37,14 +71,8 @@ class LocationHeader extends StatelessWidget {
         child: Container(
           width: double.infinity,
           color: AppColors.primary,
-          padding: EdgeInsets.fromLTRB(
-            16,
-            topInset + 12,
-            16,
-            12,
-          ),
+          padding: EdgeInsets.fromLTRB(16, topInset + 12, 16, 12),
           child: Column(
-            mainAxisSize: MainAxisSize.min,
             children: [
               const Text(
                 'Brundhavanam',
@@ -60,9 +88,9 @@ class LocationHeader extends StatelessWidget {
 
               Row(
                 children: [
-                  if (showBack)
+                  if (widget.showBack)
                     GestureDetector(
-                      onTap: onBack ?? () => Navigator.pop(context),
+                      onTap: widget.onBack ?? () => Navigator.pop(context),
                       child: const Padding(
                         padding: EdgeInsets.only(right: 8),
                         child: Icon(
@@ -73,43 +101,73 @@ class LocationHeader extends StatelessWidget {
                       ),
                     ),
 
+                  /// 📍 LOCATION AREA (CLICKABLE)
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Text(
-                              title,
-                              style: const TextStyle(
-                                color: AppColors.white,
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
+                    child: InkWell(
+                      onTap:
+                      widget.showLocationIcon ? _handleLocationTap : null,
+                      borderRadius: BorderRadius.circular(8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              if (widget.showLocationIcon)
+                                const Icon(
+                                  Icons.location_on,
+                                  size: 20,
+                                  color: AppColors.white,
+                                ),
+
+                              if (widget.showLocationIcon)
+                                const SizedBox(width: 4),
+
+                              Flexible(
+                                child: Text(
+                                  widget.title,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: AppColors.white,
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                            ),
-                            if (showDropdown)
-                              const Icon(
-                                Icons.keyboard_arrow_down,
-                                color: AppColors.white,
-                              ),
-                          ],
-                        ),
-                        if (subtitle.isNotEmpty)
-                          Text(
-                            subtitle,
-                            style: const TextStyle(
-                              color: AppColors.white,
-                              fontSize: 12,
-                            ),
+
+                              if (widget.showDropdown)
+                                RotationTransition(
+                                  turns: Tween(begin: 0.0, end: 0.5)
+                                      .animate(_arrowController),
+                                  child: const Icon(
+                                    Icons.keyboard_arrow_down,
+                                    color: AppColors.white,
+                                  ),
+                                ),
+                            ],
                           ),
-                      ],
+
+                          if (widget.subtitle.isNotEmpty)
+                            Padding(
+                              padding: EdgeInsets.only(
+                                left: widget.showLocationIcon ? 24 : 0,
+                              ),
+                              child: Text(
+                                widget.subtitle,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
                     ),
                   ),
 
                   Row(
                     children: [
                       _iconButton(
-                        context,
                         iconPath: 'assets/icons/chat.png',
                         onTap: () {
                           Navigator.push(
@@ -121,7 +179,6 @@ class LocationHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: 14),
                       _iconButton(
-                        context,
                         iconPath: 'assets/icons/wishlist.png',
                         onTap: () {
                           Navigator.push(
@@ -133,7 +190,6 @@ class LocationHeader extends StatelessWidget {
                       ),
                       const SizedBox(width: 14),
                       _profileButton(
-                        context,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -153,11 +209,10 @@ class LocationHeader extends StatelessWidget {
     );
   }
 
-  Widget _iconButton(
-      BuildContext context, {
-        required String iconPath,
-        required VoidCallback onTap,
-      }) {
+  Widget _iconButton({
+    required String iconPath,
+    required VoidCallback onTap,
+  }) {
     return InkWell(
       borderRadius: BorderRadius.circular(24),
       onTap: onTap,
@@ -173,10 +228,7 @@ class LocationHeader extends StatelessWidget {
     );
   }
 
-  Widget _profileButton(
-      BuildContext context, {
-        required VoidCallback onTap,
-      }) {
+  Widget _profileButton({required VoidCallback onTap}) {
     return InkWell(
       borderRadius: BorderRadius.circular(24),
       onTap: onTap,

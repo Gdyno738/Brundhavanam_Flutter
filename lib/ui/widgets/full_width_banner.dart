@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../screens/navigation/main_navigation.dart';
 import '../common/app_colors.dart';
 
 class FullWidthBanner extends StatelessWidget {
@@ -13,22 +14,23 @@ class FullWidthBanner extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
         image: const DecorationImage(
-          image: AssetImage(
-            'assets/bannerImages/rectangle_banner.png',
-          ),
+          image: AssetImage('assets/bannerImages/rectangle_banner.png'),
           fit: BoxFit.cover,
         ),
       ),
       child: Stack(
         alignment: Alignment.center,
         children: [
-          /// 🔘 BOOK NOW BUTTON (center + slightly down)
           Transform.translate(
-            offset: const Offset(-40, 40), // 👈 move DOWN (adjust if needed)
+            offset: const Offset(-40, 40),
             child: GestureDetector(
               onTap: () {
-                // 🔗 Future navigation (Rent Cow screen)
-                debugPrint('Book Now clicked');
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigation(initialIndex: 1),
+                  ),
+                      (route) => false,
+                );
               },
               child: Container(
                 width: 105,
@@ -51,7 +53,6 @@ class FullWidthBanner extends StatelessWidget {
                     color: AppColors.white,
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
-                    height: 1.2,
                   ),
                 ),
               ),

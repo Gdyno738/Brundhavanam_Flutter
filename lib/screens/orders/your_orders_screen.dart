@@ -6,6 +6,7 @@ import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../navigation/main_navigation.dart';
+import 'order_cancle_bottom_sheet.dart';
 import 'order_details_screen.dart';
 import 'order_time_filter.dart';
 import 'order_time_filter_sheet.dart';
@@ -163,116 +164,164 @@ class _OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final bool canCancel = !order.completed; // ✅ adjust logic if needed
+
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
-      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: AppColors.lightGrey,
         borderRadius: BorderRadius.circular(24),
       ),
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            order.title,
-            style: const TextStyle(
-              color: AppColors.black,
-              fontSize: 14,
-            ),
-          ),
-          const SizedBox(height: 4),
-          Text(
-            order.subtitle,
-            style: const TextStyle(
-              color: AppColors.grey,
-              fontSize: 10,
-            ),
-          ),
-          const SizedBox(height: 6),
-          Text(
-            order.price,
-            style: const TextStyle(
-              color: AppColors.black,
-              fontSize: 16,
-            ),
-          ),
-          const SizedBox(height: 12),
-
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                order.completed ? 'Completed' : 'On the way',
-                style: TextStyle(
-                  color:
-                  order.completed ? AppColors.black : AppColors.primary,
-                  fontSize: 12,
+          /// 🔹 MAIN CARD CONTENT
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  order.title,
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 14,
+                  ),
                 ),
-              ),
-
-              /// 👉 ACTION BUTTON (UNCHANGED UI)
-              GestureDetector(
-                onTap: () {
-                  if (order.buttonText == 'View Receipt') {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) =>
-                            OrderDetailsScreen(order: order),
-                      ),
-                    );
-                  }
-
-                  if (order.buttonText == 'Reorder') {
-                    final product = Product(
-                      image: 'https://placehold.co/150x150',
-                      title: order.title,
-                      description: order.subtitle,
-                      size: 'Default',
-                      price: double.parse(
-                        order.price.replaceAll(RegExp(r'[^\d.]'), ''),
-                      ),
-                      originalPrice: double.parse(
-                        order.price.replaceAll(RegExp(r'[^\d.]'), ''),
-                      ),
-                      category: 'Reorder',
-                      rating: 4.5, id: 'milk_001',
-                    );
-
-                    context.read<CartProvider>().addToCart(product);
-
-                    final state = MainNavigation.navKey.currentState;
-                    if (state is MainNavigationState) {
-                      state.switchTab(3);
-                    }
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Product added to cart'),
-                      ),
-                    );
-                  }
-                },
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 16,
-                    vertical: 8,
+                const SizedBox(height: 4),
+                Text(
+                  order.subtitle,
+                  style: const TextStyle(
+                    color: AppColors.grey,
+                    fontSize: 10,
                   ),
-                  decoration: BoxDecoration(
-                    color: AppColors.primary,
-                    borderRadius: BorderRadius.circular(16),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  order.price,
+                  style: const TextStyle(
+                    color: AppColors.black,
+                    fontSize: 16,
                   ),
-                  child: Text(
-                    order.buttonText,
-                    style: const TextStyle(
-                      color: AppColors.white,
-                      fontSize: 12,
+                ),
+                const SizedBox(height: 12),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      order.completed ? 'Completed' : 'On the way',
+                      style: TextStyle(
+                        color: order.completed
+                            ? AppColors.black
+                            : AppColors.primary,
+                        fontSize: 12,
+                      ),
                     ),
+
+                    /// 👉 ACTION BUTTON
+                    GestureDetector(
+                      onTap: () {
+                        if (order.buttonText == 'View Receipt') {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (_) =>
+                                  OrderDetailsScreen(order: order),
+                            ),
+                          );
+                        }
+
+                        if (order.buttonText == 'Reorder') {
+                          final product = Product(
+                            id: 'milk_001',
+                            image: 'https://placehold.co/150x150',
+                            title: order.title,
+                            description: order.subtitle,
+                            size: 'Default',
+                            price: double.parse(
+                              order.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                            ),
+                            originalPrice: double.parse(
+                              order.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                            ),
+                            category: 'Reorder',
+                            rating: 4.5,
+                          );
+
+                          context.read<CartProvider>().addToCart(product);
+
+                          final state = MainNavigation.navKey.currentState;
+                          if (state is MainNavigationState) {
+                            state.switchTab(3);
+                          }
+
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Product added to cart'),
+                            ),
+                          );
+                        }
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                          vertical: 8,
+                        ),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          order.buttonText,
+                          style: const TextStyle(
+                            color: AppColors.white,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+
+          /// 🔻 CANCEL STRIP (FIGMA STYLE)
+          if (canCancel)
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.symmetric(
+                horizontal: 16,
+                vertical: 6,
+              ),
+              decoration: const BoxDecoration(
+                color: AppColors.lightGrey,
+                borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(24),
+                  bottomRight: Radius.circular(24),
+                ),
+              ),
+              alignment: Alignment.center,
+              child: GestureDetector(
+                onTap: () {showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  backgroundColor: Colors.transparent,
+                  builder: (_) => const CancelOrderBottomSheet(),
+                );
+                  // TODO: cancel order logic / confirmation dialog
+                },
+                child: const Text(
+                  'Do you want to cancel the booking ?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.primary,
+                    fontSize: 9,
+                    fontWeight: FontWeight.w400,
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
         ],
       ),
     );
