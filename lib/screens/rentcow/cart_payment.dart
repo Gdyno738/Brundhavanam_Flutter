@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import '../../ui/common/app_colors.dart';
+import '../../ui/widgets/payment_success_screen.dart';
 import '../home/sections/location_header.dart';
 import '../rentcow/debit_credit.dart';
 
@@ -10,17 +12,15 @@ class CartPayment extends StatefulWidget {
 }
 
 class _CartPaymentState extends State<CartPayment> {
-  String selectedMethod = 'PhonePe';
+  String selectedMethod = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-
+      backgroundColor: AppColors.white,
       body: Column(
         children: [
-
-          /// 🔹 FIXED HEADER
+          /// 🔹 HEADER
           LocationHeader(
             title: 'Payment Details',
             subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
@@ -36,16 +36,17 @@ class _CartPaymentState extends State<CartPayment> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-
-                  /// PAYMENT DETAILS TITLE
                   const Text(
                     'Payment details',
-                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
                   ),
 
                   const SizedBox(height: 12),
 
-                  /// ADDRESS
                   _box(
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,7 +54,10 @@ class _CartPaymentState extends State<CartPayment> {
                         Expanded(
                           child: Text(
                             'Indira Nagar, Gachibowli, hyder...',
-                            style: TextStyle(fontSize: 13),
+                            style: TextStyle(
+                              fontSize: 13,
+                              color: AppColors.black,
+                            ),
                           ),
                         ),
                         Icon(Icons.keyboard_arrow_down),
@@ -63,34 +67,36 @@ class _CartPaymentState extends State<CartPayment> {
 
                   const SizedBox(height: 20),
 
-                  /// 🔹 UPI LOGO
                   Image.asset(
                     'assets/images/upi.png',
                     height: 26,
                     width: 52,
-                    fit: BoxFit.cover,
                   ),
 
                   const SizedBox(height: 12),
 
-                  /// 🔹 UPI OPTIONS
                   _paymentTile('PhonePe', 'assets/images/phonepe.png'),
                   _paymentTile('G Pay', 'assets/images/gpay.png'),
                   _paymentTile('Paytm', 'assets/images/paytm.png'),
 
                   const SizedBox(height: 20),
 
-                  /// ENTER UPI ID
                   const Text(
                     'Enter UPI ID',
-                    style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: AppColors.black,
+                    ),
                   ),
+
                   const SizedBox(height: 8),
 
                   _box(
                     const TextField(
                       decoration: InputDecoration(
                         hintText: 'example@upi',
+                        hintStyle: TextStyle(color: AppColors.grey),
                         border: InputBorder.none,
                       ),
                     ),
@@ -98,14 +104,17 @@ class _CartPaymentState extends State<CartPayment> {
 
                   const SizedBox(height: 30),
 
-                  /// MORE WAYS
                   const Text(
                     'More ways to pay',
-                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
                   ),
+
                   const SizedBox(height: 12),
 
-                  /// DEBIT / CREDIT (NO IMAGE USED)
                   _paymentTile(
                     'Debit/Credit Card',
                     null,
@@ -124,24 +133,56 @@ class _CartPaymentState extends State<CartPayment> {
 
                   const SizedBox(height: 30),
 
-                  /// CONTINUE BUTTON
+                  /// ✅ CONTINUE BUTTON
                   SizedBox(
                     width: double.infinity,
                     height: 55,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFF049150),
+                        backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(20),
                         ),
                       ),
-                      onPressed: () {},
+                      onPressed: () async {
+                        if (selectedMethod.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content:
+                              Text('Please select a payment method'),
+                            ),
+                          );
+                          return;
+                        }
+
+                        showDialog(
+                          context: context,
+                          barrierDismissible: false,
+                          builder: (_) => const Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        );
+
+                        await Future.delayed(const Duration(seconds: 2));
+
+                        Navigator.pop(context);
+
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) =>
+                            const PaymentSuccessScreen(),
+                          ),
+                        );
+                      },
                       child: const Text(
                         'Continue',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white,
+                          color: AppColors.white,
                         ),
                       ),
                     ),
@@ -160,14 +201,14 @@ class _CartPaymentState extends State<CartPayment> {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
       decoration: BoxDecoration(
-        border: Border.all(color: const Color(0xFFB7B1B1)),
+        border: Border.all(color: AppColors.grey),
         borderRadius: BorderRadius.circular(20),
       ),
       child: child,
     );
   }
 
-  /// 🔹 PAYMENT TILE WITH RADIO + NAVIGATION
+  /// 🔹 PAYMENT TILE
   Widget _paymentTile(
       String title,
       String? image, {
@@ -186,9 +227,8 @@ class _CartPaymentState extends State<CartPayment> {
         padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
         decoration: BoxDecoration(
           border: Border.all(
-            color: isSelected
-                ? const Color(0xFF049150)
-                : const Color(0xFFB7B1B1),
+            color:
+            isSelected ? AppColors.primary : AppColors.grey,
           ),
           borderRadius: BorderRadius.circular(20),
         ),
@@ -199,7 +239,7 @@ class _CartPaymentState extends State<CartPayment> {
                   ? Icons.radio_button_checked
                   : Icons.radio_button_unchecked,
               size: 18,
-              color: const Color(0xFF049150),
+              color: AppColors.primary,
             ),
             const SizedBox(width: 12),
 
@@ -209,16 +249,13 @@ class _CartPaymentState extends State<CartPayment> {
                 style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
+                  color: AppColors.black,
                 ),
               ),
             ),
 
             if (image != null)
-              Image.asset(
-                image,
-                height: 22,
-                errorBuilder: (_, __, ___) => const SizedBox(),
-              ),
+              Image.asset(image, height: 22),
 
             if (showArrow) ...[
               const SizedBox(width: 8),

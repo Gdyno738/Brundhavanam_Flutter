@@ -7,87 +7,83 @@ class DonateHistoryLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      padding: const EdgeInsets.all(16),
-      itemCount: 7, // placeholder count
-      separatorBuilder: (_, __) => const SizedBox(height: 8),
-      itemBuilder: (context, index) {
-        return _historyItem();
-      },
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      itemCount: 7, // placeholder
+      separatorBuilder: (_, __) => Divider(
+        color: AppColors.grey,
+        thickness: 0,
+        height: 20,
+      ),
+      itemBuilder: (_, __) => _historyItem(),
     );
   }
 
   Widget _historyItem() {
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border.all(
-          color: AppColors.grey,
-          width: 1,
-        ),
-        borderRadius: BorderRadius.circular(8),
-        color: AppColors.white,
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          /// LEFT SIDE
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              /// IMAGE PLACEHOLDER
-              Container(
-                width: 47,
-                height: 47,
-                decoration: BoxDecoration(
-                  color: AppColors.lightGrey,
-                  shape: BoxShape.circle,
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        /// LEFT SECTION
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// IMAGE
+            Container(
+              width: 47,
+              height: 47,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(50),
+                color: AppColors.lightGrey,
+                image: const DecorationImage(
+                  image: NetworkImage('https://placehold.co/47x47'),
+                  fit: BoxFit.cover,
                 ),
               ),
-
-              const SizedBox(width: 10),
-
-              /// TEXT
-              SizedBox(
-                width: 190,
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: const [
-                    Text(
-                      'Donated for Green grass',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                        height: 1.2,
-                      ),
-                    ),
-                    SizedBox(height: 6),
-                    Text(
-                      '19/12/2025',
-                      style: TextStyle(
-                        color: AppColors.black,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w400,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-
-          /// AMOUNT
-          const Text(
-            '₹ 1000/-',
-            style: TextStyle(
-              color: AppColors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
             ),
+
+            const SizedBox(width: 10),
+
+            /// TEXT
+            SizedBox(
+              width: 188,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: const [
+                  Text(
+                    'Donated for Green grass',
+                    style: TextStyle(
+                      color: AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                      height: 1,
+                    ),
+                  ),
+                  SizedBox(height: 15),
+                  Text(
+                    '19/12/2025',
+                    style: TextStyle(
+                      color: AppColors.grey,
+                      fontSize: 12,
+                      fontWeight: FontWeight.w400,
+                      height: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+
+        /// AMOUNT
+        const Text(
+          '₹ 1000/-',
+          style: TextStyle(
+            color: AppColors.black,
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }
