@@ -2,7 +2,7 @@ import '../models/profile_model.dart';
 
 class MockProfileService {
   static ProfileModel _profile = ProfileModel(
-    name: 'Aisha',
+    name: 'Pavan',
     phone: '+91 1234567890',
     email: 'xyz@gmail.com',
     address: 'hyd...',

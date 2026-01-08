@@ -33,15 +33,10 @@ class MainNavigationState extends State<MainNavigation> {
   void initState() {
     super.initState();
 
-    pages = [
-      const HomeScreen(), // 0 → Home
-
-      const RentCowScreen(), // 1 → Rent Cow (future)
-    currentIndex = widget.initialIndex;
-
+currentIndex = widget.initialIndex;
     pages = [
       const HomeScreen(),
-      const PlaceholderScreen(title: 'Rent Cow'),
+    const RentCowScreen(),
       ProductsScreen(
         initialCategory: 'Products',
         onBackToHome: () => switchTab(0),
