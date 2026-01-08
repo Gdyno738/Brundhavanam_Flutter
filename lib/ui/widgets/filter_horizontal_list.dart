@@ -41,54 +41,54 @@ class _FilterHorizontalListState extends State<FilterHorizontalList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 44,
+      height: 48,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
         padding: const EdgeInsets.symmetric(horizontal: 16),
         itemCount: filters.length,
-        separatorBuilder: (context, index) => const SizedBox(width: 10),
-        itemBuilder: (context, index) {
+        separatorBuilder: (_, __) => const SizedBox(width: 20),
+        itemBuilder: (_, index) {
           final filter = filters[index];
-          final bool isSelected = filter == selectedFilter;
+          final bool isActive = filter == selectedFilter;
 
           return GestureDetector(
             onTap: () {
               setState(() => selectedFilter = filter);
-              debugPrint('Selected filter: $filter');
             },
             child: Container(
-              height: 32,
-              padding: const EdgeInsets.symmetric(horizontal: 14),
+              height: 48,
+              padding: const EdgeInsets.symmetric(horizontal: 15),
               decoration: BoxDecoration(
-                color: AppColors.white,
-                borderRadius: BorderRadius.circular(16),
-
-                /// 🔹 subtle selected feedback (same look)
-                boxShadow: [
-                  BoxShadow(
-                    color: AppColors.black.withValues(
-                      alpha: isSelected ? 0.18 : 0.15,
-                    ),
-                    blurRadius: 6,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
+                color: isActive ? AppColors.primary : AppColors.white,
+                borderRadius: BorderRadius.circular(25),
+                border: isActive
+                    ? null
+                    : Border.all(
+                  color: AppColors.grey,
+                  width: 1,
+                ),
               ),
+              alignment: Alignment.center,
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Icon(
                     _getIcon(filter),
                     size: 16,
-                    color: const Color(0xFF2D2D2D),
+                    color: isActive
+                        ? AppColors.white
+                        : AppColors.black,
                   ),
                   const SizedBox(width: 6),
                   Text(
                     filter,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: Color(0xFF2D2D2D),
+                    style: TextStyle(
+                      color: isActive
+                          ? AppColors.white
+                          : AppColors.black,
+                      fontSize: 16,
+                      fontWeight: FontWeight.w400,
+                      height: 1,
                     ),
                   ),
                 ],

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../models/onboarding_model.dart';
 import '../../ui/common/app_colors.dart';
-import '../../screens/language/language_bottom_sheet.dart';
+import '../language/language_bottom_sheet.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -42,25 +44,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     ),
   ];
 
-  void _next() {
+  Future<void> _markOnboardingSeen() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('hasSeenOnboarding', true);
+  }
+
+  void _next() async {
     if (_index < pages.length - 1) {
       _controller.nextPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
     } else {
+      await _markOnboardingSeen();
       showLanguageSheet(rootContext);
     }
   }
 
-  void _skip() {
+  void _skip() async {
+    await _markOnboardingSeen();
     showLanguageSheet(rootContext);
   }
 
   @override
   Widget build(BuildContext context) {
     rootContext = context;
-    final height = MediaQuery.of(context).size.height;
 
     return Scaffold(
       backgroundColor: AppColors.scaffoldBackground,
@@ -68,259 +76,191 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         controller: _controller,
         itemCount: pages.length,
         onPageChanged: (i) => setState(() => _index = i),
-        itemBuilder: (context, i) {
-          final bool isLast = i == pages.length - 1;
+        itemBuilder: (_, i) {
+          final isLast = i == pages.length - 1;
           final data = pages[i];
 
           return Stack(
             children: [
-              /// IMAGE + DARK OVERLAY
-              SizedBox(
-                height: height * 0.65,
-                width: double.infinity,
-                child: Stack(
-                  children: [
-                    AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 600),
-                      transitionBuilder: (child, animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: ScaleTransition(
-                            scale: Tween<double>(begin: 1.05, end: 1.0)
-                                .animate(animation),
-                            child: child,
-                          ),
-                        );
-                      },
-                      child: Image.asset(
-                        data.image,
-                        key: ValueKey(data.image),
-                        fit: BoxFit.cover,
-                        width: double.infinity,
-                        height: double.infinity,
-                      ),
-                    ),
-
-                    /// DARK OVERLAY (FIGMA STYLE)
-                    Container(
-                      color: AppColors.black.withValues(alpha: 0.20),
-                    ),
-                  ],
+              /// 🔹 TOP IMAGE
+              Positioned.fill(
+                child: Image.asset(
+                  data.image,
+                  fit: BoxFit.cover,
                 ),
               ),
 
-              /// LOGO BADGE
+              /// 🔹 LOGO (TOP RIGHT ON IMAGE)
               Positioned(
-                right: 24,
                 top: 40,
+                right: 24,
                 child: Container(
-                  width: 124,
-                  height: 124,
-                  decoration: BoxDecoration(
+                  width: 72,
+                  height: 72,
+                  decoration: const BoxDecoration(
                     color: AppColors.white,
                     shape: BoxShape.circle,
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 8,
-                        offset: const Offset(0, 6),
-                      ),
-                    ],
                   ),
                   alignment: Alignment.center,
                   child: const Text(
                     'Logo',
                     style: TextStyle(
                       color: AppColors.primary,
-                      fontSize: 20,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                 ),
               ),
 
-              /// WHITE CONTENT PANEL
+              /// 🔹 BOTTOM WHITE CARD
               Positioned(
-                top: height * 0.55,
                 left: 0,
                 right: 0,
                 bottom: 0,
-                child: TweenAnimationBuilder<double>(
-                  duration: const Duration(milliseconds: 500),
-                  tween: Tween(begin: 40, end: 0),
-                  curve: Curves.easeOut,
-                  builder: (context, value, child) {
-                    return Transform.translate(
-                      offset: Offset(0, value),
-                      child: child,
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.fromLTRB(22, 24, 22, 24),
-                    decoration: const BoxDecoration(
-                      color: AppColors.white,
-                      borderRadius: BorderRadius.vertical(
-                        top: Radius.circular(24),
-                      ),
+                child: Container(
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
+                  decoration: const BoxDecoration(
+                    color: AppColors.white,
+                    borderRadius: BorderRadius.vertical(
+                      top: Radius.circular(28),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            /// TITLE
-                            Expanded(
-                              child: Text(
-                                data.title,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.w600,
-                                  height: 1.25,
-                                  color: AppColors.black,
-                                ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      /// ⏭ SKIP (ONLY IF NOT LAST)
+                      if (!isLast)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: _skip,
+                            child: const Text(
+                              'Skip',
+                              style: TextStyle(
+                                color: AppColors.grey,
+                                fontSize: 16,
+                                fontWeight: FontWeight.w500,
                               ),
-                            ),
-                            if (!isLast)
-                              Padding(
-                                padding: const EdgeInsets.only(left: 16.0),
-                                child: GestureDetector(
-                                  onTap: _skip,
-                                  child: const Text(
-                                    'Skip',
-                                    style: TextStyle(
-                                      color: AppColors.grey,
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                          ],
-                        ),
-
-                        const SizedBox(height: 14),
-
-                        /// BULLET POINTS
-                        ...data.points.map(
-                              (text) => Padding(
-                            padding: const EdgeInsets.only(bottom: 10),
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Padding(
-                                  padding: EdgeInsets.only(top: 2),
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    size: 16,
-                                    color: AppColors.primary,
-                                  ),
-                                ),
-                                const SizedBox(width: 10),
-                                Expanded(
-                                  child: Text(
-                                    text,
-                                    style: const TextStyle(
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.4,
-                                      color: AppColors.black,
-                                    ),
-                                  ),
-                                ),
-                              ],
                             ),
                           ),
                         ),
 
-                        const Spacer(),
+                      if (!isLast) const SizedBox(height: 12),
 
-                        /// BOTTOM ACTION
-                        isLast
-                            ? SizedBox(
+                      /// TITLE
+                      Text(
+                        data.title,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.w600,
+                          height: 1.2,
+                        ),
+                      ),
+
+                      const SizedBox(height: 16),
+
+                      /// BULLET POINTS
+                      ...data.points.map(
+                            (p) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12),
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Icon(
+                                Icons.check,
+                                size: 18,
+                                color: AppColors.primary,
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  p,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    height: 1.4,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                      const SizedBox(height: 24),
+
+                      /// 🔹 LAST SCREEN → GET STARTED BUTTON
+                      if (isLast)
+                        SizedBox(
                           width: double.infinity,
                           height: 48,
                           child: ElevatedButton(
+                            onPressed: _next,
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.primary,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8),
+                                borderRadius: BorderRadius.circular(24),
                               ),
                             ),
-                            onPressed: _next,
                             child: const Text(
                               'Get Started',
                               style: TextStyle(
-                                color: AppColors.white,
                                 fontSize: 16,
-                                fontWeight: FontWeight.bold,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.white,
                               ),
                             ),
                           ),
                         )
-                            : Row(
+                      else
+                      /// 🔹 DOTS + NEXT ARROW
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            if (_index > 0)
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_back,
-                                  color: AppColors.primary,
-                                  size: 26,
-                                ),
-                                onPressed: () {
-                                  _controller.previousPage(
-                                    duration: const Duration(
-                                        milliseconds: 300),
-                                    curve: Curves.easeInOut,
-                                  );
-                                },
-                              )
-                            else
-                              const SizedBox(width: 48),
-
                             /// DOTS
-                            Expanded(
-                              child: Row(
-                                mainAxisAlignment:
-                                MainAxisAlignment.center,
-                                children: List.generate(
-                                  pages.length,
-                                      (d) => Container(
-                                    margin: const EdgeInsets.symmetric(
-                                        horizontal: 4),
-                                    width: 10,
-                                    height: 10,
-                                    decoration: BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      color: _index == d
-                                          ? AppColors.primary
-                                          : AppColors.lightGrey,
-                                    ),
+                            Row(
+                              children: List.generate(
+                                pages.length,
+                                    (dotIndex) => Container(
+                                  margin: const EdgeInsets.only(right: 6),
+                                  width: 8,
+                                  height: 8,
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    color: _index == dotIndex
+                                        ? AppColors.primary
+                                        : AppColors.lightGrey,
                                   ),
                                 ),
                               ),
                             ),
 
-                            if (_index < pages.length - 1)
-                              IconButton(
-                                icon: const Icon(
-                                  Icons.arrow_forward,
+                            /// NEXT ARROW
+                            GestureDetector(
+                              onTap: _next,
+                              child: Container(
+                                width: 44,
+                                height: 44,
+                                decoration: const BoxDecoration(
                                   color: AppColors.primary,
-                                  size: 26,
+                                  shape: BoxShape.circle,
                                 ),
-                                onPressed: _next,
-                              )
-                            else
-                              const SizedBox(width: 48),
+                                child: const Icon(
+                                  Icons.arrow_forward,
+                                  color: AppColors.white,
+                                ),
+                              ),
+                            ),
                           ],
                         ),
-                      ],
-                    ),
+                    ],
                   ),
                 ),
               ),
             ],
           );
+
+
         },
       ),
     );

@@ -34,20 +34,25 @@ class QuickLinks extends StatelessWidget {
     return GestureDetector(
       onTap: () => onChanged(value),
       child: Container(
-        margin: const EdgeInsets.only(right: 12),
+        width: 108.75, // ✅ Figma width
         height: 48,
-        padding: const EdgeInsets.symmetric(horizontal: 25),
+        margin: const EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
         decoration: BoxDecoration(
           color: isActive ? AppColors.primary : AppColors.white,
           borderRadius: BorderRadius.circular(25),
-          border: Border.all(
-            color: isActive ? AppColors.primary : const Color(0xFFB7B1B1),
+          border: isActive
+              ? null
+              : Border.all(
+            color: const Color(0xFFB7B1B1),
+            width: 1,
           ),
           boxShadow: isActive
               ? [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 10),
-              blurRadius: 10,
+              color: AppColors.shadow,
+              blurRadius: 25,
+              offset: const Offset(0, 0),
             ),
           ]
               : null,
@@ -55,10 +60,12 @@ class QuickLinks extends StatelessWidget {
         alignment: Alignment.center,
         child: Text(
           text,
+          textAlign: TextAlign.center,
           style: TextStyle(
             color: isActive ? AppColors.white : AppColors.black,
             fontSize: 16,
             fontWeight: FontWeight.w400,
+            height: 1,
           ),
         ),
       ),

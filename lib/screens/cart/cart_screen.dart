@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../ui/common/base_screen.dart';
 import '../orders/order_status.dart';
 import '../orders/order_placed_screen.dart';
 
@@ -26,15 +27,11 @@ class CartScreen extends StatelessWidget {
     const delivery = 50.0;
     final payable = total - discount + delivery;
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// 🔝 HEADER
-          SafeArea(
-            bottom: false,
-            child: LocationHeader(
-              title: 'Orders',
+        LocationHeader(
+              title: 'Cart',
               subtitle: 'Indira Nagar, Gachibowli, Hyder...',
               showBack: true,
               showDropdown: false,
@@ -44,7 +41,7 @@ class CartScreen extends StatelessWidget {
 
 
             ),
-          ),
+
 
           const SizedBox(height: 12),
 
@@ -61,12 +58,12 @@ class CartScreen extends StatelessWidget {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => ProductsScreen(
-                      initialCategory: 'Products',
-                      onBackToHome: () => Navigator.pop(context),
+                    builder: (_) => const ProductsScreen(
+                      initialCategory: 'ALL',
                     ),
                   ),
                 );
+
               },
             )
                 : ListView(
@@ -93,12 +90,12 @@ class CartScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => ProductsScreen(
-                          initialCategory: 'Products',
-                          onBackToHome: () => Navigator.pop(context),
+                        builder: (_) => const ProductsScreen(
+                          initialCategory: 'ALL',
                         ),
                       ),
                     );
+
                   },
                   child: Container(
                     margin: const EdgeInsets.all(16),

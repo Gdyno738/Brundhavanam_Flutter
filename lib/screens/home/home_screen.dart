@@ -1,7 +1,8 @@
-import 'package:brundhavanam_app/screens/category/category_products_screen.dart';
+
+import 'package:brundhavanam_app/screens/home/sections/location_picker_screen.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/dummy_products.dart';
+
 import '../../data/dummy_reviews.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/common/base_screen.dart';
@@ -13,15 +14,19 @@ import '../../ui/widgets/farm_video_banner.dart';
 import '../../ui/widgets/filter_horizontal_list.dart';
 import '../../ui/widgets/full_width_banner.dart';
 import '../../ui/widgets/home_search_bar.dart';
-import '../../ui/widgets/product_card.dart';
+import '../../ui/widgets/most_popular_products_section.dart';
+
 import '../../ui/widgets/reviews_horizontal_list.dart';
 import '../../ui/widgets/section_header.dart';
 import '../../ui/widgets/farm_to_home_section.dart';
 import '../../ui/widgets/why_trust_us_section.dart';
 
 import '../category/category_grid_screen.dart';
-import '../navigation/main_navigation.dart';
+import '../donate/donate_screen.dart';
 
+
+
+import '../popularproducts/popular_products_screen.dart';
 import 'sections/location_header.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -32,7 +37,8 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String selectedCategory = 'Milk';
+  String? selectedCategory;
+
 
   @override
   Widget build(BuildContext context) {
@@ -40,16 +46,25 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           LocationHeader(
-            title: 'DLF',
+            title: 'DLF Cyber City',
             subtitle: 'Indira Nagar, Gachibowli',
-            showBack: false,
             showDropdown: true,
+            showLocationIcon: true,
+            onLocationTap: () async {
+              await showModalBottomSheet(
+                context: context,
+                isScrollControlled: true,
+                backgroundColor: Colors.transparent,
+                builder: (_) => const LocationPickerScreen(),
+              );
+            },
           ),
 
 
 
 
-    /// ✅ REST OF SCREEN
+
+          /// ✅ REST OF SCREEN
           Expanded(
             child: SingleChildScrollView(
               physics: const BouncingScrollPhysics(),
@@ -82,16 +97,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   /// 🧀 Category icons
                   CategoryHorizontalList(
-                    selectedCategory: selectedCategory,
+                    selectedCategory: selectedCategory ?? 'ALL',
                     onCategorySelected: (category) {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => CategoryProductsScreen(category: category)
-                        ),
-                      );
+                      setState(() {
+                        selectedCategory = category == 'ALL' ? null : category;
+                      });
                     },
                   ),
+
+
 
 
                   const SizedBox(height: 20),
@@ -107,34 +121,17 @@ class _HomeScreenState extends State<HomeScreen> {
                   const SizedBox(height: 20),
 
                   /// ⭐ MOST POPULAR PRODUCTS
-                  SectionHeader(
-                    title: 'Most Popular Products',
+                  MostPopularProductsSection(
                     onViewAll: () {
-                      MainNavigation.navKey.currentState?.switchTab(2);
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const MostPopularProductsScreen(),
+                        ),
+                      );
                     },
                   ),
 
-
-                  const SizedBox(height: 20),
-
-                  /// 🛒 Popular product cards
-                  SizedBox(
-                    height: 317, // ✅ enough for full ProductCard
-                    child: ListView.separated(
-                      scrollDirection: Axis.horizontal,
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      itemCount: popularProducts.length,
-                      separatorBuilder: (_, _) => const SizedBox(width: 20),
-                      itemBuilder: (context, index) {
-                        return SizedBox(
-                          width: 185, // ✅ FIXED CARD WIDTH
-                          child: ProductCard(
-                            product: popularProducts[index],
-                          ),
-                        );
-                      },
-                    ),
-                  ),
 
 
                   const SizedBox(height: 20),
@@ -179,9 +176,15 @@ class _HomeScreenState extends State<HomeScreen> {
 
                   BecomePartnerCard(
                     onDonateTap: () {
-                      MainNavigation.navKey.currentState?.switchTab(4); // 👈 Donate tab
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => const DonateScreen(),
+                        ),
+                      );
                     },
                   ),
+
 
 
                   const SizedBox(height: 20),

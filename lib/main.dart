@@ -1,9 +1,9 @@
-import 'package:brundhavanam_app/providers/cart_provider.dart';
-import 'package:brundhavanam_app/providers/wish_list_provider.dart';
-import 'package:brundhavanam_app/screens/navigation/main_navigation.dart';
-import 'package:brundhavanam_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import 'providers/cart_provider.dart';
+import 'providers/wish_list_provider.dart';
+import 'screens/splash_screen.dart';
 
 void main() {
   runApp(
@@ -22,11 +22,9 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-
-      /// 🔥 KEY IS THE FIX
-      home: SplashScreen()
+      home: SplashScreen(), // ✅ ONLY SplashScreen here
     );
   }
 }
