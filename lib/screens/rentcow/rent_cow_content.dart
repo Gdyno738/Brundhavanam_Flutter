@@ -25,6 +25,7 @@ class _RentCowContentState extends State<RentCowContent> {
   String selectedCow = 'Type of cow';
   List<String> selectedCowImages = [];
 
+  bool isNext = true;
 
   String selectedFloor = 'Floor';
   String selectedHouseType = '';
@@ -304,15 +305,13 @@ class _RentCowContentState extends State<RentCowContent> {
                       ),
                       builder: (_) {
                         return CowTypeSelector(
-                          onSelect: (name, image) {
+                          onSelect: (name, images) {
                             setState(() {
                               selectedCow = name;
-
-                              // 👇 show SAME image 4 times (left & right)
-                              selectedCowImages = List.generate(4, (_) => image);
+                              selectedCowImages = images;
+                              currentImageIndex = 0;
                             });
                           },
-
                         );
                       },
                     );
@@ -335,35 +334,76 @@ class _RentCowContentState extends State<RentCowContent> {
                   ),
                 ),
 
-                const SizedBox(height: 16),
+                const SizedBox(height: 5),
 
                 if (selectedCowImages.isNotEmpty) ...[
                   const SizedBox(height: 20),
 
                   SizedBox(
                     height: 260,
-                    child: PageView.builder(
-                      itemCount: selectedCowImages.length,
-                      controller: PageController(viewportFraction: 0.9),
-                      onPageChanged: (index) {
-                        setState(() {
-                          currentImageIndex = index; // ✅ THIS LINE
-                        });
-                      },
-                      itemBuilder: (context, index) {
-                        return Center(
-                          child: Image.asset(
-                            selectedCowImages[index],
-                            height: 240,
-                            fit: BoxFit.contain,
+                    width: double.infinity,
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+
+                        /// 🐄 PERFECTLY CENTERED IMAGE
+                        GestureDetector(
+                          onTap: () {
+                            if (currentImageIndex < selectedCowImages.length - 1) {
+                              setState(() {
+                                currentImageIndex++;
+                              });
+                            }
+                          },
+                          child: Center(
+                            child: SizedBox(
+                              height: 220,
+                              width: 320, // 👈 FIXED WIDTH FOR ALL IMAGES
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(16),
+                                child: Image.asset(
+                                  selectedCowImages[currentImageIndex],
+                                  fit: BoxFit.contain, // ✅ MOST IMPORTANT
+                                  alignment: Alignment.center,
+                                ),
+                              ),
+                            ),
                           ),
-                        );
-                      },
+                        ),
+
+                        /// ⬅ LEFT ARROW
+                        if (currentImageIndex > 0)
+                          Positioned(
+                            left: 8,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentImageIndex--;
+                                });
+                              },
+                              child: _arrowButton(Icons.chevron_left),
+                            ),
+                          ),
+
+                        /// ➡ RIGHT ARROW
+                        if (currentImageIndex < selectedCowImages.length - 1)
+                          Positioned(
+                            right: 8,
+                            child: InkWell(
+                              onTap: () {
+                                setState(() {
+                                  currentImageIndex++;
+                                });
+                              },
+                              child: _arrowButton(Icons.chevron_right),
+                            ),
+                          ),
+                      ],
                     ),
                   ),
 
 
-                  const SizedBox(height: 8),
+                  const SizedBox(height: 5),
 
                   /// DOT INDICATOR
                   Row(
@@ -377,18 +417,18 @@ class _RentCowContentState extends State<RentCowContent> {
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
                           color: currentImageIndex == index
-                              ? const Color(0xFF292D32) // active
-                              : const Color(0xFFC0C0C0), // inactive
-
+                              ? Colors.black
+                              : Colors.grey,
                         ),
                       ),
                     ),
                   ),
+
                 ],
 
 
 
-                const SizedBox(height: 20),
+                const SizedBox(height: 10),
 
                 GestureDetector(
                   onTap: () {
@@ -497,23 +537,45 @@ class _RentCowContentState extends State<RentCowContent> {
   }
 }
 
-/// 🔹 INFO CHIP
+/// ================= INFO CHIP =================
 class _InfoChip extends StatelessWidget {
   final String text;
   const _InfoChip({required this.text});
 
   @override
   Widget build(BuildContext context) {
+    final bool isTime = text.contains('AM') || text.contains('PM');
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
         color: Colors.white.withOpacity(0.7),
         borderRadius: BorderRadius.circular(25),
       ),
-      child: Text(text, style: const TextStyle(fontSize: 12)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Image.asset(
+            isTime
+                ? 'assets/icons/clock_symbol.png'
+                : 'assets/icons/location_symbol.png',
+            width: 16,
+            height: 16,
+          ),
+          const SizedBox(width: 6),
+          Text(
+            text,
+            style: const TextStyle(
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
+
 
 /// 🔹 CHIP BUTTON
 class _ChipButton extends StatelessWidget {
@@ -532,3 +594,19 @@ class _ChipButton extends StatelessWidget {
     );
   }
 }
+
+Widget _arrowButton(IconData icon) {
+  return Container(
+    width: 32,
+    height: 32,
+    decoration: BoxDecoration(
+      color: Colors.white,
+      borderRadius: BorderRadius.circular(20),
+      boxShadow: const [
+        BoxShadow(color: Colors.black12, blurRadius: 4),
+      ],
+    ),
+    child: Icon(icon, size: 20),
+  );
+}
+

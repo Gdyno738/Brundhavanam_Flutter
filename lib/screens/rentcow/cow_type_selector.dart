@@ -1,17 +1,51 @@
 import 'package:flutter/material.dart';
 
 class CowTypeSelector extends StatelessWidget {
-  final Function(String, String) onSelect;
+  final Function(String, List<String>) onSelect;
+
 
   const CowTypeSelector({super.key, required this.onSelect});
 
   @override
   Widget build(BuildContext context) {
+
+
     final cows = [
-      {'name': 'Gir Cow', 'image': 'assets/images/gir.jpg'},
-      {'name': 'Sahiwal Cow', 'image': 'assets/images/Sahiwal.png'},
-      {'name': 'Tharparkar', 'image': 'assets/images/Tharparkar.jpg'},
+      {
+        'name': 'Gir Cow',
+        'price': 700,
+        'images': [
+          'assets/images/gir.jpg',
+          'assets/images/Sahiwal.png',
+          'assets/images/gir.jpg',
+          'assets/images/Sahiwal.png',
+        ],
+      },
+      {
+        'name': 'Sahiwal Cow',
+        'price': 700,
+        'images': [
+          'assets/images/Sahiwal.png',
+          'assets/images/Tharparkar.jpg',
+          'assets/images/Sahiwal.png',
+          'assets/images/Tharparkar.jpg',
+
+        ],
+      },
+      {
+        'name': 'Tharparkar Cow',
+        'price': 700,
+        'images': [
+          'assets/images/Tharparkar.jpg',
+          'assets/images/gir.jpg',
+          'assets/images/Tharparkar.jpg',
+          'assets/images/gir.jpg',
+          'assets/images/Tharparkar.jpg',
+
+        ],
+      },
     ];
+
 
     return Container(
       padding: const EdgeInsets.all(16),
@@ -38,39 +72,70 @@ class CowTypeSelector extends StatelessWidget {
 
           return GestureDetector(
             onTap: () {
-              onSelect(cow['name']!, cow['image']!);
+              onSelect(
+                cow['name'] as String,
+                List<String>.from(cow['images'] as List),
+              );
               Navigator.pop(context);
             },
-            child: Card(
-              // ✅ CARD BACKGROUND COLOR
-              color: Colors.white,
 
+            child: Card(
+              color: Colors.white,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
-                side: const BorderSide(
-                  color: Color(0xFFB7B1B1),
-                ),
+                side: const BorderSide(color: Color(0xFFB7B1B1)),
               ),
-
-              elevation: 1,
+              elevation: 2,
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Image.asset(
-                    cow['image']!,
-                    height: 90,
-                  ),
-                  const SizedBox(height: 10),
-                  Text(
-                    cow['name']!,
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
+                  /// 🐄 IMAGE (BIG + FIXED AT TOP)
+                  SizedBox(
+                    height: 160, // 🔥 controls image size
+                    child: ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(16),
+                        topRight: Radius.circular(16),
+                      ),
+                      child: Image.asset(
+                        (cow['images'] as List<String>).first,
+                        fit: BoxFit.cover, // fills width nicely
+                      ),
                     ),
+                  ),
+
+                  /// 🐄 NAME (NO EXTRA SPACE)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 6),
+                    child: Text(
+                      cow['name'] as String,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+
+                  /// 💰 PRICE (GREEN + BOLD)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8, top: 2),
+                    child: Text(
+                      'Price : ₹${cow['price'] as int}',
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                        color: Colors.green,
+                      ),
+                    ),
+
                   ),
                 ],
               ),
             ),
+
+
           );
         },
       ),

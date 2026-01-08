@@ -75,6 +75,8 @@ flutter:
      - assets/icons/products.png
      - assets/icons/cart.png
      - assets/icons/whatsapp_icon.png
+     - assets/icons/clock_symbol.png
+     - assets/icons/location_symbol.png
      - assets/bannerImages/rectangle_banner.png
      - assets/bannerImages/family_banner.png
      - assets/bannerImages/support_banner.png

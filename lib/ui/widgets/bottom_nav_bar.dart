@@ -20,33 +20,47 @@ class BottomNavBar extends StatelessWidget {
 
     return GestureDetector(
       onTap: () => onTap(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Image.asset(
-            icon,
-            width: 24,
-            height: 24,
-            color: isActive ? AppColors.primary : AppColors.grey,
-          ),
-          const SizedBox(height: 4),
-          Text(
-            label,
-            style: TextStyle(
-              fontSize: 10,
-              fontWeight: FontWeight.w500,
-              color: isActive ? AppColors.primary : AppColors.grey,
+      child: Transform.translate(
+        offset: const Offset(0, -12), // 👈 icon + text move together
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              width: 57,
+              height: 57,
+              decoration: BoxDecoration(
+                color: isActive ? AppColors.primary : Colors.transparent,
+                shape: BoxShape.circle,
+              ),
+              child: Center(
+                child: Image.asset(
+                  icon,
+                  width: 24,
+                  height: 24,
+                  color: isActive ? Colors.white : AppColors.grey,
+                ),
+              ),
             ),
-          ),
-        ],
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                fontSize: 10,
+                fontWeight: FontWeight.w500,
+                color: isActive ? AppColors.primary : AppColors.grey,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 72,
+      height: 100, // 👈 SAME AS FIGMA
       decoration: BoxDecoration(
         color: AppColors.white,
         boxShadow: [
@@ -60,31 +74,11 @@ class BottomNavBar extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
-          _navItem(
-            index: 0,
-            icon: 'assets/icons/home.png',
-            label: 'Home',
-          ),
-          _navItem(
-            index: 1,
-            icon: 'assets/icons/rent_cow.png',
-            label: 'Rent Cow',
-          ),
-          _navItem(
-            index: 2,
-            icon: 'assets/icons/products.png',
-            label: 'Products',
-          ),
-          _navItem(
-            index: 3,
-            icon: 'assets/icons/cart.png',
-            label: 'Cart',
-          ),
-          _navItem(
-            index: 4,
-            icon: 'assets/icons/profile.png',
-            label: 'Profile',
-          ),
+          _navItem(index: 0, icon: 'assets/icons/home.png', label: 'Home'),
+          _navItem(index: 1, icon: 'assets/icons/rent_cow.png', label: 'Rent Cow'),
+          _navItem(index: 2, icon: 'assets/icons/products.png', label: 'Products'),
+          _navItem(index: 3, icon: 'assets/icons/cart.png', label: 'Cart'),
+          _navItem(index: 4, icon: 'assets/icons/profile.png', label: 'Profile'),
         ],
       ),
     );
