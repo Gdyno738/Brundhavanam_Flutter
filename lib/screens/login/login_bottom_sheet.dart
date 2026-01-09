@@ -77,6 +77,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
           const SizedBox(height: 32),
 
           /// MOBILE NUMBER FIELD
+          /// MOBILE NUMBER FIELD (PROPERLY ALIGNED)
           Container(
             height: 60,
             padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -85,7 +86,9 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               border: Border.all(color: AppColors.lightGrey),
             ),
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
               children: [
+                /// +91
                 const Text(
                   '+91',
                   style: TextStyle(
@@ -94,14 +97,28 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
+
                 const SizedBox(width: 20),
+
+                /// MOBILE NUMBER
                 Expanded(
                   child: TextField(
                     controller: mobileController,
                     keyboardType: TextInputType.phone,
                     maxLength: 10,
+
+                    style: const TextStyle(
+                      color: AppColors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w600,
+                    ),
+
+                    textAlignVertical: TextAlignVertical.center,
+                    cursorColor: AppColors.primary,
+
                     decoration: const InputDecoration(
                       counterText: '',
+                      isDense: true, // 🔥 KEY FIX
                       hintText: 'Mobile Number',
                       hintStyle: TextStyle(
                         color: AppColors.grey,
@@ -115,6 +132,7 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               ],
             ),
           ),
+
 
           const SizedBox(height: 20),
 
