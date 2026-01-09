@@ -1,6 +1,8 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../ui/widgets/ProductSizeBadge.dart';
+
 
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
@@ -31,28 +33,34 @@ class ProductCard extends StatelessWidget {
                 ),
               );
 
-              if (result == 'VIEW_ALL_PRODUCTS') {
-                MainNavigation.navKey.currentState?.switchTab(2);
-              }
-            },
-            child: MediaQuery(
-              // 🔒 clamp iOS text scaling
-              data: MediaQuery.of(context).copyWith(
-                textScaleFactor:
-                math.min(MediaQuery.of(context).textScaleFactor, 1.0),
-              ),
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppColors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(
-                    color: AppColors.lightGrey,
-                    width: 0.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadow,
-                      blurRadius: 8,
+      child: Container(
+        decoration: BoxDecoration(
+          color: AppColors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(
+            color: AppColors.lightGrey,
+            width: 0.5,
+          ),
+          boxShadow: [
+            BoxShadow(
+              color: AppColors.shadow,
+              blurRadius: 8,
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            /// 🖼 IMAGE
+            SizedBox(
+              height: 180,
+              width: double.infinity,
+              child: Stack(
+                children: [
+                  /// PRODUCT IMAGE
+                  ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
                     ),
                   ],
                 ),
@@ -64,11 +72,40 @@ class ProductCard extends StatelessWidget {
                     SizedBox(
                       height: 180,
                       width: double.infinity,
-                      child: Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: const BorderRadius.vertical(
-                              top: Radius.circular(16),
+                      height: double.infinity,
+                    ),
+                  ),
+
+                  /// 🟢 SIZE BADGE (TOP RIGHT)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: ProductSizeBadge(
+                      size: product.size, // e.g. "500 ml"
+                    ),
+                  ),
+
+                  /// 🔖 WISHLIST (BOTTOM LEFT)
+                  Positioned(
+                    left: 8,
+                    bottom: 8,
+                    child: Consumer<WishlistProvider>(
+                      builder: (_, wishlist, __) {
+                        final isWishlisted = wishlist.isWishlisted(product);
+
+                        return GestureDetector(
+                          onTap: () => wishlist.toggle(product),
+                          child: Container(
+                            padding: const EdgeInsets.all(6),
+                            decoration: BoxDecoration(
+                              color: AppColors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              boxShadow: const [
+                                BoxShadow(
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                ),
+                              ],
                             ),
                             child: Image.network(
                               product.image,
@@ -78,14 +115,15 @@ class ProductCard extends StatelessWidget {
                             ),
                           ),
 
-                          /// 🔖 Wishlist
-                          Positioned(
-                            left: 8,
-                            bottom: 8,
-                            child: Consumer<WishlistProvider>(
-                              builder: (_, wishlist, __) {
-                                final isWishlisted =
-                                wishlist.isWishlisted(product);
+
+            /// CONTENT
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: 6),
 
                                 return GestureDetector(
                                   onTap: () => wishlist.toggle(product),

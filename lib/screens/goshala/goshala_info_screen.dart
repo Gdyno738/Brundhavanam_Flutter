@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../home/sections/location_header.dart';
 import 'goshala_live_tabs_screen.dart';
+import '../goshala/ViewLiveBadge.dart';
+import '../donate/donate_screen.dart';
+import '../../ui/widgets/become_partner_card.dart';
 
 class GoshalaInfoScreen extends StatelessWidget {
   const GoshalaInfoScreen({super.key});
@@ -13,11 +16,14 @@ class GoshalaInfoScreen extends StatelessWidget {
       body: Column(
         children: [
           /// HEADER
-          LocationHeader(
-            title: 'Goshala',
-            subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
-            showBack: true,
-            showDropdown: false,
+          const SafeArea(
+            bottom: false,
+            child: LocationHeader(
+              title: 'Goshala',
+              subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
+              showBack: true,
+              showDropdown: false,
+            ),
           ),
 
           Expanded(
@@ -44,39 +50,11 @@ class GoshalaInfoScreen extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                builder: (_) =>
-                                const GoshalaLiveScreen(),
+                                builder: (_) => const GoshalaLiveScreen(),
                               ),
                             );
                           },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 14,
-                              vertical: 8,
-                            ),
-                            decoration: BoxDecoration(
-                              color: Colors.black.withValues(alpha: 150),
-                              borderRadius: BorderRadius.circular(20),
-                            ),
-                            child: const Row(
-                              children: [
-                                Icon(
-                                  Icons.circle,
-                                  size: 8,
-                                  color: Colors.red,
-                                ),
-                                SizedBox(width: 6),
-                                Text(
-                                  'View Live',
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
+                          child: const ViewLiveBadge(),
                         ),
                       ),
                     ],
@@ -135,6 +113,39 @@ class GoshalaInfoScreen extends StatelessWidget {
                   ),
 
                   const SizedBox(height: 24),
+
+                  /// 👉 BECOME PARTNER TITLE
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      'Become Partner',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                        height: 1.2,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  /// 👉 BECOME PARTNER CARD
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: BecomePartnerCard(
+                      onDonateTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => const DonateScreen(),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+
+                  const SizedBox(height: 20),
                 ],
               ),
             ),
