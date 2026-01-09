@@ -3,6 +3,7 @@ import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/payment_success_screen.dart';
 import '../home/sections/location_header.dart';
 import '../rentcow/debit_credit.dart';
+import '../rentcow/UpiVerificationField.dart';
 
 class CartPayment extends StatefulWidget {
   const CartPayment({super.key});
@@ -81,26 +82,8 @@ class _CartPaymentState extends State<CartPayment> {
 
                   const SizedBox(height: 20),
 
-                  const Text(
-                    'Enter UPI ID',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                      color: AppColors.black,
-                    ),
-                  ),
+                  const UpiVerificationField(),
 
-                  const SizedBox(height: 8),
-
-                  _box(
-                    const TextField(
-                      decoration: InputDecoration(
-                        hintText: 'example@upi',
-                        hintStyle: TextStyle(color: AppColors.grey),
-                        border: InputBorder.none,
-                      ),
-                    ),
-                  ),
 
                   const SizedBox(height: 30),
 

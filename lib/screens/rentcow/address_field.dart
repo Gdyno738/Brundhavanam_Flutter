@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import '../../screens/home/sections/location_picker_screen.dart'; // adjust path if needed
 
 class AddressField extends StatelessWidget {
   const AddressField({super.key});
@@ -30,9 +30,21 @@ class AddressField extends StatelessWidget {
                 fontWeight: FontWeight.w400,
               ),
             ),
+
+            /// 👉 MAPS CLICK
             GestureDetector(
-              onTap: () {
-                // TODO: Open Google Maps here
+              onTap: () async {
+                final selectedLocation = await Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const LocationPickerScreen(),
+                  ),
+                );
+
+                if (selectedLocation != null) {
+                  debugPrint('Selected location: $selectedLocation');
+                  // You can store this in state / controller later
+                }
               },
               child: const Text(
                 'Maps',

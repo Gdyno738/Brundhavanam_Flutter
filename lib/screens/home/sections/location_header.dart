@@ -230,17 +230,20 @@ class _LocationHeaderState extends State<LocationHeader>
 
   Widget _profileButton({required VoidCallback onTap}) {
     return InkWell(
-      borderRadius: BorderRadius.circular(24),
+      borderRadius: BorderRadius.circular(20),
       onTap: onTap,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
+      child: Container(
+        width: 60,   // 👈 SAME FOR ALL ICONS
+        height: 60,
+        alignment: Alignment.center,
         child: Image.asset(
           'assets/icons/cow.png',
-          width: 24,
-          height: 24,
-          fit: BoxFit.cover,
+          width: 80,  // image size
+          height: 80,
+          fit: BoxFit.contain,
         ),
       ),
     );
+
   }
 }

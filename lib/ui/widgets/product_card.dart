@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../ui/widgets/ProductSizeBadge.dart';
+
 
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
@@ -57,6 +59,7 @@ class ProductCard extends StatelessWidget {
               width: double.infinity,
               child: Stack(
                 children: [
+                  /// PRODUCT IMAGE
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
@@ -69,14 +72,22 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
 
-                  /// 🔖 Wishlist
+                  /// 🟢 SIZE BADGE (TOP RIGHT)
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: ProductSizeBadge(
+                      size: product.size, // e.g. "500 ml"
+                    ),
+                  ),
+
+                  /// 🔖 WISHLIST (BOTTOM LEFT)
                   Positioned(
                     left: 8,
                     bottom: 8,
                     child: Consumer<WishlistProvider>(
                       builder: (_, wishlist, __) {
-                        final isWishlisted =
-                        wishlist.isWishlisted(product);
+                        final isWishlisted = wishlist.isWishlisted(product);
 
                         return GestureDetector(
                           onTap: () => wishlist.toggle(product),
@@ -107,6 +118,7 @@ class ProductCard extends StatelessWidget {
                 ],
               ),
             ),
+
 
             /// CONTENT
             Expanded(
