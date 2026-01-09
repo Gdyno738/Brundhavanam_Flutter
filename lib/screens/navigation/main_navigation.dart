@@ -1,3 +1,5 @@
+import 'package:brundhavanam_app/screens/category/category_grid_screen.dart';
+import 'package:brundhavanam_app/screens/category/category_products_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../ui/widgets/bottom_nav_bar.dart';
@@ -40,6 +42,8 @@ class MainNavigation extends StatefulWidget {
 class MainNavigationState extends State<MainNavigation> {
   late int currentIndex;
   late final List<Widget> pages;
+  String? productsInitialCategory;
+
 
   @override
   void initState() {
@@ -52,17 +56,23 @@ class MainNavigationState extends State<MainNavigation> {
       const RentCowScreen(),
 
       /// ✅ CORRECT: null = ALL PRODUCTS
-      const ProductsScreen(),
+      const CategoryGridScreen(),
 
       const CartScreen(),
       const ProfileScreen(),
     ];
   }
 
-  void switchTab(int index) {
-    if (index == currentIndex) return;
-    setState(() => currentIndex = index);
+  void switchTab(int index, {String? initialCategory}) {
+    setState(() {
+      currentIndex = index;
+
+      if (index == 2) {
+        productsInitialCategory = initialCategory;
+      }
+    });
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +86,19 @@ class MainNavigationState extends State<MainNavigation> {
         }
       },
       child: Scaffold(
-        body: pages[currentIndex],
+        body: IndexedStack(
+          index: currentIndex,
+          children: List.generate(pages.length, (index) {
+            return Navigator(
+              onGenerateRoute: (_) {
+                return MaterialPageRoute(
+                  builder: (_) => pages[index],
+                );
+              },
+            );
+          }),
+        ),
+
         bottomNavigationBar: BottomNavBar(
           currentIndex: currentIndex,
           onTap: switchTab,

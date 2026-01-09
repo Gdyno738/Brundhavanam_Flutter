@@ -120,7 +120,7 @@ class _OtpScreenState extends State<OtpScreen> {
 
               /// MOBILE NUMBER (UNDERLINED)
               Text(
-                widget.mobileNumber,
+                '+91 ${widget.mobileNumber}',
                 style: const TextStyle(
                   color: AppColors.grey,
                   fontSize: 16,
@@ -128,6 +128,7 @@ class _OtpScreenState extends State<OtpScreen> {
                   decoration: TextDecoration.underline,
                 ),
               ),
+
 
               const SizedBox(height: 40),
 

@@ -3,6 +3,7 @@ import '../../data/dummy_categories.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_card.dart';
 import '../home/sections/location_header.dart';
+import '../navigation/main_navigation.dart';
 import 'category_products_screen.dart';
 
 class CategoryGridScreen extends StatelessWidget {
@@ -18,13 +19,19 @@ class CategoryGridScreen extends StatelessWidget {
           SafeArea(
             bottom: false,
             child: LocationHeader(
-              title: 'Categories',
+              title: 'Products',
               subtitle: '',
               showBack: true,
               showDropdown: false,
-              onBack: () => Navigator.pop(context),
+              onBack: () {
+                MainNavigation.navKey.currentState?.switchTab(0);
+              },
+
+
+
             ),
           ),
+
 
           const SizedBox(height: 16),
 

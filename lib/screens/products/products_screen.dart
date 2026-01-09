@@ -6,7 +6,7 @@ import '../../ui/widgets/category_horizontal_list.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
 import '../home/sections/location_header.dart';
-import '../navigation/main_navigation.dart'; // ✅ ADD THIS
+import '../navigation/main_navigation.dart';
 
 class ProductsScreen extends StatefulWidget {
   final String? initialCategory;
@@ -31,55 +31,47 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false, // ⛔ prevent default pop
-      onPopInvokedWithResult: (didPop, result) {
-        _goHome();
-      },
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Column(
-          children: [
-            /// 🔝 HEADER
-            LocationHeader(
-              title: 'Products',
-              subtitle: '',
-              showBack: true,
-              showDropdown: false,
-              onBack: _goHome, // ✅ BACK TO HOME
-            ),
+    return Scaffold(
+      backgroundColor: AppColors.white,
+      body: Column(
+        children: [
+          /// 🔝 HEADER
+          LocationHeader(
+            title: 'Products',
+            subtitle: '',
+            showBack: true,
+            showDropdown: false,
+            onBack: _goHome, // ✅ back to Home tab
+          ),
 
-            const SizedBox(height: 12),
-            const HomeSearchBar(),
-            const SizedBox(height: 12),
+          const SizedBox(height: 12),
+          const HomeSearchBar(),
+          const SizedBox(height: 12),
 
-            /// 🏷 CATEGORY LIST
-            CategoryHorizontalList(
-              selectedCategory: selectedCategory ?? 'ALL',
-              onCategorySelected: (category) {
-                setState(() {
-                  selectedCategory = category == 'ALL' ? null : category;
-                });
-              },
-            ),
+          /// 🏷 CATEGORY LIST
+          CategoryHorizontalList(
+            selectedCategory: selectedCategory ?? 'ALL',
+            onCategorySelected: (category) {
+              setState(() {
+                selectedCategory = category == 'ALL' ? null : category;
+              });
+            },
+          ),
 
-            const SizedBox(height: 16),
+          const SizedBox(height: 16),
 
-            /// 🧺 PRODUCTS
-            Expanded(child: _buildProductsGrid()),
-          ],
-        ),
+          /// 🧺 PRODUCTS GRID
+          Expanded(child: _buildProductsGrid()),
+        ],
       ),
     );
   }
 
   void _goHome() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      final navState = MainNavigation.navKey.currentState;
-      if (navState != null && navState.mounted) {
-        navState.switchTab(0);
-      }
-    });
+    final navState = MainNavigation.navKey.currentState;
+    if (navState != null && navState.mounted) {
+      navState.switchTab(0);
+    }
   }
 
   Widget _buildProductsGrid() {

@@ -33,18 +33,17 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
         title: 'Rent Cow',
         subtitle: 'Gruhapravesham',
         price: '₹ 570/-',
-        buttonText: 'View Receipt',
-        orderDate: DateTime.now().subtract(const Duration(days: 2)),
         address: 'Gachibowli, Hyderabad',
-        completed: true,
+        orderDate: DateTime.now().subtract(const Duration(days: 2)),
+        status: OrderStatus.active, // keep active for testing cancel
       ),
       OrderModel(
         title: 'Low-Fat Buffalo Milk',
         subtitle: 'Daily consumption',
         price: '₹ 470/-',
-        buttonText: 'Reorder',
-        orderDate: DateTime.now().subtract(const Duration(days: 10)),
         address: 'Indira Nagar, Hyderabad',
+        orderDate: DateTime.now().subtract(const Duration(days: 10)),
+        status: OrderStatus.completed,
       ),
     ];
   }
@@ -58,15 +57,12 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
           return order.orderDate.isAfter(
             now.subtract(const Duration(days: 7)),
           );
-
         case OrderTimeFilter.pastThreeMonths:
           return order.orderDate.isAfter(
             DateTime(now.year, now.month - 3, now.day),
           );
-
         case OrderTimeFilter.thisYear:
           return order.orderDate.year == now.year;
-
         case OrderTimeFilter.lastYear:
           return order.orderDate.year == now.year - 1;
       }
@@ -91,7 +87,7 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
       ),
       body: Column(
         children: [
-          /// 🔍 SEARCH + FILTER (SAME UI STYLE)
+          /// 🔍 SEARCH + FILTER
           Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -164,7 +160,26 @@ class _OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool canCancel = !order.completed; // ✅ adjust logic if needed
+    final bool canCancel = !order.completed; // testing mode
+
+    final bool isRentCow = order.title == 'Rent Cow';
+    final String buttonText = isRentCow ? 'View Receipt' : 'Reorder';
+
+    String statusText;
+    Color statusColor;
+
+    if (order.cancelled) {
+      statusText = order.refundStatus == RefundStatus.initiated
+          ? 'Refund Initiated'
+          : 'Order Cancelled';
+      statusColor = Colors.red;
+    } else if (order.completed) {
+      statusText = 'Completed';
+      statusColor = AppColors.black;
+    } else {
+      statusText = 'On the way';
+      statusColor = AppColors.primary;
+    }
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
@@ -174,54 +189,41 @@ class _OrderCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          /// 🔹 MAIN CARD CONTENT
+          /// 🔹 MAIN CARD
           Padding(
             padding: const EdgeInsets.all(16),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  order.title,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: 14,
-                  ),
-                ),
+                Text(order.title,
+                    style: const TextStyle(
+                        color: AppColors.black, fontSize: 14)),
                 const SizedBox(height: 4),
-                Text(
-                  order.subtitle,
-                  style: const TextStyle(
-                    color: AppColors.grey,
-                    fontSize: 10,
-                  ),
-                ),
+                Text(order.subtitle,
+                    style: const TextStyle(
+                        color: AppColors.grey, fontSize: 10)),
                 const SizedBox(height: 6),
-                Text(
-                  order.price,
-                  style: const TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                  ),
-                ),
+                Text(order.price,
+                    style: const TextStyle(
+                        color: AppColors.black, fontSize: 16)),
                 const SizedBox(height: 12),
 
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      order.completed ? 'Completed' : 'On the way',
+                      statusText,
                       style: TextStyle(
-                        color: order.completed
-                            ? AppColors.black
-                            : AppColors.primary,
+                        color: statusColor,
                         fontSize: 12,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
 
                     /// 👉 ACTION BUTTON
                     GestureDetector(
                       onTap: () {
-                        if (order.buttonText == 'View Receipt') {
+                        if (isRentCow) {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
@@ -229,9 +231,7 @@ class _OrderCard extends StatelessWidget {
                                   OrderDetailsScreen(order: order),
                             ),
                           );
-                        }
-
-                        if (order.buttonText == 'Reorder') {
+                        } else {
                           final product = Product(
                             id: 'milk_001',
                             image: 'https://placehold.co/150x150',
@@ -239,18 +239,23 @@ class _OrderCard extends StatelessWidget {
                             description: order.subtitle,
                             size: 'Default',
                             price: double.parse(
-                              order.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                              order.price
+                                  .replaceAll(RegExp(r'[^\d.]'), ''),
                             ),
                             originalPrice: double.parse(
-                              order.price.replaceAll(RegExp(r'[^\d.]'), ''),
+                              order.price
+                                  .replaceAll(RegExp(r'[^\d.]'), ''),
                             ),
                             category: 'Reorder',
                             rating: 4.5,
                           );
 
-                          context.read<CartProvider>().addToCart(product);
+                          context
+                              .read<CartProvider>()
+                              .addToCart(product);
 
-                          final state = MainNavigation.navKey.currentState;
+                          final state =
+                              MainNavigation.navKey.currentState;
                           if (state is MainNavigationState) {
                             state.switchTab(3);
                           }
@@ -272,7 +277,7 @@ class _OrderCard extends StatelessWidget {
                           borderRadius: BorderRadius.circular(16),
                         ),
                         child: Text(
-                          order.buttonText,
+                          buttonText,
                           style: const TextStyle(
                             color: AppColors.white,
                             fontSize: 12,
@@ -286,7 +291,7 @@ class _OrderCard extends StatelessWidget {
             ),
           ),
 
-          /// 🔻 CANCEL STRIP (FIGMA STYLE)
+          /// 🔻 CANCEL STRIP (FOR TESTING)
           if (canCancel)
             Container(
               width: double.infinity,
@@ -303,13 +308,13 @@ class _OrderCard extends StatelessWidget {
               ),
               alignment: Alignment.center,
               child: GestureDetector(
-                onTap: () {showModalBottomSheet(
-                  context: context,
-                  isScrollControlled: true,
-                  backgroundColor: Colors.transparent,
-                  builder: (_) => const CancelOrderBottomSheet(),
-                );
-                  // TODO: cancel order logic / confirmation dialog
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    backgroundColor: Colors.transparent,
+                    builder: (_) => const CancelOrderBottomSheet(),
+                  );
                 },
                 child: const Text(
                   'Do you want to cancel the booking ?',

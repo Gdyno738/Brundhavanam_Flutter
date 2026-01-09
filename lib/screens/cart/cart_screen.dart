@@ -1,8 +1,9 @@
+import 'package:brundhavanam_app/screens/category/category_grid_screen.dart';
+import 'package:brundhavanam_app/screens/rentcow/cart_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../ui/common/base_screen.dart';
-import '../orders/order_status.dart';
-import '../orders/order_placed_screen.dart';
+
 
 import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
@@ -90,9 +91,7 @@ class CartScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const ProductsScreen(
-                          initialCategory: 'ALL',
-                        ),
+                        builder: (_) => const CategoryGridScreen()
                       ),
                     );
 
@@ -171,39 +170,38 @@ class CartScreen extends StatelessWidget {
                 ),
 
                 /// ✅ PROCEED TO PAY
-                GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const OrderPlacedScreen(
-                          status: OrderStatus.success,
-                        ),
-                      ),
-                    );
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => const CartPayment(),
+            ),
+          );
+        },
+        child: Container(
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          height: 60,
+          decoration: BoxDecoration(
+            color: AppColors.primary,
+            borderRadius: BorderRadius.circular(20),
+          ),
+          child: const Center(
+            child: Text(
+              'Proceed to Pay',
+              style: TextStyle(
+                color: AppColors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      )
 
-                  },
-                  child: Container(
-                    margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
-                    height: 60,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary,
-                      borderRadius: BorderRadius.circular(20),
-                    ),
-                    child: const Center(
-                      child: Text(
-                        'Proceed to Pay',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
 
-              ],
+
+      ],
             ),
           ),
         ],

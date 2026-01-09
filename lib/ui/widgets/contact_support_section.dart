@@ -23,7 +23,7 @@ class ContactSupportSection extends StatelessWidget {
             /// 🔲 DARK OVERLAY
             Container(
               decoration: BoxDecoration(
-                color: AppColors.black.withValues(alpha: 0.40),
+                color: AppColors.black.withValues(alpha: 0.10),
                 borderRadius: BorderRadius.circular(20),
               ),
             ),

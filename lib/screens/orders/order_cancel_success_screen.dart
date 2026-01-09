@@ -56,6 +56,10 @@ class OrderCancelSuccessScreen extends StatelessWidget {
 
             /// ⏳ REFUND STATUS
             _refundTimeline(),
+
+            const SizedBox(height: 12),
+            _refundInfoStrip(),
+
           ],
         ),
       ),
@@ -172,12 +176,13 @@ class OrderCancelSuccessScreen extends StatelessWidget {
         _timelineItem(
           color: AppColors.grey,
           title: 'Refund Completed',
-          date: '25 Dec 2025',
+          date: 'Pending',
           inactive: true,
         ),
       ],
     );
   }
+
 
   Widget _timelineItem({
     required Color color,
@@ -219,6 +224,31 @@ class OrderCancelSuccessScreen extends StatelessWidget {
       ],
     );
   }
+
+  Widget _refundInfoStrip() {
+    return Container(
+      width: double.infinity,
+      padding: const EdgeInsets.symmetric(vertical: 10),
+      decoration: BoxDecoration(
+        color: AppColors.lightGrey,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: AppColors.primary.withValues(alpha: 0.3),
+        ),
+      ),
+      child: const Center(
+        child: Text(
+          'Refund has been initiated by admin',
+          style: TextStyle(
+            color: AppColors.primary,
+            fontSize: 12,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      ),
+    );
+  }
+
 }
 
 /// 🔹 PRICE ROW
