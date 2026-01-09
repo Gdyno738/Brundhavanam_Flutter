@@ -1,19 +1,35 @@
+enum OrderStatus {
+  active,
+  completed,
+  cancelled,
+}
+
+enum RefundStatus {
+  none,
+  initiated,
+  completed,
+}
+
 class OrderModel {
   final String title;
   final String subtitle;
   final String price;
-  final String buttonText;
-  final DateTime orderDate;
   final String address;
-  final bool completed;
+  final DateTime orderDate;
+
+  OrderStatus status;
+  RefundStatus refundStatus;
 
   OrderModel({
     required this.title,
     required this.subtitle,
     required this.price,
-    required this.buttonText,
-    required this.orderDate,
     required this.address,
-    this.completed = false,
+    required this.orderDate,
+    this.status = OrderStatus.active,
+    this.refundStatus = RefundStatus.none,
   });
+
+  bool get completed => status == OrderStatus.completed;
+  bool get cancelled => status == OrderStatus.cancelled;
 }

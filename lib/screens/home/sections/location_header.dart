@@ -235,7 +235,7 @@ class _LocationHeaderState extends State<LocationHeader>
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: Image.asset(
-          'assets/icons/cow.png',
+          'assets/icons/rent_cow.png',
           width: 24,
           height: 24,
           fit: BoxFit.cover,

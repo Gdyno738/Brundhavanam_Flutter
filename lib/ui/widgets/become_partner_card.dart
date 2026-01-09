@@ -27,6 +27,13 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
+    // 🔧 Responsive cow logic
+    final double cowSize = screenWidth < 360 ? 120 : 155;
+    final double cowLeft = screenWidth < 360 ? -30 : -10;
+    final double cowBottom = screenWidth < 360 ? -6 : 0;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SizedBox(
@@ -45,15 +52,20 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
               ),
             ),
 
-            /// 🌿 GRASS STRIP
+            /// 🌿 GRASS STRIP (ROUNDED)
             Positioned(
               bottom: 0,
               left: 0,
               right: 0,
-              child: Image.asset(
-                'assets/images/grass_strip.png',
-                height: 24,
-                fit: BoxFit.cover,
+              child: ClipRRect(
+                borderRadius: const BorderRadius.vertical(
+                  bottom: Radius.circular(20),
+                ),
+                child: Image.asset(
+                  'assets/images/grass_strip.png',
+                  height: 24,
+                  fit: BoxFit.cover,
+                ),
               ),
             ),
 
@@ -76,11 +88,11 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
               ),
             ),
 
-            /// 🐄 COW IMAGE
+            /// 🐄 RESPONSIVE BREATHING COW
             Positioned(
-              left: -10,
-              bottom: 0,
-              child: const _BreathingCow(),
+              left: cowLeft,
+              bottom: cowBottom,
+              child: _BreathingCow(size: cowSize),
             ),
           ],
         ),
@@ -90,10 +102,12 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
 }
 
 ////////////////////////////////////////////////////////////////
-/// 🐄 BREATHING COW
+/// 🐄 BREATHING COW (RESPONSIVE)
 ////////////////////////////////////////////////////////////////
 class _BreathingCow extends StatefulWidget {
-  const _BreathingCow();
+  final double size;
+
+  const _BreathingCow({required this.size});
 
   @override
   State<_BreathingCow> createState() => _BreathingCowState();
@@ -135,7 +149,7 @@ class _BreathingCowState extends State<_BreathingCow>
       },
       child: Image.asset(
         'assets/images/cow_overlay.png',
-        height: 155,
+        height: widget.size,
         fit: BoxFit.contain,
       ),
     );
@@ -143,7 +157,7 @@ class _BreathingCowState extends State<_BreathingCow>
 }
 
 ////////////////////////////////////////////////////////////////
-/// 🧊 GLASS CARD
+/// 🧊 GLASS CARD (PERFORMANCE OPTIMIZED)
 ////////////////////////////////////////////////////////////////
 class _GlassPartnerCard extends StatefulWidget {
   final VoidCallback onDonateTap;
@@ -167,8 +181,9 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
     _controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4),
-    )..repeat();
+    )..repeat(reverse: true);
 
+    // 🔧 Only opacity animates (blur stays static)
     _opacityAnim = Tween<double>(begin: 0.16, end: 0.20).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
@@ -182,71 +197,73 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(12),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 2.5, sigmaY: 2.5),
-        child: AnimatedBuilder(
-          animation: _opacityAnim,
-          builder: (_, __) {
-            return Stack(
-              children: [
-                Container(
-                  width: 198,
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: AppColors.white.withValues(
-                      alpha: _opacityAnim.value,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
-                    border: Border.all(
-                      color: AppColors.white.withValues(alpha: 0.30),
-                    ),
-                    boxShadow: const [
-                      BoxShadow(
-                        color: Color(0x55000000),
-                        blurRadius: 18,
-                        offset: Offset(0, 6),
+    return RepaintBoundary( // 🚀 isolates blur repaint
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 1.2, sigmaY: 1.2),
+          child: AnimatedBuilder(
+            animation: _opacityAnim,
+            builder: (_, __) {
+              return Stack(
+                children: [
+                  Container(
+                    width: 198,
+                    padding: const EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: AppColors.white.withValues(
+                        alpha: _opacityAnim.value,
                       ),
-                    ],
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.white.withValues(alpha: 0.30),
+                      ),
+                      boxShadow: const [
+                        BoxShadow(
+                          color: Color(0x55000000),
+                          blurRadius: 18,
+                          offset: Offset(0, 6),
+                        ),
+                      ],
+                    ),
+                    child: _GlassContent(
+                      onDonateTap: widget.onDonateTap,
+                    ),
                   ),
-                  child: _GlassContent(
-                    onDonateTap: widget.onDonateTap,
-                  ),
-                ),
 
-                /// ✨ LIGHT SWEEP
-                Positioned.fill(
-                  child: IgnorePointer(
-                    child: AnimatedBuilder(
-                      animation: _controller,
-                      builder: (_, _) {
-                        return FractionalTranslation(
-                          translation:
-                          Offset(-1 + (_controller.value * 2), 0),
-                          child: Transform.rotate(
-                            angle: -0.3,
-                            child: Container(
-                              width: 60,
-                              decoration: BoxDecoration(
-                                gradient: LinearGradient(
-                                  colors: [
-                                    Colors.white.withValues(alpha: 0.0),
-                                    Colors.white.withValues(alpha: 0.25),
-                                    Colors.white.withValues(alpha: 0.0),
-                                  ],
+                  /// ✨ LIGHT SWEEP (cheap transform only)
+                  Positioned.fill(
+                    child: IgnorePointer(
+                      child: AnimatedBuilder(
+                        animation: _controller,
+                        builder: (_, _) {
+                          return FractionalTranslation(
+                            translation:
+                            Offset(-1 + (_controller.value * 2), 0),
+                            child: Transform.rotate(
+                              angle: -0.3,
+                              child: Container(
+                                width: 60,
+                                decoration: BoxDecoration(
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      Colors.white.withValues(alpha: 0.0),
+                                      Colors.white.withValues(alpha: 0.25),
+                                      Colors.white.withValues(alpha: 0.0),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        );
-                      },
+                          );
+                        },
+                      ),
                     ),
                   ),
-                ),
-              ],
-            );
-          },
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
