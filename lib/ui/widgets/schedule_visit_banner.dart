@@ -72,12 +72,14 @@ class ScheduleVisitBanner extends StatelessWidget {
                 ),
               ),
 
-              const SizedBox(height: 16),
+              const SizedBox(height: 20),
 
               Align(
                 alignment: Alignment.centerRight,
                 child: GestureDetector(
-                  onTap: () => Navigator.pop(context),
+                  onTap: () {
+                    Navigator.of(context, rootNavigator: true).pop();
+                  },
                   child: const Text(
                     'Ok',
                     style: TextStyle(
@@ -95,10 +97,11 @@ class ScheduleVisitBanner extends StatelessWidget {
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 227,
+      height: 260,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: const DecorationImage(
@@ -132,7 +135,7 @@ class ScheduleVisitBanner extends StatelessWidget {
               const SizedBox(height: 12),
 
               const Text(
-                'Visit our goshala in person and experience our environment, care practices, and daily activities.',
+                'Visit our goshala in person and experience our environment, care practices, and daily activities. Spend time with the cows, understand our work, and connect with the goshala at your convenience.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: AppColors.white,

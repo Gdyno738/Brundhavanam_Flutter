@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../screens/navigation/main_navigation.dart';
 import '../common/app_colors.dart';
 
 class EmptyCartView extends StatelessWidget {
@@ -61,8 +62,14 @@ class EmptyCartView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                onPressed: onBrowse,
-                child: const Text(
+                onPressed:() {
+            final navState = MainNavigation.navKey.currentState;
+            if (navState != null) {
+            navState.switchTab(2);
+            }
+            },
+
+              child: const Text(
                   'Browse Products',
                   style: TextStyle(
                     color: Colors.white,

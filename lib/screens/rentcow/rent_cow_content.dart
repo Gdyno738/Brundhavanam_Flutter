@@ -73,6 +73,7 @@ class _RentCowContentState extends State<RentCowContent> {
                             color: Colors.white,
                             fontSize: 24,
                             fontWeight: FontWeight.w900,
+
                           ),
                         ),
                       ),
@@ -80,9 +81,10 @@ class _RentCowContentState extends State<RentCowContent> {
                       const SizedBox(
                         width: 320,
                         child: Text(
-                          'We offer healthy, well-maintained cows for rent for religious rituals, poojas, temple events, and traditional ceremonies.',
+                          'We offer healthy, well-maintained cows for rent for religious rituals, poojas, temple events, and traditional ceremonies. Our cows are raised with care, proper nutrition, and humane practices.',
                           textAlign: TextAlign.center,
-                          style: TextStyle(color: Colors.white, fontSize: 16),
+                          style: TextStyle(color: Colors.white, fontSize: 16,
+                            fontFamily: 'Edu NSW ACT Foundation'),
                         ),
                       ),
                       const SizedBox(height: 16),
@@ -150,8 +152,10 @@ class _RentCowContentState extends State<RentCowContent> {
                 /// 🔑 SCROLL TARGET
                 Container(
                   key: _scheduleKey,
+                  alignment: Alignment.center,
                   child: const Text(
                     'Schedule your visit',
+                    textAlign: TextAlign.center,
                     style: TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.w600,
@@ -549,7 +553,7 @@ class _InfoChip extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
       decoration: BoxDecoration(
-        color: Colors.white.withOpacity(0.7),
+        color: Colors.white.withValues(alpha: 0.7),
         borderRadius: BorderRadius.circular(25),
       ),
       child: Row(

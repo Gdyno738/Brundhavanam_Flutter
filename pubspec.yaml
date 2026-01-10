@@ -108,6 +108,7 @@ flutter:
      - assets/bannerImages/banner2.png
      - assets/bannerImages/banner3.png
      - assets/bannerImages/schedule_visit_banner.png
+     - assets/icons/cow.png
 
 
   # An image asset can refer to one or more resolution-specific "variants", see
@@ -130,6 +131,13 @@ flutter:
           weight: 500
         - asset: assets/fonts/DynaPuff-Bold.ttf
           weight: 700
+
+    - family: Edu NSW ACT Foundation
+      fonts:
+        - asset: assets/fonts/EduNSWACTFoundation[wght].ttf
+          weight: 400
+
+
 
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
