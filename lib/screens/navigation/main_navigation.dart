@@ -1,10 +1,10 @@
 import 'package:brundhavanam_app/screens/category/category_grid_screen.dart';
-import 'package:brundhavanam_app/screens/category/category_products_screen.dart';
+
 import 'package:flutter/material.dart';
 
 import '../../ui/widgets/bottom_nav_bar.dart';
 import '../../screens/home/home_screen.dart';
-import '../../screens/products/products_screen.dart';
+
 import '../rentcow/RentCowScreen.dart';
 import '../../screens/cart/cart_screen.dart';
 import '../../screens/profile/profile_screen.dart';

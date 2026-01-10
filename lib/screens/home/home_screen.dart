@@ -26,6 +26,7 @@ import '../donate/donate_screen.dart';
 
 
 
+import '../navigation/main_navigation.dart';
 import '../popularproducts/popular_products_screen.dart';
 import 'sections/location_header.dart';
 
@@ -82,15 +83,10 @@ class _HomeScreenState extends State<HomeScreen> {
                   SectionHeader(
                     title: 'Dairy Products',
                     onViewAll: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const CategoryGridScreen(),
-                        ),
-                      );
+                      MainNavigation.navKey.currentState?.switchTab(2); // 👈 Products tab index
                     },
-
                   ),
+
 
 
 
@@ -131,6 +127,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       );
                     },
                   ),
+
+
 
 
 

@@ -11,62 +11,64 @@ class CategoryGridScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
-        children: [
-          /// HEADER
-          SafeArea(
-            bottom: false,
-            child: LocationHeader(
-              title: 'Products',
-              subtitle: '',
-              showBack: true,
-              showDropdown: false,
-              onBack: () {
-                MainNavigation.navKey.currentState?.switchTab(0);
-              },
-
-
-
-            ),
-          ),
-
-
-          const SizedBox(height: 16),
-
-          /// CATEGORY GRID
-          Expanded(
-            child: GridView.builder(
-              padding: const EdgeInsets.all(16),
-              itemCount: categories.length,
-              gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                childAspectRatio: 0.75,
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) {
+        // Always go to Home tab instead of popping
+        MainNavigation.navKey.currentState?.switchTab(0);
+      },
+      child: Scaffold(
+        backgroundColor: AppColors.white,
+        body: Column(
+          children: [
+            /// HEADER
+            SafeArea(
+              bottom: false,
+              child: LocationHeader(
+                title: 'Products',
+                subtitle: '',
+                showBack: true,
+                showDropdown: false,
+                onBack: () {
+                  MainNavigation.navKey.currentState?.switchTab(0);
+                },
               ),
-              itemBuilder: (context, index) {
-                final category = categories[index];
-
-                return CategoryCard(
-                  category: category,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => CategoryProductsScreen(
-                          category: category.name,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
             ),
-          ),
-        ],
+
+            const SizedBox(height: 16),
+
+            /// CATEGORY GRID
+            Expanded(
+              child: GridView.builder(
+                padding: const EdgeInsets.all(16),
+                itemCount: categories.length,
+                gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  crossAxisSpacing: 16,
+                  mainAxisSpacing: 16,
+                  childAspectRatio: 0.75,
+                ),
+                itemBuilder: (context, index) {
+                  final category = categories[index];
+                  return CategoryCard(
+                    category: category,
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryProductsScreen(
+                            category: category.name,
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

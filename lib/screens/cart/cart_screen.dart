@@ -56,16 +56,9 @@ class CartScreen extends StatelessWidget {
             child: cart.items.isEmpty
                 ? EmptyCartView(
               onBrowse: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) => const ProductsScreen(
-                      initialCategory: 'ALL',
-                    ),
-                  ),
-                );
-
+                MainNavigation.navKey.currentState?.switchTab(2); // Products tab
               },
+
             )
                 : ListView(
               children: [
@@ -88,14 +81,9 @@ class CartScreen extends StatelessWidget {
                 /// ➕ ADD MORE PRODUCTS
                 GestureDetector(
                   onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const CategoryGridScreen()
-                      ),
-                    );
-
+                    MainNavigation.navKey.currentState?.switchTab(2); // Products tab
                   },
+
                   child: Container(
                     margin: const EdgeInsets.all(16),
                     padding: const EdgeInsets.all(10),

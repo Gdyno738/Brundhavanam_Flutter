@@ -25,12 +25,7 @@ class FullWidthBanner extends StatelessWidget {
             offset: const Offset(-40, 40),
             child: GestureDetector(
               onTap: () {
-                Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                    builder: (_) => const MainNavigation(initialIndex: 1),
-                  ),
-                      (route) => false,
-                );
+                MainNavigation.navKey.currentState?.switchTab(1);
               },
               child: Container(
                 width: 105,

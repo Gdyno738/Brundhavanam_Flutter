@@ -82,7 +82,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
           return Stack(
             children: [
-              /// 🔹 TOP IMAGE
+              /// 🔹 BACKGROUND IMAGE
               Positioned.fill(
                 child: Image.asset(
                   data.image,
@@ -90,7 +90,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
               ),
 
-              /// 🔹 LOGO (TOP RIGHT ON IMAGE)
+              /// 🔹 LOGO (TOP RIGHT)
               Positioned(
                 top: 40,
                 right: 24,
@@ -129,7 +129,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// ⏭ SKIP (ONLY IF NOT LAST)
                       if (!isLast)
                         Align(
                           alignment: Alignment.centerRight,
@@ -148,7 +147,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       if (!isLast) const SizedBox(height: 12),
 
-                      /// TITLE
                       Text(
                         data.title,
                         style: const TextStyle(
@@ -160,7 +158,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const SizedBox(height: 16),
 
-                      /// BULLET POINTS
                       ...data.points.map(
                             (p) => Padding(
                           padding: const EdgeInsets.only(bottom: 12),
@@ -189,7 +186,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const SizedBox(height: 24),
 
-                      /// 🔹 LAST SCREEN → GET STARTED BUTTON
                       if (isLast)
                         SizedBox(
                           width: double.infinity,
@@ -213,54 +209,89 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         )
                       else
-                      /// 🔹 DOTS + NEXT ARROW
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            /// DOTS
-                            Row(
-                              children: List.generate(
-                                pages.length,
-                                    (dotIndex) => Container(
-                                  margin: const EdgeInsets.only(right: 6),
-                                  width: 8,
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: _index == dotIndex
-                                        ? AppColors.primary
-                                        : AppColors.lightGrey,
-                                  ),
-                                ),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            onTap: _next,
+                            child: Container(
+                              width: 44,
+                              height: 44,
+                              decoration: const BoxDecoration(
+                                color: AppColors.primary,
+                                shape: BoxShape.circle,
+                              ),
+                              child: const Icon(
+                                Icons.arrow_forward,
+                                color: AppColors.white,
                               ),
                             ),
-
-                            /// NEXT ARROW
-                            GestureDetector(
-                              onTap: _next,
-                              child: Container(
-                                width: 44,
-                                height: 44,
-                                decoration: const BoxDecoration(
-                                  color: AppColors.primary,
-                                  shape: BoxShape.circle,
-                                ),
-                                child: const Icon(
-                                  Icons.arrow_forward,
-                                  color: AppColors.white,
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
                     ],
                   ),
                 ),
               ),
+
+              /// 🔙 BACK BUTTON (BOTTOM LEFT)
+              /// 🔙 BACK BUTTON (BOTTOM LEFT – HIDDEN ON LAST SCREEN)
+              if (_index > 0 && _index < pages.length - 1)
+                Positioned(
+                  left: 16,
+                  bottom: 20,
+                  child: GestureDetector(
+                    onTap: () {
+                      _controller.previousPage(
+                        duration: const Duration(milliseconds: 300),
+                        curve: Curves.easeInOut,
+                      );
+                    },
+                    child: Container(
+                      width: 44,
+                      height: 44,
+                      decoration: const BoxDecoration(
+                        color: AppColors.white,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 6,
+                          ),
+                        ],
+                      ),
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: AppColors.black,
+                      ),
+                    ),
+                  ),
+                ),
+
+              /// 🔘 DOTS (BOTTOM CENTER – HIDDEN ON LAST SCREEN)
+              if (_index < pages.length - 1)
+                Positioned(
+                  bottom: 20,
+                  left: 0,
+                  right: 0,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(
+                      pages.length,
+                          (dotIndex) => Container(
+                        margin: const EdgeInsets.symmetric(horizontal: 4),
+                        width: 8,
+                        height: 8,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: _index == dotIndex
+                              ? AppColors.primary
+                              : AppColors.lightGrey,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
             ],
           );
-
-
         },
       ),
     );

@@ -23,6 +23,21 @@ class DonateTab extends StatelessWidget {
 
           const SizedBox(height: 20),
 
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16),
+            child: Text(
+              'Become Partner',
+              style: const TextStyle(
+                color: AppColors.black,
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
+                height: 1.2,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 20),
+
           _donationCard(
             context,
             image: 'https://placehold.co/375x176',
