@@ -5,7 +5,7 @@ final List<Product> popularProducts = [
     id:'milk_001',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpOKQJfpoon8pRe8VS5hmhTY_M8K5nNBC_lQ&s',
     title: 'Low-Fat Buffalo Milk',
-    description: 'Rich taste with reduced fat',
+    description: 'Fresh, pure cow milk sourced directly from our goshala and handled with care. Naturally light and easy to digest, it is ideal for daily consumption by all age groups.',
     size: '500 ml',
     price: 470,
     originalPrice: 520,
