@@ -1,16 +1,23 @@
 import 'dart:io';
+import 'package:brundhavanam_app/screens/orders/orders_model.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'order_cancel_success_screen.dart';
 
 class CancelOrderBottomSheet extends StatefulWidget {
-  const CancelOrderBottomSheet({super.key});
+  final OrderModel order;
+
+  const CancelOrderBottomSheet({
+    super.key,
+    required this.order,
+  });
 
   @override
   State<CancelOrderBottomSheet> createState() =>
       _CancelOrderBottomSheetState();
 }
+
 
 class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
   final ImagePicker _picker = ImagePicker();
@@ -104,28 +111,62 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
           const SizedBox(height: 16),
 
           /// ORDER CARD (SIMPLIFIED)
+          /// ORDER CARD (DYNAMIC)
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: const Color(0xFFF3F5F6),
               borderRadius: BorderRadius.circular(12),
             ),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Rent Cow',
-                  style: TextStyle(fontSize: 14),
+              children: [
+                /// 🖼 IMAGE
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(10),
+                  child: Image(
+                    image: widget.order.image != null
+                        ? (widget.order.image!.startsWith('http')
+                        ? NetworkImage(widget.order.image!)
+                        : AssetImage(widget.order.image!)
+                    as ImageProvider)
+                        : const AssetImage('assets/images/placeholder.png'),
+                    width: 64,
+                    height: 64,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                SizedBox(height: 4),
-                Text(
-                  'Gruhapravesham',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
-                ),
-                SizedBox(height: 6),
-                Text(
-                  '₹ 570/-',
-                  style: TextStyle(fontSize: 16),
+
+                const SizedBox(width: 12),
+
+                /// 📄 DETAILS
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      widget.order.title,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      widget.order.subtitle,
+                      style: const TextStyle(
+                        fontSize: 10,
+                        color: Colors.grey,
+                      ),
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      widget.order.price,
+                      style: const TextStyle(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

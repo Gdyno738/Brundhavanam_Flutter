@@ -1,5 +1,5 @@
 enum OrderStatus {
-  success,
-  failed,
-
+  active,
+  completed,
+  cancelled,
 }

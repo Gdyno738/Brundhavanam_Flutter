@@ -8,6 +8,7 @@ import '../../ui/widgets/home_search_bar.dart';
 import '../navigation/main_navigation.dart';
 import 'order_cancle_bottom_sheet.dart';
 import 'order_details_screen.dart';
+
 import 'order_time_filter.dart';
 import 'order_time_filter_sheet.dart';
 import 'orders_model.dart';
@@ -35,7 +36,8 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
         price: '₹ 570/-',
         address: 'Gachibowli, Hyderabad',
         orderDate: DateTime.now().subtract(const Duration(days: 2)),
-        status: OrderStatus.active, // keep active for testing cancel
+        status: OrderStatus.active,
+        image: 'assets/images/cow.jpg', // ✅ cow image
       ),
       OrderModel(
         title: 'Low-Fat Buffalo Milk',
@@ -44,11 +46,11 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
         address: 'Indira Nagar, Hyderabad',
         orderDate: DateTime.now().subtract(const Duration(days: 10)),
         status: OrderStatus.completed,
+        image: 'https://placehold.co/100x100', // ✅ product image
       ),
     ];
   }
-
-  List<OrderModel> get _filteredOrders {
+    List<OrderModel> get _filteredOrders {
     final now = DateTime.now();
 
     return _orders.where((order) {
@@ -122,15 +124,25 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
                         ),
                       ],
                     ),
-                    child: const Center(
-                      child: Text(
-                        'Filter',
-                        style: TextStyle(
+                    child: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: const [
+                        Icon(
+                          Icons.filter_list,
+                          size: 18,
                           color: AppColors.black,
-                          fontWeight: FontWeight.w500,
                         ),
-                      ),
+                        SizedBox(width: 6),
+                        Text(
+                          'Filter',
+                          style: TextStyle(
+                            color: AppColors.black,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
                     ),
+
                   ),
                 ),
               ],
@@ -165,6 +177,11 @@ class _OrderCard extends StatelessWidget {
     final bool isRentCow = order.title == 'Rent Cow';
     final String buttonText = isRentCow ? 'View Receipt' : 'Reorder';
 
+    final String imageUrl = order.title == 'Rent Cow'
+        ? 'assets/images/cow.jpg'
+        : 'https://placehold.co/100x100';
+
+
     String statusText;
     Color statusColor;
 
@@ -192,104 +209,123 @@ class _OrderCard extends StatelessWidget {
           /// 🔹 MAIN CARD
           Padding(
             padding: const EdgeInsets.all(16),
-            child: Column(
+            child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(order.title,
-                    style: const TextStyle(
-                        color: AppColors.black, fontSize: 14)),
-                const SizedBox(height: 4),
-                Text(order.subtitle,
-                    style: const TextStyle(
-                        color: AppColors.grey, fontSize: 10)),
-                const SizedBox(height: 6),
-                Text(order.price,
-                    style: const TextStyle(
-                        color: AppColors.black, fontSize: 16)),
-                const SizedBox(height: 12),
+                /// 🖼 IMAGE
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: Image(
+                    image: order.title == 'Rent Cow'
+                        ? const AssetImage('assets/images/cow.jpg')
+                        : const NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpOKQJfpoon8pRe8VS5hmhTY_M8K5nNBC_lQ&s')
+                    as ImageProvider,
+                    width: 72,
+                    height: 72,
+                    fit: BoxFit.cover,
+                  ),
+                ),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      statusText,
-                      style: TextStyle(
-                        color: statusColor,
-                        fontSize: 12,
-                        fontWeight: FontWeight.w500,
+                const SizedBox(width: 12),
+
+                /// 📄 CONTENT
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        order.title,
+                        style: const TextStyle(
+                          color: AppColors.black,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
-                    ),
-
-                    /// 👉 ACTION BUTTON
-                    GestureDetector(
-                      onTap: () {
-                        if (isRentCow) {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (_) =>
-                                  OrderDetailsScreen(order: order),
-                            ),
-                          );
-                        } else {
-                          final product = Product(
-                            id: 'milk_001',
-                            image: 'https://placehold.co/150x150',
-                            title: order.title,
-                            description: order.subtitle,
-                            size: 'Default',
-                            price: double.parse(
-                              order.price
-                                  .replaceAll(RegExp(r'[^\d.]'), ''),
-                            ),
-                            originalPrice: double.parse(
-                              order.price
-                                  .replaceAll(RegExp(r'[^\d.]'), ''),
-                            ),
-                            category: 'Reorder',
-                            rating: 4.5,
-                          );
-
-                          context
-                              .read<CartProvider>()
-                              .addToCart(product);
-
-                          final state =
-                              MainNavigation.navKey.currentState;
-                          if (state is MainNavigationState) {
-                            state.switchTab(3);
-                          }
-
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Product added to cart'),
-                            ),
-                          );
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                      const SizedBox(height: 4),
+                      Text(
+                        order.subtitle,
+                        style: const TextStyle(
+                          color: AppColors.grey,
+                          fontSize: 10,
                         ),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary,
-                          borderRadius: BorderRadius.circular(16),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        order.price,
+                        style: const TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
                         ),
-                        child: Text(
-                          buttonText,
-                          style: const TextStyle(
-                            color: AppColors.white,
-                            fontSize: 12,
+                      ),
+                      const SizedBox(height: 12),
+
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            statusText,
+                            style: TextStyle(
+                              color: statusColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
-                        ),
+
+                          /// ACTION BUTTON (unchanged)
+                          GestureDetector(
+                            onTap: () {
+                              if (isRentCow)
+                              { Navigator.push( context, MaterialPageRoute( builder: (_) => OrderDetailsScreen(order: order),
+                              ),
+                              );
+                              }
+                              else {
+                                final product = Product( id: 'milk_001',
+                                  image: 'https://placehold.co/150x150',
+                                  title: order.title,
+                                  description: order.subtitle,
+                                  size: 'Default',
+                                  price: double.parse( order.price .replaceAll(RegExp(r'[^\d.]'), ''),
+                                  ),
+                                  originalPrice: double.parse( order.price .replaceAll(RegExp(r'[^\d.]'), ''),
+                                  ),
+                                  category: 'Reorder', rating: 4.5, );
+                                context .read<CartProvider>() .addToCart(product);
+                                final state = MainNavigation.navKey.currentState;
+                                if (state is MainNavigationState) { state.switchTab(3);
+                                }
+                                ScaffoldMessenger.of(context).showSnackBar( const SnackBar( content: Text('Product added to cart'),
+                                ),
+                                );
+                              }
+                              },
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 8,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary,
+                                borderRadius: BorderRadius.circular(16),
+                              ),
+                              child: Text(
+                                buttonText,
+                                style: const TextStyle(
+                                  color: AppColors.white,
+                                  fontSize: 12,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ],
             ),
           ),
+
 
           /// 🔻 CANCEL STRIP (FOR TESTING)
           if (canCancel)
@@ -313,7 +349,8 @@ class _OrderCard extends StatelessWidget {
                     context: context,
                     isScrollControlled: true,
                     backgroundColor: Colors.transparent,
-                    builder: (_) => const CancelOrderBottomSheet(),
+                    builder: (_) => CancelOrderBottomSheet(order: order),
+
                   );
                 },
                 child: const Text(

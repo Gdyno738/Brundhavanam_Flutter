@@ -5,7 +5,7 @@ import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/cart_item_card.dart';
 import '../navigation/main_navigation.dart';
-import 'order_status.dart';
+import 'orders_model.dart';
 import 'order_tracking_screen.dart';
 
 class OrderPlacedScreen extends StatelessWidget {

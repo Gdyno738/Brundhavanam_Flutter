@@ -29,6 +29,18 @@ class _ProductsScreenState extends State<ProductsScreen> {
     selectedCategory = widget.initialCategory; // null = ALL
   }
 
+  // ✅ ONLY ADDED FUNCTIONALITY
+  @override
+  void didUpdateWidget(covariant ProductsScreen oldWidget) {
+    super.didUpdateWidget(oldWidget);
+
+    if (oldWidget.initialCategory != widget.initialCategory) {
+      setState(() {
+        selectedCategory = widget.initialCategory;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -41,7 +53,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
             subtitle: '',
             showBack: true,
             showDropdown: false,
-            onBack: _goHome, // ✅ back to Home tab
+            onBack: _goHome,
           ),
 
           const SizedBox(height: 12),

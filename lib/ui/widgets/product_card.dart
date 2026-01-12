@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/wish_list_provider.dart';
+import '../../screens/category/category_products_screen.dart';
 import '../../screens/navigation/main_navigation.dart';
 import '../../screens/products/product_details_screen.dart';
 import '../common/app_colors.dart';
@@ -124,6 +125,7 @@ class ProductCard extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  /// SIZE TEXT
                   Text(
                     product.size,
                     style: const TextStyle(
@@ -134,6 +136,7 @@ class ProductCard extends StatelessWidget {
 
                   const SizedBox(height: 2),
 
+                  /// TITLE
                   Text(
                     product.title,
                     maxLines: 2,
@@ -145,6 +148,7 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
 
+                  /// DESCRIPTION
                   Text(
                     product.description,
                     maxLines: 2,
@@ -157,14 +161,16 @@ class ProductCard extends StatelessWidget {
 
                   const SizedBox(height: 4),
 
-                  /// CATEGORY LINK
+                  /// ✅ CATEGORY QUICK LINK (ONLY FUNCTIONAL CHANGE)
                   GestureDetector(
                     onTap: () {
-                      final navState =
-                          MainNavigation.navKey.currentState;
-                      navState?.switchTab(
-                        2,
-                        initialCategory: product.category,
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryProductsScreen(
+                            category: product.category,
+                          ),
+                        ),
                       );
                     },
                     child: Text(
@@ -177,8 +183,10 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
 
+
                   const SizedBox(height: 6),
 
+                  /// PRICE
                   Row(
                     children: [
                       Text(
@@ -186,8 +194,7 @@ class ProductCard extends StatelessWidget {
                         style: const TextStyle(
                           fontSize: 10,
                           color: AppColors.grey,
-                          decoration:
-                          TextDecoration.lineThrough,
+                          decoration: TextDecoration.lineThrough,
                         ),
                       ),
                       const SizedBox(width: 6),
@@ -246,8 +253,7 @@ class ProductCard extends StatelessWidget {
                     ],
                   )
                       : GestureDetector(
-                    onTap: () =>
-                        cart.addToCart(product),
+                    onTap: () => cart.addToCart(product),
                     child: const Center(
                       child: Text(
                         'Add to Cart',
