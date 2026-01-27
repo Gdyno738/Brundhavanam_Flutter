@@ -42,13 +42,13 @@ class CategoryGridScreen extends StatelessWidget {
               child: GridView.builder(
                 padding: const EdgeInsets.all(16),
                 itemCount: categories.length,
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
-                  childAspectRatio: 0.75,
+                  mainAxisExtent: 195, // 👈 controls card height
                 ),
+
                 itemBuilder: (context, index) {
                   final category = categories[index];
                   return CategoryCard(

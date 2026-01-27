@@ -25,16 +25,35 @@ class DonateTab extends StatelessWidget {
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Text(
-              'Become Partner',
-              style: const TextStyle(
-                color: AppColors.black,
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                height: 1.2,
-              ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  'Become partner',
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontSize: 16,
+                    fontWeight: FontWeight.w600,
+                    height: 1.2,
+                  ),
+                ),
+
+                SizedBox(height: 6),
+
+                Text(
+                  'Support goshala with your contribution and be part of a tradition rooted in care, respect, and gratitude.',
+                  style: TextStyle(
+                    color: Colors.black87,
+                    fontSize: 14,          // ⬆ bigger
+                    fontWeight: FontWeight.w400, // ⬆ bold
+                    height: 1.4,
+                  ),
+                ),
+              ],
             ),
           ),
+
+
 
           const SizedBox(height: 20),
 

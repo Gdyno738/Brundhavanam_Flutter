@@ -59,7 +59,7 @@ class _RentCowContentState extends State<RentCowContent> {
                 ),
 
                 Positioned(
-                  top: 120,
+                  top: 60,
                   left: 0,
                   right: 0,
                   child: Column(

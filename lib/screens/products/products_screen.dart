@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
@@ -100,7 +99,7 @@ class _ProductsScreenState extends State<ProductsScreen> {
         crossAxisCount: 2,
         crossAxisSpacing: 16,
         mainAxisSpacing: 16,
-        childAspectRatio: 0.65,
+        childAspectRatio: 0.55,
       ),
       itemBuilder: (_, index) {
         return ProductCard(product: products[index]);

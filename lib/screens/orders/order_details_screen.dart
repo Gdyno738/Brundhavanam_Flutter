@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
-
 import 'orders_model.dart';
+import 'order_total_bill_screen.dart';
+
 
 class OrderDetailsScreen extends StatelessWidget {
   final OrderModel order;
@@ -25,7 +26,7 @@ class OrderDetailsScreen extends StatelessWidget {
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text(
-          'Order Details',
+          'Your Orders',
           style: TextStyle(
             color: AppColors.black,
             fontWeight: FontWeight.w500,
@@ -38,127 +39,33 @@ class OrderDetailsScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// ORDER SUMMARY CARD
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.lightGrey,
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.lightGrey),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  /// IMAGE
-                  Container(
-                    width: 124,
-                    height: 124,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10),
-                      image: const DecorationImage(
-                        image: NetworkImage('https://placehold.co/124x124'),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 12),
 
-                  /// DETAILS
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          order.title,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          order.subtitle,
-                          style: const TextStyle(
-                            color: AppColors.grey,
-                            fontSize: 10,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          order.price,
-                          style: const TextStyle(
-                            color: AppColors.black,
-                            fontSize: 16,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          order.completed
-                              ? 'Delivered'
-                              : 'On the way',
-                          style: TextStyle(
-                            fontSize: 12,
-                            color: order.completed
-                                ? AppColors.black
-                                : AppColors.primary,
-                          ),
-                        ),
-                        const SizedBox(height: 6),
-                        Text(
-                          order.address,
-                          style: const TextStyle(
-                            fontSize: 12,
-                            color: AppColors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            /// ORDER DETAILS SECTION
+            /// ORDER DETAILS TITLE
             const Text(
-              'Order Info',
+              'Order Details',
               style: TextStyle(
                 fontSize: 16,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w600,
                 color: AppColors.black,
               ),
             ),
 
-            const SizedBox(height: 12),
+            const SizedBox(height: 16),
 
-            _infoRow(
-              'Order Placed',
-              _formatDate(order.orderDate),
-            ),
+            _infoRow('Order Placed', _formatDate(order.orderDate)),
+            _infoRow('Order Number', _generateOrderNumber(order.orderDate)),
 
-            _infoRow(
-              'Order Number',
-              _generateOrderNumber(order.orderDate),
-            ),
+            const SizedBox(height: 16),
 
-            const SizedBox(height: 24),
-
-            /// DOWNLOAD RECEIPT
+            /// DOWNLOAD RECEIPT BUTTON
             GestureDetector(
               onTap: () {
-                // TODO: Implement PDF download
                 ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(
-                    content: Text('Receipt download coming soon'),
-                  ),
+                  const SnackBar(content: Text('Receipt download coming soon')),
                 );
               },
               child: Container(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 20, vertical: 14),
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(14),
                   border: Border.all(color: AppColors.grey),
@@ -169,16 +76,108 @@ class OrderDetailsScreen extends StatelessWidget {
                     Text(
                       'Download Receipt',
                       style: TextStyle(
-                        fontSize: 16,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
                         color: AppColors.black,
                       ),
                     ),
-                    Icon(
-                      Icons.download,
-                      color: AppColors.black,
-                    ),
+                    Icon(Icons.download, size: 18),
                   ],
                 ),
+              ),
+            ),
+
+            const SizedBox(height: 20),
+
+            /// PRODUCT CARD
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.grey.shade100,
+                borderRadius: BorderRadius.circular(18),
+              ),
+              child: Row(
+                children: [
+                  /// IMAGE
+                  ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.network(
+                      'assets/images/cow360_1.png',
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+
+                  const SizedBox(width: 12),
+
+                  /// DETAILS
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          order.title,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        const SizedBox(height: 4),
+
+                        Text(
+                          order.subtitle,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.grey,
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        Text(
+                          order.price,
+                          style: const TextStyle(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+
+                        const SizedBox(height: 6),
+
+                        Text(
+                          order.completed
+                              ? 'Delivered on ${_formatDate(order.orderDate)}'
+                              : 'On the way',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.grey,
+                          ),
+                        ),
+
+                        const SizedBox(height: 2),
+
+                        Text(
+                          order.address,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppColors.grey,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
+                  GestureDetector(
+                    onTap: () => _showTotalBillSheet(context),
+                    child: const Icon(Icons.chevron_right),
+                  ),
+
+
+                ],
               ),
             ),
           ],
@@ -196,17 +195,11 @@ class OrderDetailsScreen extends StatelessWidget {
         children: [
           Text(
             label,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.black,
-            ),
+            style: const TextStyle(fontSize: 14, color: AppColors.black),
           ),
           Text(
             value,
-            style: const TextStyle(
-              fontSize: 14,
-              color: AppColors.black,
-            ),
+            style: const TextStyle(fontSize: 14, color: AppColors.black),
           ),
         ],
       ),
@@ -215,11 +208,97 @@ class OrderDetailsScreen extends StatelessWidget {
 
   /// DATE FORMATTER
   static String _formatDate(DateTime date) {
-    return '${date.day}/${date.month}/${date.year}';
+    const months = [
+      'Jan','Feb','Mar','Apr','May','Jun',
+      'Jul','Aug','Sep','Oct','Nov','Dec'
+    ];
+    return '${date.day} ${months[date.month - 1]} ${date.year}';
   }
 
-  /// TEMP ORDER NUMBER GENERATOR
+  /// ORDER NUMBER GENERATOR
   static String _generateOrderNumber(DateTime date) {
-    return 'ORD${date.year}${date.month}${date.day}${date.millisecond}';
+    return '12547GH211225'; // matches your screenshot style
   }
+
+  void _showTotalBillSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.transparent,
+      isScrollControlled: true,
+      builder: (_) {
+        return Container(
+          padding: const EdgeInsets.all(20),
+          margin: const EdgeInsets.fromLTRB(16, 0, 16, 24),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              const Text(
+                'Total bill',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.w600,
+                  color: AppColors.primary,
+                ),
+              ),
+
+              const SizedBox(height: 20),
+
+              _billRow('Cow', '₹470/-'),
+              const SizedBox(height: 10),
+              _billRow('Delivery Charges', '₹100/-'),
+
+              const Divider(height: 30),
+
+              _billRow('Total', '₹570/-', bold: true),
+
+              const SizedBox(height: 20),
+
+              SizedBox(
+                width: double.infinity,
+                height: 44,
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: AppColors.primary,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(14),
+                    ),
+                  ),
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Close'),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+
+  Widget _billRow(String left, String right, {bool bold = false}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          left,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: bold ? FontWeight.w600 : FontWeight.w400,
+          ),
+        ),
+        Text(
+          right,
+          style: TextStyle(
+            fontSize: 14,
+            fontWeight: bold ? FontWeight.w600 : FontWeight.w400,
+          ),
+        ),
+      ],
+    );
+  }
+
 }
