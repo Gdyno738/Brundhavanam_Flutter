@@ -71,32 +71,31 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                       /// ❤️ WISHLIST ICON
                       Positioned(
-                        top: 12,
-                        right: 12,
+                        left: 8,
+                        bottom: 8,
                         child: Consumer<WishlistProvider>(
-                          builder: (context, wishlist, _) {
-                            final isWishlisted = wishlist.isWishlisted(product);
+                          builder: (_, wishlist, __) {
+                            final isWishlisted =
+                            wishlist.isWishlisted(product);
 
                             return GestureDetector(
-                              onTap: () {
-                                wishlist.toggle(product);
-                              },
+                              onTap: () => wishlist.toggle(product),
                               child: Container(
-                                padding: const EdgeInsets.all(8),
+                                padding: const EdgeInsets.all(6),
                                 decoration: BoxDecoration(
                                   color: AppColors.white,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
+                                  borderRadius: BorderRadius.circular(8),
+                                  boxShadow: const [
                                     BoxShadow(
-                                      color: AppColors.shadow,
-                                      blurRadius: 6,
+                                      color: Colors.black26,
+                                      blurRadius: 4,
                                     ),
                                   ],
                                 ),
                                 child: Icon(
                                   isWishlisted
-                                      ? Icons.favorite
-                                      : Icons.favorite_border,
+                                      ? Icons.bookmark
+                                      : Icons.bookmark_border,
                                   color: AppColors.primary,
                                   size: 20,
                                 ),
@@ -105,6 +104,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           },
                         ),
                       ),
+
                     ],
                   ),
 

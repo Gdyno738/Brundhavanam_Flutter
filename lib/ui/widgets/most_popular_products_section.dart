@@ -27,7 +27,7 @@ class MostPopularProductsSection extends StatelessWidget {
 
         /// 🛒 PRODUCTS LIST
         SizedBox(
-          height: 330,
+          height: MediaQuery.of(context).size.height * 0.48,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,6 +43,7 @@ class MostPopularProductsSection extends StatelessWidget {
             },
           ),
         ),
+
       ],
     );
   }

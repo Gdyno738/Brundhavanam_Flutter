@@ -101,7 +101,7 @@ class ScheduleVisitBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 260,
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: const DecorationImage(
@@ -112,7 +112,7 @@ class ScheduleVisitBanner extends StatelessWidget {
         ),
       ),
 
-    child: Center(
+      child: Center(
         child: Container(
           margin: const EdgeInsets.all(16),
           padding: const EdgeInsets.all(20),
@@ -156,13 +156,6 @@ class ScheduleVisitBanner extends StatelessWidget {
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 12,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
                   child: const Text(
                     'Schedule a Visit',
