@@ -4,6 +4,12 @@ import '../../data/dummy_products.dart';
 import '../widgets/product_card.dart';
 import '../widgets/section_header.dart';
 
+import 'package:flutter/material.dart';
+
+import '../../data/dummy_products.dart';
+import '../widgets/product_card.dart';
+import '../widgets/section_header.dart';
+
 class MostPopularProductsSection extends StatelessWidget {
   final VoidCallback onViewAll;
 
@@ -17,17 +23,15 @@ class MostPopularProductsSection extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        /// 🔥 HEADER
         SectionHeader(
           title: 'Most Popular Products',
-          onViewAll: onViewAll, // ✅ delegated (CORRECT)
+          onViewAll: onViewAll,
         ),
 
         const SizedBox(height: 12),
 
-        /// 🛒 PRODUCTS LIST
         SizedBox(
-          height: 330,
+          height: 320, // ✅ increased to prevent overflow
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),

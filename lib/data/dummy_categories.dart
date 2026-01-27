@@ -26,4 +26,5 @@ const List<CategoryItem> categories = [
     name: 'Butter',
     image: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQSqRRY28sZ9-c7X-vy9ohiNbdHehWV-67D1g&s',
   ),
+
 ];

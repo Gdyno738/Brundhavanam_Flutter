@@ -21,7 +21,7 @@ class BottomNavBar extends StatelessWidget {
     return GestureDetector(
       onTap: () => onTap(index),
       child: Transform.translate(
-        offset: const Offset(0, -12), // 👈 icon + text move together
+        offset: const Offset(0, -6), // 👈 icon + text move together
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -60,9 +60,27 @@ class BottomNavBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 100, // 👈 SAME AS FIGMA
+      height: 115, // 👈 SAME AS FIGMA
+      padding: const EdgeInsets.only(top: 15),
       decoration: BoxDecoration(
         color: AppColors.white,
+
+        // ✅ ONLY TOP GREEN STROKE
+        border: const Border(
+          top: BorderSide(
+            color: Color(0xFF049150),
+            width: 4,
+          ),
+          left: BorderSide(
+            color: Color(0xFF049150),
+            width: 0.8,
+          ),
+          right: BorderSide(
+            color: Color(0xFF049150),
+            width: 2.0,
+          ),
+        ),
+
         boxShadow: [
           BoxShadow(
             color: AppColors.shadow,

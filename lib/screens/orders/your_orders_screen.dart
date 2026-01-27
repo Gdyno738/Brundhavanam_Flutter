@@ -172,153 +172,91 @@ class _OrderCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final bool canCancel = !order.completed; // testing mode
-
     final bool isRentCow = order.title == 'Rent Cow';
-    final String buttonText = isRentCow ? 'View Receipt' : 'Reorder';
-
-    final String imageUrl = order.title == 'Rent Cow'
-        ? 'assets/images/cow.jpg'
-        : 'https://placehold.co/100x100';
-
-
-    String statusText;
-    Color statusColor;
-
-    if (order.cancelled) {
-      statusText = order.refundStatus == RefundStatus.initiated
-          ? 'Refund Initiated'
-          : 'Order Cancelled';
-      statusColor = Colors.red;
-    } else if (order.completed) {
-      statusText = 'Completed';
-      statusColor = AppColors.black;
-    } else {
-      statusText = 'On the way';
-      statusColor = AppColors.primary;
-    }
+    final bool isCancelled = order.cancelled;
+    final bool isCompleted = order.completed;
 
     return Container(
       margin: const EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
-        color: AppColors.lightGrey,
+        color: const Color(0xFFF6F6F6),
         borderRadius: BorderRadius.circular(24),
+        border: Border.all(color: const Color(0xFFE7E7E7)),
       ),
       child: Column(
+        mainAxisSize: MainAxisSize.min,
         children: [
-          /// 🔹 MAIN CARD
+
+          /// ───────── MAIN CARD ─────────
           Padding(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(15),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 🖼 IMAGE
+
+                /// IMAGE
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(10),
                   child: Image(
-                    image: order.title == 'Rent Cow'
+                    image: isRentCow
                         ? const AssetImage('assets/images/cow.jpg')
-                        : const NetworkImage('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpOKQJfpoon8pRe8VS5hmhTY_M8K5nNBC_lQ&s')
+                        : const NetworkImage(
+                        'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSpOKQJfpoon8pRe8VS5hmhTY_M8K5nNBC_lQ&s')
                     as ImageProvider,
-                    width: 72,
-                    height: 72,
+                    width: 90,
+                    height: 90,
                     fit: BoxFit.cover,
                   ),
                 ),
 
                 const SizedBox(width: 12),
 
-                /// 📄 CONTENT
+                /// CONTENT
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        order.title,
-                        style: const TextStyle(
-                          color: AppColors.black,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
+
+                      /// Title + Subtitle
+                      Text(order.title,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              color: Color(0xFF252525))),
                       const SizedBox(height: 4),
-                      Text(
-                        order.subtitle,
-                        style: const TextStyle(
-                          color: AppColors.grey,
-                          fontSize: 10,
-                        ),
-                      ),
+                      Text(order.subtitle,
+                          style: const TextStyle(
+                              fontSize: 10,
+                              color: Color(0xFF595959))),
                       const SizedBox(height: 6),
-                      Text(
-                        order.price,
-                        style: const TextStyle(
-                          color: AppColors.black,
-                          fontSize: 16,
+
+                      /// Price
+                      Text(order.price,
+                          style: const TextStyle(
+                              fontSize: 14,
+                              color: Color(0xFF252525))),
+                      const SizedBox(height: 10),
+
+                      /// Date + Button
+                      /// DATE (separate line)
+                      const Text(
+                        'Order Placed on 23 Dec, 7:46AM',
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: Color(0xFF252525),
                         ),
                       ),
+
                       const SizedBox(height: 12),
 
+                      /// BUTTON ROW
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            statusText,
-                            style: TextStyle(
-                              color: statusColor,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-
-                          /// ACTION BUTTON (unchanged)
-                          GestureDetector(
-                            onTap: () {
-                              if (isRentCow)
-                              { Navigator.push( context, MaterialPageRoute( builder: (_) => OrderDetailsScreen(order: order),
-                              ),
-                              );
-                              }
-                              else {
-                                final product = Product( id: 'milk_001',
-                                  image: 'https://placehold.co/150x150',
-                                  title: order.title,
-                                  description: order.subtitle,
-                                  size: 'Default',
-                                  price: double.parse( order.price .replaceAll(RegExp(r'[^\d.]'), ''),
-                                  ),
-                                  originalPrice: double.parse( order.price .replaceAll(RegExp(r'[^\d.]'), ''),
-                                  ),
-                                  category: 'Reorder', rating: 4.5, );
-                                context .read<CartProvider>() .addToCart(product);
-                                final state = MainNavigation.navKey.currentState;
-                                if (state is MainNavigationState) { state.switchTab(3);
-                                }
-                                ScaffoldMessenger.of(context).showSnackBar( const SnackBar( content: Text('Product added to cart'),
-                                ),
-                                );
-                              }
-                              },
-                            child: Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 16,
-                                vertical: 8,
-                              ),
-                              decoration: BoxDecoration(
-                                color: AppColors.primary,
-                                borderRadius: BorderRadius.circular(16),
-                              ),
-                              child: Text(
-                                buttonText,
-                                style: const TextStyle(
-                                  color: AppColors.white,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ),
-                          ),
+                          _buildButton(context, isRentCow, isCancelled),
                         ],
                       ),
+
                     ],
                   ),
                 ),
@@ -326,45 +264,128 @@ class _OrderCard extends StatelessWidget {
             ),
           ),
 
-
-          /// 🔻 CANCEL STRIP (FOR TESTING)
-          if (canCancel)
+          /// ───────── BOTTOM STRIP ─────────
+          if (isRentCow)
             Container(
               width: double.infinity,
-              padding: const EdgeInsets.symmetric(
-                horizontal: 16,
-                vertical: 6,
-              ),
+              padding: const EdgeInsets.symmetric(vertical: 6),
               decoration: const BoxDecoration(
-                color: AppColors.lightGrey,
+                color: Color(0xFFEDEDEE),
                 borderRadius: BorderRadius.only(
                   bottomLeft: Radius.circular(24),
                   bottomRight: Radius.circular(24),
                 ),
               ),
-              alignment: Alignment.center,
-              child: GestureDetector(
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    backgroundColor: Colors.transparent,
-                    builder: (_) => CancelOrderBottomSheet(order: order),
+              child: Column(
+                children: [
 
-                  );
-                },
-                child: const Text(
-                  'Do you want to cancel the booking ?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 9,
-                    fontWeight: FontWeight.w400,
-                  ),
-                ),
+                  if (!isCancelled && !isCompleted) ...[
+                    const Text(
+                      'Do you want to cancel the booking ?',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Color(0xFF049150),
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    GestureDetector(
+                      onTap: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.transparent,
+                          isScrollControlled: true,
+                          builder: (_) => CancelOrderBottomSheet(order: order),
+                        );
+                      },
+                      child: const Text(
+                        'Cancel Order',
+                        style: TextStyle(
+                          fontSize: 9,
+                          color: Color(0xFF049150),
+                          decoration: TextDecoration.underline,
+                        ),
+                      ),
+                    ),
+                  ],
+
+                  if (isCancelled)
+                    const Text(
+                      'Order Cancelled',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.red,
+                      ),
+                    ),
+
+                  if (isCompleted)
+                    const Text(
+                      'Completed',
+                      style: TextStyle(
+                        fontSize: 9,
+                        color: Colors.green,
+                      ),
+                    ),
+                ],
               ),
             ),
         ],
+      ),
+    );
+  }
+
+  /// ───────── BUTTON STYLES ─────────
+  Widget _buildButton(BuildContext context, bool isRentCow, bool isCancelled) {
+
+    /// Refund initiated button
+    if (isCancelled) {
+      return Container(
+        height: 38,
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: const Color(0xFF049150)),
+        ),
+        alignment: Alignment.center,
+        child: const Text(
+          'Refund Initiated',
+          style: TextStyle(
+            fontSize: 14,
+            color: Color(0xFF049150),
+            fontWeight: FontWeight.w500,
+          ),
+        ),
+      );
+    }
+
+    /// View receipt / reorder
+    return GestureDetector(
+      onTap: () {
+        if (isRentCow) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => OrderDetailsScreen(order: order),
+            ),
+          );
+        }
+      },
+      child: Container(
+        height: 38,
+        padding: const EdgeInsets.symmetric(horizontal: 18),
+        decoration: BoxDecoration(
+          color: const Color(0xFF049150),
+          borderRadius: BorderRadius.circular(18),
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          isRentCow ? 'View Receipt' : 'Re-order',
+          style: const TextStyle(
+            fontSize: 14,
+            color: Colors.white,
+            fontWeight: FontWeight.w500,
+          ),
+        ),
       ),
     );
   }

@@ -2,7 +2,7 @@ enum OrderStatus {
   active,
   completed,
   cancelled,
-  success, // ✅ REQUIRED by OrderPlacedScreen
+  success, outForDelivery, // ✅ REQUIRED by OrderPlacedScreen
 }
 
 enum RefundStatus {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../../../ui/common/app_colors.dart';
 import '../../models/profile_model.dart';
 import '../../services/mock_profile_service.dart';
+import '../../screens/profile/settings/SavedAddressSection.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -87,6 +88,9 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             _field(phoneController, false),
             _field(emailController, true),
             _field(addressController, true),
+            const SizedBox(height: 12),
+            const SavedAddressSection(),
+
           ],
         ),
       ),

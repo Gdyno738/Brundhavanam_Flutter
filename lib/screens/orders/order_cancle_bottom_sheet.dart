@@ -14,10 +14,8 @@ class CancelOrderBottomSheet extends StatefulWidget {
   });
 
   @override
-  State<CancelOrderBottomSheet> createState() =>
-      _CancelOrderBottomSheetState();
+  State<CancelOrderBottomSheet> createState() => _CancelOrderBottomSheetState();
 }
-
 
 class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
   final ImagePicker _picker = ImagePicker();
@@ -32,7 +30,6 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
     'Others',
   ];
 
-  /// 📸 Pick image
   Future<void> _pickImage(ImageSource source) async {
     final XFile? picked =
     await _picker.pickImage(source: source, imageQuality: 70);
@@ -42,7 +39,6 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
     }
   }
 
-  /// 📸 Source chooser
   void _showImageSourceSheet() {
     showModalBottomSheet(
       context: context,
@@ -85,7 +81,7 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
       padding: const EdgeInsets.all(20),
       decoration: const BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,10 +92,7 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
             children: [
               const Text(
                 'Cancel Booking',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.w600,
-                ),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
               IconButton(
                 icon: const Icon(Icons.close),
@@ -108,22 +101,20 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
             ],
           ),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
 
-          /// ORDER CARD (SIMPLIFIED)
-          /// ORDER CARD (DYNAMIC)
+          /// ORDER CARD
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: const Color(0xFFF3F5F6),
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
             ),
-            child: Row(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                /// 🖼 IMAGE
                 ClipRRect(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(12),
                   child: Image(
                     image: widget.order.image != null
                         ? (widget.order.image!.startsWith('http')
@@ -131,61 +122,51 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                         : AssetImage(widget.order.image!)
                     as ImageProvider)
                         : const AssetImage('assets/images/placeholder.png'),
-                    width: 64,
-                    height: 64,
+                    width: double.infinity,
+                    height: 180,
                     fit: BoxFit.cover,
                   ),
                 ),
-
-                const SizedBox(width: 12),
-
-                /// 📄 DETAILS
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.order.title,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      widget.order.subtitle,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: Colors.grey,
-                      ),
-                    ),
-                    const SizedBox(height: 6),
-                    Text(
-                      widget.order.price,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ],
+                const SizedBox(height: 10),
+                Text(
+                  widget.order.title,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 2),
+                Text(
+                  widget.order.subtitle,
+                  style:
+                  const TextStyle(fontSize: 10, color: Colors.black54),
+                ),
+                const SizedBox(height: 6),
+                Text(
+                  widget.order.price,
+                  style: const TextStyle(
+                      fontSize: 14, fontWeight: FontWeight.w600),
+                ),
+                const SizedBox(height: 6),
+                const Text(
+                  'Ordered on 24 Dec 2025',
+                  style: TextStyle(fontSize: 10, color: Colors.black54),
+                ),
+                const Text(
+                  'Gachibowli, Hyd...',
+                  style: TextStyle(fontSize: 10, color: Colors.black54),
                 ),
               ],
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          /// ISSUE TITLE
           const Text(
             'What is the issue with the product?',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
 
           const SizedBox(height: 12),
 
-          /// REASONS (CUSTOM RADIO – NO DEPRECATION)
           Column(
             children: reasons.map((reason) {
               final isSelected = selectedReason == reason;
@@ -203,9 +184,8 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                         height: 18,
                         decoration: BoxDecoration(
                           shape: BoxShape.circle,
-                          border: Border.all(
-                            color: const Color(0xFF049150),
-                          ),
+                          border:
+                          Border.all(color: const Color(0xFF049150)),
                         ),
                         child: isSelected
                             ? Center(
@@ -221,10 +201,8 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                             : null,
                       ),
                       const SizedBox(width: 10),
-                      Text(
-                        reason,
-                        style: const TextStyle(fontSize: 12),
-                      ),
+                      Text(reason,
+                          style: const TextStyle(fontSize: 12)),
                     ],
                   ),
                 ),
@@ -232,15 +210,11 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
             }).toList(),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          /// ADD IMAGES
           const Text(
             'Add Images',
-            style: TextStyle(
-              fontSize: 14,
-              fontWeight: FontWeight.w500,
-            ),
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
           ),
 
           const SizedBox(height: 10),
@@ -249,7 +223,6 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
             spacing: 10,
             runSpacing: 10,
             children: [
-              /// UPLOAD BUTTON
               GestureDetector(
                 onTap: _showImageSourceSheet,
                 child: Container(
@@ -259,23 +232,26 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                     color: const Color(0xFFEDEDED),
                     borderRadius: BorderRadius.circular(11),
                     border: Border.all(
-                      color: Colors.black.withValues(alpha: 0.5),
+                      color: Colors.black.withOpacity(0.4),
                       width: 0.5,
                     ),
                   ),
-                  child: const Center(
-                    child: Text(
-                      'Upload Image',
-                      style: TextStyle(
-                        fontSize: 10,
-                        color: Colors.black54,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: const [
+                      Icon(Icons.image_outlined,
+                          size: 28, color: Colors.black45),
+                      SizedBox(height: 6),
+                      Text(
+                        'Upload Image',
+                        style: TextStyle(
+                            fontSize: 10, color: Colors.black54),
                       ),
-                    ),
+                    ],
                   ),
                 ),
               ),
 
-              /// IMAGE PREVIEW
               ..._images.map((file) {
                 return Stack(
                   children: [
@@ -303,11 +279,8 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                             color: Colors.black54,
                             shape: BoxShape.circle,
                           ),
-                          child: const Icon(
-                            Icons.close,
-                            size: 14,
-                            color: Colors.white,
-                          ),
+                          child: const Icon(Icons.close,
+                              size: 14, color: Colors.white),
                         ),
                       ),
                     ),
@@ -319,49 +292,54 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
 
           const Spacer(),
 
-          /// ACTION BUTTONS
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              OutlinedButton(
-                onPressed: () => Navigator.pop(context),
-                style: OutlinedButton.styleFrom(
-                  side: const BorderSide(color: Color(0xFF049150), width: 2),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              Expanded(
+                child: OutlinedButton(
+                  onPressed: () => Navigator.pop(context),
+                  style: OutlinedButton.styleFrom(
+                    side: const BorderSide(
+                        color: Color(0xFF049150), width: 1.5),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 14),
+                  ),
+                  child: const Text(
+                    'Back',
+                    style: TextStyle(color: Color(0xFF049150)),
                   ),
                 ),
-                child: const Text(
-                  'Back',
-                  style: TextStyle(color: Color(0xFF049150)),
-                ),
               ),
-              ElevatedButton(
-                onPressed: selectedReason == null
-                    ? null
-                    : () {
-                  /// 1️⃣ Close cancel bottom sheet
-                  Navigator.pop(context);
-
-                  /// 2️⃣ Navigate to success screen AFTER sheet closes
-                  Future.microtask(() {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const OrderCancelSuccessScreen(),
-                      ),
-                    );
-                  });
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF049150),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(16),
+              const SizedBox(width: 12),
+              Expanded(
+                child: ElevatedButton(
+                  onPressed: selectedReason == null
+                      ? null
+                      : () {
+                    Navigator.pop(context);
+                    Future.microtask(() {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                          const OrderCancelSuccessScreen(),
+                        ),
+                      );
+                    });
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF049150),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(24),
+                    ),
+                    padding:
+                    const EdgeInsets.symmetric(vertical: 14),
                   ),
+                  child: const Text('Cancel order'),
                 ),
-                child: const Text('Cancel Order'),
               ),
-
             ],
           ),
         ],

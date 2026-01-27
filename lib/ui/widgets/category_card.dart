@@ -29,12 +29,10 @@ class CategoryCard extends StatelessWidget {
           ],
         ),
         child: Column(
+          mainAxisSize: MainAxisSize.min, // ✅ FIX
           children: [
-            /// IMAGE
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(
-                top: Radius.circular(16),
-              ),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
               child: Image.network(
                 category.image,
                 height: 140,
@@ -43,16 +41,13 @@ class CategoryCard extends StatelessWidget {
               ),
             ),
 
-            /// NAME
             Container(
               height: 50,
               width: double.infinity,
               alignment: Alignment.center,
               decoration: const BoxDecoration(
                 color: AppColors.primary,
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(16),
-                ),
+                borderRadius: BorderRadius.vertical(bottom: Radius.circular(16)),
               ),
               child: Text(
                 category.name,
@@ -66,6 +61,7 @@ class CategoryCard extends StatelessWidget {
           ],
         ),
       ),
+
     );
   }
 }

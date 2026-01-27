@@ -21,4 +21,6 @@ class AppColors {
   static Color shadow = black.withValues(alpha: 0.15);
   static Color glossWhite = white.withValues(alpha: 0.08);
   static Color glossBlack = black.withValues(alpha: 0.05);
+
+
 }
