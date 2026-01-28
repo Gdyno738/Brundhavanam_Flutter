@@ -2,14 +2,14 @@ import '../models/review.dart';
 
 final List<Review> dummyReviews = [
   Review(
-    userName: 'Aisha',
+    userName: 'pavan',
     userImage: 'https://placehold.co/30x30',
     reviewText: 'Lorem ipsum dolor sit amet, consectetur.',
     rating: 5,
     backgroundImage: 'https://placehold.co/171x261',
   ),
   Review(
-    userName: 'Rahul',
+    userName: 'ganesh',
     userImage: 'https://placehold.co/30x30',
     reviewText: 'Very pure and timely service.',
     rating: 4,

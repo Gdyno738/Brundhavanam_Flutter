@@ -1,12 +1,25 @@
 import 'package:flutter/material.dart';
+import '../../models/SavedAddress.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/payment_success_screen.dart';
 import '../home/sections/location_header.dart';
 import '../rentcow/debit_credit.dart';
 import '../rentcow/UpiVerificationField.dart';
+import '../../services/mock_profile_service.dart';
+
+
 
 class CartPayment extends StatefulWidget {
-  const CartPayment({super.key});
+  final String? cowName;
+  final String? cowImage;
+
+  const CartPayment({
+    super.key,
+    this.cowName,
+    this.cowImage,
+  });
+
+
 
   @override
   State<CartPayment> createState() => _CartPaymentState();
@@ -14,6 +27,28 @@ class CartPayment extends StatefulWidget {
 
 class _CartPaymentState extends State<CartPayment> {
   String selectedMethod = '';
+
+
+  List<SavedAddress> addresses = [];
+  SavedAddress? selectedAddress;
+
+
+
+
+  @override
+  void initState() {
+    super.initState();
+    loadAddresses();
+  }
+
+  Future<void> loadAddresses() async {
+    final data = await MockProfileService.getSavedAddresses();
+    setState(() {
+      addresses = data;
+      selectedAddress = data.isNotEmpty ? data.first : null;
+    });
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +59,7 @@ class _CartPaymentState extends State<CartPayment> {
           /// 🔹 HEADER
           LocationHeader(
             title: 'Payment Details',
-            subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
+            subtitle: selectedAddress?.address ?? 'Select address',
             showBack: true,
             showDropdown: false,
             onBack: () => Navigator.pop(context),
@@ -49,22 +84,31 @@ class _CartPaymentState extends State<CartPayment> {
                   const SizedBox(height: 12),
 
                   _box(
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: const [
-                        Expanded(
-                          child: Text(
-                            'Indira Nagar, Gachibowli, hyder...',
-                            style: TextStyle(
-                              fontSize: 13,
-                              color: AppColors.black,
+                    InkWell(
+                      onTap: showAddressPicker,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Text(
+                              selectedAddress?.address ?? 'Select address',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                fontSize: 13,
+                                color: AppColors.black,
+                              ),
                             ),
                           ),
-                        ),
-                        Icon(Icons.keyboard_arrow_down),
-                      ],
+                          const Icon(Icons.keyboard_arrow_down),
+                        ],
+                      ),
                     ),
                   ),
+
+
+
+
 
                   const SizedBox(height: 20),
 
@@ -97,6 +141,46 @@ class _CartPaymentState extends State<CartPayment> {
                   ),
 
                   const SizedBox(height: 12),
+
+                  /// 🐄 SELECTED COW CARD
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.lightGrey),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        if (widget.cowImage != null && widget.cowImage!.isNotEmpty)
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              widget.cowName ?? 'Cart Item'
+                              ,
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: Text(
+                            widget.cowName ?? 'Cart Item'
+                            ,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
 
                   _paymentTile(
                     'Debit/Credit Card',
@@ -249,4 +333,84 @@ class _CartPaymentState extends State<CartPayment> {
       ),
     );
   }
+
+  void showAddressPicker() {
+    if (addresses.isEmpty) return;
+
+    showModalBottomSheet(
+      context: context,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+      ),
+      builder: (_) {
+        return ListView.builder(
+          itemCount: addresses.length,
+          itemBuilder: (context, index) {
+            final address = addresses[index];
+
+            return GestureDetector(
+              onTap: () {
+                setState(() {
+                  selectedAddress = address;
+                });
+                Navigator.pop(context);
+              },
+              child: Container(
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                padding: const EdgeInsets.all(16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(color: AppColors.grey),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
+                    ),
+                  ],
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Icon(Icons.location_on, color: AppColors.primary, size: 20),
+                    const SizedBox(width: 10),
+
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            address.name,
+                            style: const TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.black,
+                            ),
+                          ),
+                          const SizedBox(height: 4),
+                          Text(
+                            address.address,
+                            style: const TextStyle(
+                              fontSize: 13,
+                              color: Colors.black54,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    if (selectedAddress == address)
+                      const Icon(Icons.check_circle, color: AppColors.primary, size: 20),
+                  ],
+                ),
+              ),
+            );
+
+          },
+        );
+      },
+    );
+  }
+
 }

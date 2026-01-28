@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/wish_list_provider.dart';
@@ -9,8 +8,8 @@ import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/about_us_section.dart';
 import '../../ui/widgets/most_popular_products_section.dart';
 import '../home/sections/location_header.dart';
-
 import '../popularproducts/popular_products_screen.dart';
+import '../../screens/products/premiumTag.dart';
 
 class ProductDetailsScreen extends StatefulWidget {
   final Product product;
@@ -134,7 +133,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                       Row(
                         children: [
                           Text(
-                            '₹${product.originalPrice}',
+                            '₹${product.originalPrice}/-',
                             style: const TextStyle(
                               fontSize: 12,
                               color: AppColors.grey,
@@ -224,8 +223,10 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     ],
                   ),
 
+                  const SizedBox(height: 12),
 
-                  const SizedBox(height: 28),
+                  const PremiumTag(),
+                  const SizedBox(height: 12),
 
                   /// 🛒 ADD TO CART / QUANTITY
                   Consumer<CartProvider>(

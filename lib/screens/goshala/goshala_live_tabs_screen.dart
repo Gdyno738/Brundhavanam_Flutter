@@ -62,16 +62,16 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
 
   Widget _buildContent() {
     switch (_current) {
-    case GoshalaSection.live:
-    return _liveCameraLayout();
+      case GoshalaSection.live:
+        return _liveCameraLayout();
 
-    case GoshalaSection.history:
-    return const DonateHistoryLayout();
+      case GoshalaSection.history:
+        return const DonateHistoryLayout();
 
 
-    case GoshalaSection.donate:
-    return DonateTab(
-    onDonateTap: goToDonateTab,);
+      case GoshalaSection.donate:
+        return DonateTab(
+          onDonateTap: goToDonateTab,);
 
 
       case GoshalaSection.gallery:

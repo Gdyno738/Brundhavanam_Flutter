@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
 import '../../screens/rentcow/DateField.dart';
 import '../../screens/rentcow/TimeField.dart';
@@ -6,6 +8,7 @@ import '../../screens/rentcow/EventDropdown.dart';
 import '../../screens/rentcow/cow_type_selector.dart';
 import '../../screens/rentcow/total_bill_bottom_sheet.dart';
 import '../../screens/rentcow/address_field.dart';
+import '../navigation/main_navigation.dart';
 import '../rentcow/cart_payment.dart';
 import '../rentcow/SelectButton.dart';
 
@@ -22,6 +25,8 @@ class _RentCowContentState extends State<RentCowContent> {
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _scheduleKey = GlobalKey();
 
+
+
   String selectedCow = 'Type of cow';
   List<String> selectedCowImages = [];
 
@@ -32,8 +37,11 @@ class _RentCowContentState extends State<RentCowContent> {
   final TextEditingController customFloorController = TextEditingController();
 
 
+
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartProvider>();
+
     return SingleChildScrollView(
       controller: _scrollController,
       child: Column(
@@ -59,7 +67,7 @@ class _RentCowContentState extends State<RentCowContent> {
                 ),
 
                 Positioned(
-                  top: 120,
+                  top: 60,
                   left: 0,
                   right: 0,
                   child: Column(
@@ -480,22 +488,41 @@ class _RentCowContentState extends State<RentCowContent> {
                   height: 55,
                   child: ElevatedButton(
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF049150),
+                      backgroundColor: cart.cowItem != null
+                          ? Colors.grey
+                          : AppColors.primary,
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (_) => const CartPayment(),
-                        ),
+                    onPressed: cart.cowItem != null
+                        ? null
+                        : () {
+                      if (selectedCow == 'Type of cow') {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Please select cow type'),
+                          ),
+                        );
+                        return;
+                      }
+
+                      final image = selectedCowImages.isNotEmpty
+                          ? selectedCowImages[currentImageIndex]
+                          : '';
+
+                      const double cowPrice = 470;
+
+                      Provider.of<CartProvider>(context, listen: false)
+                          .addCowToCart(selectedCow, image, cowPrice);
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Cow added to cart')),
                       );
                     },
-                    child: const Text(
-                      'Continue',
-                      style: TextStyle(
+                    child: Text(
+                      cart.cowItem != null ? 'Added to Cart' : 'Add to Cart',
+                      style: const TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
@@ -503,6 +530,8 @@ class _RentCowContentState extends State<RentCowContent> {
                     ),
                   ),
                 ),
+
+
               ],
             ),
           ),

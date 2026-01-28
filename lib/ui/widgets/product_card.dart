@@ -50,15 +50,13 @@ class ProductCard extends StatelessWidget {
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
           children: [
-
             /// 🖼 IMAGE SECTION
-            AspectRatio(
-              aspectRatio: 1,
+            SizedBox(
+              height: 180,
+              width: double.infinity,
               child: Stack(
-
-              children: [
+                children: [
                   /// IMAGE
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
@@ -121,14 +119,12 @@ class ProductCard extends StatelessWidget {
             ),
 
             /// 📄 CONTENT
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.max,
-
-              children: [
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   /// SIZE TEXT
                   Text(
                     product.size,
@@ -214,8 +210,7 @@ class ProductCard extends StatelessWidget {
                   ),
                 ],
               ),
-          ),
-        ),
+            ),
 
             /// 🛒 ADD TO CART
             Consumer<CartProvider>(
