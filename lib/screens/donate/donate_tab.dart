@@ -13,55 +13,56 @@ class DonateTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
+
     return SingleChildScrollView(
       padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
+          /// 🔹 SCHEDULE VISIT BANNER
           const ScheduleVisitBanner(),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: const [
-                Text(
-                  'Become partner',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w600,
-                    height: 1.2,
-                  ),
-                ),
-
-                SizedBox(height: 6),
-
-                Text(
-                  'Support goshala with your contribution and be part of a tradition rooted in care, respect, and gratitude.',
-                  style: TextStyle(
-                    color: Colors.black87,
-                    fontSize: 14,          // ⬆ bigger
-                    fontWeight: FontWeight.w400, // ⬆ bold
-                    height: 1.4,
-                  ),
-                ),
-              ],
+          /// 🔹 BECOME PARTNER TITLE
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 4),
+            child: Text(
+              'Become Partner',
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 18,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
 
+          const SizedBox(height: 12),
 
+          /// 🔹 DESCRIPTION (Responsive)
+          Text(
+            'Support goshala with your contribution and be part of a tradition rooted in care, respect, and gratitude.',
+            style: const TextStyle(
+              color: Colors.black87,
+              fontSize: 15,
+              fontWeight: FontWeight.w400,
+            ),
+          ),
 
-          const SizedBox(height: 20),
+          const SizedBox(height: 24),
 
+          /// 🔹 DONATION CARDS
           _donationCard(
             context,
             image: 'https://placehold.co/375x176',
             title: 'Donate for Green grass - ₹1,000 per Load',
           ),
+
           const SizedBox(height: 20),
 
           _donationCard(
@@ -69,6 +70,7 @@ class DonateTab extends StatelessWidget {
             image: 'https://placehold.co/375x176',
             title: 'Donate for Dry fodder - ₹750',
           ),
+
           const SizedBox(height: 20),
 
           _donationCard(
@@ -76,7 +78,8 @@ class DonateTab extends StatelessWidget {
             image: 'https://placehold.co/375x176',
             title: 'Donate for Cow Medical Care',
           ),
-          const SizedBox(height: 32),
+
+          const SizedBox(height: 30),
 
           /// 🔹 GENERAL DONATION
           const Text(
@@ -88,13 +91,14 @@ class DonateTab extends StatelessWidget {
             ),
           ),
 
-          const SizedBox(height: 24),
+          const SizedBox(height: 20),
 
-          _generalDonateSection(),
+          _generalDonateSection(screenWidth),
         ],
       ),
     );
   }
+
 
   /// ================= DONATION CARD =================
 
@@ -105,42 +109,48 @@ class DonateTab extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Container(
-          height: 176,
-          decoration: BoxDecoration(
-            color: AppColors.white,
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(
-              color: AppColors.lightGrey,
-              width: 0.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.shadow,
-                blurRadius: 8,
+
+        /// IMAGE CARD
+        AspectRatio(
+          aspectRatio: 16 / 7,
+          child: Container(
+            decoration: BoxDecoration(
+              color: AppColors.white,
+              borderRadius: BorderRadius.circular(16),
+              border: Border.all(color: AppColors.lightGrey),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.shadow,
+                  blurRadius: 8,
+                ),
+              ],
+              image: DecorationImage(
+                image: NetworkImage(image),
+                fit: BoxFit.cover,
               ),
-            ],
-            image: DecorationImage(
-              image: NetworkImage(image),
-              fit: BoxFit.cover,
             ),
           ),
         ),
 
         const SizedBox(height: 12),
 
-        Text(
-          title,
-          textAlign: TextAlign.center,
-          style: const TextStyle(
-            color: AppColors.black,
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
+        /// TITLE
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 8),
+          child: Text(
+            title,
+            textAlign: TextAlign.center,
+            style: const TextStyle(
+              color: AppColors.black,
+              fontSize: 15,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
 
-        const SizedBox(height: 14),
+        const SizedBox(height: 12),
 
+        /// DONATE BUTTON
         _donateButton(context),
       ],
     );
@@ -158,19 +168,14 @@ class DonateTab extends StatelessWidget {
           ),
         );
       },
-      // ✅ OPEN BECOME PARTNER SCREEN
       child: Container(
-        width: 121,
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 32,
+          vertical: 12,
+        ),
         decoration: BoxDecoration(
           color: AppColors.primary,
           borderRadius: BorderRadius.circular(12),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.shadow,
-              blurRadius: 6,
-            ),
-          ],
         ),
         alignment: Alignment.center,
         child: const Text(
@@ -185,19 +190,21 @@ class DonateTab extends StatelessWidget {
     );
   }
 
+
   /// ================= GENERAL DONATE =================
 
-  Widget _generalDonateSection() {
+  Widget _generalDonateSection(double screenWidth) {
+    final qrSize = screenWidth * 0.7;
+
     return Center(
       child: Column(
         mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
 
-          /// 📱 QR IMAGE
+          /// QR IMAGE
           Container(
-            height: 276,
-            width: 276,
+            height: qrSize,
+            width: qrSize,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(12),
               image: const DecorationImage(
@@ -215,12 +222,12 @@ class DonateTab extends StatelessWidget {
 
           const SizedBox(height: 20),
 
-          /// 💚 SCAN & PAY BUTTON
+          /// SCAN & PAY BUTTON
           GestureDetector(
-            onTap: onDonateTap, // ✅ SAME FLOW
+            onTap: onDonateTap,
             child: Container(
               padding: const EdgeInsets.symmetric(
-                horizontal: 32,
+                horizontal: 40,
                 vertical: 14,
               ),
               decoration: BoxDecoration(

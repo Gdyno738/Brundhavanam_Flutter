@@ -10,7 +10,16 @@ import '../../services/mock_profile_service.dart';
 
 
 class CartPayment extends StatefulWidget {
-  const CartPayment({super.key});
+  final String? cowName;
+  final String? cowImage;
+
+  const CartPayment({
+    super.key,
+    this.cowName,
+    this.cowImage,
+  });
+
+
 
   @override
   State<CartPayment> createState() => _CartPaymentState();
@@ -19,8 +28,11 @@ class CartPayment extends StatefulWidget {
 class _CartPaymentState extends State<CartPayment> {
   String selectedMethod = '';
 
+
   List<SavedAddress> addresses = [];
   SavedAddress? selectedAddress;
+
+
 
 
   @override
@@ -129,6 +141,46 @@ class _CartPaymentState extends State<CartPayment> {
                   ),
 
                   const SizedBox(height: 12),
+
+                  /// 🐄 SELECTED COW CARD
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 20),
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: AppColors.lightGrey),
+                      borderRadius: BorderRadius.circular(16),
+                    ),
+                    child: Row(
+                      children: [
+                        if (widget.cowImage != null && widget.cowImage!.isNotEmpty)
+
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: Image.asset(
+                              widget.cowName ?? 'Cart Item'
+                              ,
+                              height: 70,
+                              width: 70,
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+
+                        const SizedBox(width: 12),
+
+                        Expanded(
+                          child: Text(
+                            widget.cowName ?? 'Cart Item'
+                            ,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+
 
                   _paymentTile(
                     'Debit/Credit Card',

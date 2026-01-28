@@ -2,7 +2,6 @@ enum OrderStatus {
   active,
   completed,
   cancelled,
-  success, outForDelivery, // ✅ REQUIRED by OrderPlacedScreen
 }
 
 enum RefundStatus {
@@ -17,11 +16,10 @@ class OrderModel {
   final String price;
   final String address;
   final DateTime orderDate;
+  final String image;
 
-  OrderStatus status;          // ✅ mutable
-  RefundStatus refundStatus;   // ✅ exists
-
-  final String? image;
+  OrderStatus status;
+  RefundStatus refundStatus;
 
   OrderModel({
     required this.title,
@@ -29,13 +27,11 @@ class OrderModel {
     required this.price,
     required this.address,
     required this.orderDate,
-    required this.status,
+    required this.image,
+    this.status = OrderStatus.active,
     this.refundStatus = RefundStatus.none,
-    this.image,
   });
 
-  bool get completed =>
-      status == OrderStatus.completed || status == OrderStatus.success;
-
+  bool get completed => status == OrderStatus.completed;
   bool get cancelled => status == OrderStatus.cancelled;
 }

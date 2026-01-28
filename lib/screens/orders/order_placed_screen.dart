@@ -61,11 +61,11 @@ class OrderPlacedScreen extends StatelessWidget {
 
             /// ✅ SUCCESS ICON
             Icon(
-              status == OrderStatus.success
+              status == OrderStatus.completed
                   ? Icons.check_circle
                   : Icons.error,
               size: 80,
-              color: status == OrderStatus.success
+              color: status == OrderStatus.completed
                   ? AppColors.primary
                   : Colors.red,
             ),
@@ -73,7 +73,7 @@ class OrderPlacedScreen extends StatelessWidget {
             const SizedBox(height: 12),
 
             Text(
-              status == OrderStatus.success
+              status == OrderStatus.completed
                   ? 'Your order is placed successfully'
                   : 'Payment failed',
               style: const TextStyle(
@@ -81,6 +81,7 @@ class OrderPlacedScreen extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
+
 
             const SizedBox(height: 24),
 

@@ -200,9 +200,12 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.pushAndRemoveUntil(
                   parentContext,
-                  MaterialPageRoute(builder: (_) => const MainNavigation()),
-                      (route) => false, // 🔥 clears login stack
+                  MaterialPageRoute(
+                    builder: (_) => MainNavigation(key: MainNavigation.navKey),
+                  ),
+                      (route) => false,
                 );
+
               });
             },
             child: const Text(

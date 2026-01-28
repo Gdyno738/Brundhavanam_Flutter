@@ -5,6 +5,15 @@ import '../common/app_colors.dart';
 class FullWidthBanner extends StatelessWidget {
   const FullWidthBanner({super.key});
 
+  void _goToBook(BuildContext context) {
+    final navState = MainNavigation.navKey.currentState;
+
+    if (navState != null && navState.mounted) {
+      navState.switchTab(1);
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -24,9 +33,7 @@ class FullWidthBanner extends StatelessWidget {
           Transform.translate(
             offset: const Offset(-40, 40),
             child: GestureDetector(
-              onTap: () {
-                MainNavigation.navKey.currentState?.switchTab(1);
-              },
+              onTap: () => _goToBook(context), // ✅ FIX
               child: Container(
                 width: 105,
                 height: 32,

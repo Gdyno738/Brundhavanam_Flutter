@@ -101,13 +101,17 @@ class ScheduleVisitBanner extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         image: const DecorationImage(
-          image: AssetImage('assets/bannerImages/schedule_visit_banner.png'),
+          image: AssetImage(
+            'assets/bannerImages/schedule_visit_banner.png',
+          ),
           fit: BoxFit.cover,
         ),
       ),
+
       child: Center(
         child: Container(
           margin: const EdgeInsets.all(16),
@@ -145,17 +149,13 @@ class ScheduleVisitBanner extends StatelessWidget {
               GestureDetector(
                 onTap: () => _openCalendar(context),
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 28, vertical: 10),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 28,
+                    vertical: 10,
+                  ),
                   decoration: BoxDecoration(
                     color: AppColors.white,
                     borderRadius: BorderRadius.circular(40),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.shadow,
-                        blurRadius: 12,
-                        offset: const Offset(0, 5),
-                      ),
-                    ],
                   ),
                   child: const Text(
                     'Schedule a Visit',
@@ -173,5 +173,4 @@ class ScheduleVisitBanner extends StatelessWidget {
       ),
     );
   }
-
 }

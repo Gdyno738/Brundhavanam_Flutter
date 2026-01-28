@@ -51,12 +51,14 @@ class CategoryProductsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               itemCount: filteredProducts.length,
               gridDelegate:
-              const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
+              const SliverGridDelegateWithMaxCrossAxisExtent(
+                maxCrossAxisExtent: 200,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.60,
+                childAspectRatio: 0.70,
               ),
+
+
               itemBuilder: (_, index) {
                 return ProductCard(
                   product: filteredProducts[index],

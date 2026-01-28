@@ -37,23 +37,31 @@ class ProductCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(color: AppColors.lightGrey, width: 0.5),
+          border: Border.all(
+            color: AppColors.lightGrey,
+            width: 0.5,
+          ),
           boxShadow: [
-            BoxShadow(color: AppColors.shadow, blurRadius: 8),
+            BoxShadow(
+              color: AppColors.shadow,
+              blurRadius: 8,
+            ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            /// IMAGE
+            /// 🖼 IMAGE SECTION
             SizedBox(
-              height: 150,
+              height: 180,
               width: double.infinity,
               child: Stack(
                 children: [
+                  /// IMAGE
                   ClipRRect(
-                    borderRadius:
-                    const BorderRadius.vertical(top: Radius.circular(16)),
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(16),
+                    ),
                     child: Image.network(
                       product.image,
                       width: double.infinity,
@@ -62,12 +70,16 @@ class ProductCard extends StatelessWidget {
                     ),
                   ),
 
+                  /// 🟢 SIZE BADGE
                   Positioned(
                     top: 0,
                     right: 0,
-                    child: ProductSizeBadge(size: product.size),
+                    child: ProductSizeBadge(
+                      size: product.size,
+                    ),
                   ),
 
+                  /// 🔖 WISHLIST
                   Positioned(
                     left: 8,
                     bottom: 8,
@@ -85,7 +97,9 @@ class ProductCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(8),
                               boxShadow: const [
                                 BoxShadow(
-                                    color: Colors.black26, blurRadius: 4),
+                                  color: Colors.black26,
+                                  blurRadius: 4,
+                                ),
                               ],
                             ),
                             child: Icon(
@@ -104,90 +118,101 @@ class ProductCard extends StatelessWidget {
               ),
             ),
 
-            /// CONTENT (AUTO HEIGHT)
-            Expanded(
-              child: Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      product.size,
-                      style: const TextStyle(
-                          fontSize: 10, color: AppColors.primary),
+            /// 📄 CONTENT
+            Padding(
+              padding:
+              const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  /// SIZE TEXT
+                  Text(
+                    product.size,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.primary,
                     ),
-                    const SizedBox(height: 2),
+                  ),
 
-                    Text(
-                      product.title,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
+                  const SizedBox(height: 2),
+
+                  /// TITLE
+                  Text(
+                    product.title,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.black,
+                    ),
+                  ),
+
+                  /// DESCRIPTION
+                  Text(
+                    product.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(
+                      fontSize: 10,
+                      color: AppColors.grey,
+                    ),
+                  ),
+
+                  const SizedBox(height: 4),
+
+                  /// ✅ CATEGORY QUICK LINK (ONLY FUNCTIONAL CHANGE)
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CategoryProductsScreen(
+                            category: product.category,
+                          ),
+                        ),
+                      );
+                    },
+                    child: Text(
+                      product.category,
                       style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w400,
-                        color: AppColors.black,
+                        fontSize: 10,
+                        color: AppColors.primary,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
+                  ),
 
-                    Text(
-                      product.description,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                          fontSize: 10, color: AppColors.grey),
-                    ),
 
-                    const SizedBox(height: 4),
+                  const SizedBox(height: 6),
 
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => CategoryProductsScreen(
-                                category: product.category),
-                          ),
-                        );
-                      },
-                      child: Text(
-                        product.category,
+                  /// PRICE
+                  Row(
+                    children: [
+                      Text(
+                        '₹${product.originalPrice}',
                         style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.primary,
-                            fontWeight: FontWeight.w500),
+                          fontSize: 10,
+                          color: AppColors.grey,
+                          decoration: TextDecoration.lineThrough,
+                        ),
                       ),
-                    ),
-
-                    const Spacer(),
-
-                    Row(
-                      children: [
-                        Text(
-                          '₹${product.originalPrice}',
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.grey,
-                            decoration: TextDecoration.lineThrough,
-                          ),
+                      const SizedBox(width: 6),
+                      Text(
+                        '₹${product.price}',
+                        style: const TextStyle(
+                          fontSize: 12,
+                          fontWeight: FontWeight.w500,
+                          color: AppColors.black,
                         ),
-                        const SizedBox(width: 6),
-                        Text(
-                          '₹${product.price}',
-                          style: const TextStyle(
-                            fontSize: 12,
-                            fontWeight: FontWeight.w500,
-                            color: AppColors.black,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
 
-            /// ADD TO CART
+            /// 🛒 ADD TO CART
             Consumer<CartProvider>(
               builder: (_, cart, __) {
                 final inCart = cart.isInCart(product);
@@ -196,17 +221,20 @@ class ProductCard extends StatelessWidget {
                   height: 44,
                   decoration: const BoxDecoration(
                     color: AppColors.primary,
-                    borderRadius:
-                    BorderRadius.vertical(bottom: Radius.circular(16)),
+                    borderRadius: BorderRadius.vertical(
+                      bottom: Radius.circular(16),
+                    ),
                   ),
                   child: inCart
                       ? Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceAround,
                     children: [
                       IconButton(
                         icon: const Icon(Icons.remove,
                             color: Colors.white),
-                        onPressed: () => cart.decrease(product),
+                        onPressed: () =>
+                            cart.decrease(product),
                       ),
                       Text(
                         cart.quantity(product).toString(),
@@ -217,9 +245,10 @@ class ProductCard extends StatelessWidget {
                         ),
                       ),
                       IconButton(
-                        icon:
-                        const Icon(Icons.add, color: Colors.white),
-                        onPressed: () => cart.increase(product),
+                        icon: const Icon(Icons.add,
+                            color: Colors.white),
+                        onPressed: () =>
+                            cart.increase(product),
                       ),
                     ],
                   )

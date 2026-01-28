@@ -53,7 +53,8 @@ class CartScreen extends StatelessWidget {
 
           /// 🛒 CART BODY
           Expanded(
-            child: cart.items.isEmpty
+            child: cart.items.isEmpty && cart.cowItem == null
+
                 ? EmptyCartView(
               onBrowse: () {
                 MainNavigation.navKey.currentState?.switchTab(2); // Products tab
@@ -62,6 +63,76 @@ class CartScreen extends StatelessWidget {
             )
                 : ListView(
               children: [
+                /// 🐄 RENTED COW ITEM
+                if (cart.cowItem != null)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 8,
+                    ),
+                    child: Container(
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        border: Border.all(color: AppColors.lightGrey),
+                        borderRadius: BorderRadius.circular(16),
+                      ),
+                      child: Row(
+                        children: [
+                          if (cart.cowItem!.image.isNotEmpty)
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(12),
+                              child: Image.asset(
+                                cart.cowItem!.image,
+                                height: 70,
+                                width: 70,
+                                fit: BoxFit.cover,
+                              ),
+                            ),
+                          const SizedBox(width: 12),
+
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  cart.cowItem!.name,
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(height: 4),
+                                Text(
+                                  '₹${cart.cowItem!.price}',
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    color: Colors.grey,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+
+                          GestureDetector(
+                            onTap: () {
+                              cart.removeCowFromCart();
+                            },
+                            child: const Text(
+                              'Remove',
+                              style: TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
+                          ),
+
+                        ],
+                      ),
+                    ),
+                  ),
+
                 /// 🛍 CART ITEMS
                 ...items.map((product) {
                   return Padding(
