@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
 import '../home/sections/location_header.dart';
@@ -21,15 +22,13 @@ class CategoryProductsScreen extends StatelessWidget {
         .where((p) => p.category == category)
         .toList();
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// HEADER → CATEGORY NAME
           SafeArea(
             bottom: false,
             child: LocationHeader(
-              title: category, // 👈 Selected category name
+              title: category,
               subtitle: '',
               showBack: true,
               showDropdown: false,
@@ -37,15 +36,8 @@ class CategoryProductsScreen extends StatelessWidget {
             ),
           ),
 
-
           const SizedBox(height: 12),
 
-          /// SEARCH (REUSED)
-          const HomeSearchBar(),
-
-          const SizedBox(height: 16),
-
-          /// PRODUCTS OF THIS CATEGORY
           Expanded(
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
@@ -55,10 +47,8 @@ class CategoryProductsScreen extends StatelessWidget {
                 maxCrossAxisExtent: 200,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.70,
+                childAspectRatio: 0.55,
               ),
-
-
               itemBuilder: (_, index) {
                 return ProductCard(
                   product: filteredProducts[index],
@@ -69,5 +59,8 @@ class CategoryProductsScreen extends StatelessWidget {
         ],
       ),
     );
+
   }
 }
+
+

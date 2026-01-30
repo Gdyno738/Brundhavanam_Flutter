@@ -3,6 +3,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../models/onboarding_model.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../language/language_bottom_sheet.dart';
 
 class OnboardingScreen extends StatefulWidget {
@@ -19,7 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   final List<OnboardingModel> pages = [
     OnboardingModel(
-      image: 'assets/images/cow.jpg',
+      image: 'assets/images/cow-calf.png',
       title: 'Honor traditions the authentic way.',
       points: [
         'Cow & calf rent for house-warming and sacred ceremonies.',
@@ -27,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       ],
     ),
     OnboardingModel(
-      image: 'assets/images/cow.jpg',
+      image: 'assets/images/onboarding_milk.png',
       title: 'Tradition delivered with trust.',
       points: [
         'Verified farmers and healthy cattle.',
@@ -70,9 +71,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     rootContext = context;
 
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
-      body: PageView.builder(
+    return BaseScreen(
+      child: PageView.builder(
         controller: _controller,
         itemCount: pages.length,
         onPageChanged: (i) => setState(() => _index = i),
@@ -80,55 +80,34 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           final isLast = i == pages.length - 1;
           final data = pages[i];
 
-          return Stack(
+          return Column(
             children: [
-              /// 🔹 BACKGROUND IMAGE
-              Positioned.fill(
-                child: Image.asset(
-                  data.image,
-                  fit: BoxFit.cover,
+
+              /// 🔹 TOP IMAGE (RESTORED)
+              Expanded(
+                flex: 6,
+                child: Stack(
+                  children: [
+                    Positioned.fill(
+                      child: Image.asset(
+                        data.image,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ],
                 ),
               ),
 
-              /// 🔹 LOGO (TOP RIGHT)
-              Positioned(
-                top: 40,
-                right: 24,
-                child: Container(
-                  width: 72,
-                  height: 72,
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    shape: BoxShape.circle,
-                  ),
-                  alignment: Alignment.center,
-                  child: const Text(
-                    'Logo',
-                    style: TextStyle(
-                      color: AppColors.primary,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-              ),
-
-              /// 🔹 BOTTOM WHITE CARD
-              Positioned(
-                left: 0,
-                right: 0,
-                bottom: 0,
-                child: Container(
-                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 24),
-                  decoration: const BoxDecoration(
-                    color: AppColors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(28),
-                    ),
-                  ),
+              /// 🔹 TEXT SECTION (UNCHANGED UI)
+              Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 24, 24, 30),
                   child: Column(
-                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+
+                      /// 🔹 TOP ROW (BACK + SKIP)
                       if (!isLast)
                         Align(
                           alignment: Alignment.centerRight,
@@ -145,12 +124,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                           ),
                         ),
 
-                      if (!isLast) const SizedBox(height: 12),
+
+                      const SizedBox(height: 20),
 
                       Text(
                         data.title,
                         style: const TextStyle(
-                          fontSize: 20,
+                          fontSize: 22,
                           fontWeight: FontWeight.w600,
                           height: 1.2,
                         ),
@@ -160,7 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       ...data.points.map(
                             (p) => Padding(
-                          padding: const EdgeInsets.only(bottom: 12),
+                          padding: const EdgeInsets.only(bottom: 14),
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
@@ -184,112 +164,65 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         ),
                       ),
 
-                      const SizedBox(height: 24),
+                      const Spacer(),
 
-                      if (isLast)
-                        SizedBox(
-                          width: double.infinity,
-                          height: 48,
-                          child: ElevatedButton(
-                            onPressed: _next,
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: AppColors.primary,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(24),
-                              ),
-                            ),
-                            child: const Text(
-                              'Get Started',
-                              style: TextStyle(
-                                fontSize: 16,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.white,
-                              ),
-                            ),
-                          ),
-                        )
-                      else
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: GestureDetector(
-                            onTap: _next,
-                            child: Container(
-                              width: 44,
-                              height: 44,
-                              decoration: const BoxDecoration(
-                                color: AppColors.primary,
-                                shape: BoxShape.circle,
-                              ),
+                      /// 🔘 BOTTOM NAVIGATION ROW
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+
+                          /// BACK BUTTON
+                          if (_index > 0)
+                            GestureDetector(
+                              onTap: () {
+                                _controller.previousPage(
+                                  duration: const Duration(milliseconds: 300),
+                                  curve: Curves.easeInOut,
+                                );
+                              },
                               child: const Icon(
-                                Icons.arrow_forward,
-                                color: AppColors.white,
+                                Icons.arrow_back,
+                                size: 28,
+                                color: AppColors.primary,
+                              ),
+                            )
+                          else
+                            const SizedBox(width: 28),
+
+                          /// DOTS (CENTERED)
+                          Row(
+                            children: List.generate(
+                              pages.length,
+                                  (dotIndex) => Container(
+                                margin: const EdgeInsets.symmetric(horizontal: 4),
+                                width: _index == dotIndex ? 20 : 8,
+                                height: 8,
+                                decoration: BoxDecoration(
+                                  color: _index == dotIndex
+                                      ? AppColors.primary
+                                      : AppColors.lightGrey,
+                                  borderRadius: BorderRadius.circular(20),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+
+                          /// FORWARD BUTTON
+                          GestureDetector(
+                            onTap: _next,
+                            child: const Icon(
+                              Icons.arrow_forward,
+                              size: 28,
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ],
+                      ),
+
                     ],
                   ),
                 ),
               ),
-
-              /// 🔙 BACK BUTTON (BOTTOM LEFT)
-              /// 🔙 BACK BUTTON (BOTTOM LEFT – HIDDEN ON LAST SCREEN)
-              if (_index > 0 && _index < pages.length - 1)
-                Positioned(
-                  left: 16,
-                  bottom: 20,
-                  child: GestureDetector(
-                    onTap: () {
-                      _controller.previousPage(
-                        duration: const Duration(milliseconds: 300),
-                        curve: Curves.easeInOut,
-                      );
-                    },
-                    child: Container(
-                      width: 44,
-                      height: 44,
-                      decoration: const BoxDecoration(
-                        color: AppColors.white,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.black12,
-                            blurRadius: 6,
-                          ),
-                        ],
-                      ),
-                      child: const Icon(
-                        Icons.arrow_back,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ),
-                ),
-
-              /// 🔘 DOTS (BOTTOM CENTER – HIDDEN ON LAST SCREEN)
-              if (_index < pages.length - 1)
-                Positioned(
-                  bottom: 20,
-                  left: 0,
-                  right: 0,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      pages.length,
-                          (dotIndex) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 4),
-                        width: 8,
-                        height: 8,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: _index == dotIndex
-                              ? AppColors.primary
-                              : AppColors.lightGrey,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
             ],
           );
         },

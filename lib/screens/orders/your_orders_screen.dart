@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../navigation/main_navigation.dart';
 import 'order_cancle_bottom_sheet.dart';
@@ -73,22 +74,45 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0.5,
-        title: const Text(
-          'Your Orders',
-          style: TextStyle(color: AppColors.black),
-        ),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-      ),
-      body: Column(
+    return BaseScreen(
+
+      statusBarColor: AppColors.white,
+      statusBarIconBrightness: Brightness.dark,
+      child: Column(
         children: [
+
+          /// 🔹 APP BAR
+          SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFE7E7E7)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back, color: AppColors.black),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Your Orders',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+
           /// 🔍 SEARCH + FILTER
           Padding(
             padding: const EdgeInsets.all(16),
@@ -124,25 +148,16 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
                         ),
                       ],
                     ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(
-                          Icons.filter_list,
-                          size: 18,
-                          color: AppColors.black,
-                        ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.filter_list, size: 18),
                         SizedBox(width: 6),
                         Text(
                           'Filter',
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.w500,
-                          ),
+                          style: TextStyle(fontWeight: FontWeight.w500),
                         ),
                       ],
                     ),
-
                   ),
                 ),
               ],
@@ -152,7 +167,7 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
           /// 📦 ORDERS LIST
           Expanded(
             child: ListView.builder(
-              padding: const EdgeInsets.all(16),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
               itemCount: _filteredOrders.length,
               itemBuilder: (_, index) {
                 return _OrderCard(order: _filteredOrders[index]);
@@ -163,6 +178,7 @@ class _YourOrdersScreenState extends State<YourOrdersScreen> {
       ),
     );
   }
+
 }
 
 class _OrderCard extends StatelessWidget {

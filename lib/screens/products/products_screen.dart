@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../data/dummy_products.dart';
 import '../../ui/common/app_colors.dart';
@@ -42,9 +43,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+
+      child: Column(
         children: [
           /// 🔝 HEADER
           LocationHeader(

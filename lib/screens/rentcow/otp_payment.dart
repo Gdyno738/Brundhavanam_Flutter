@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../home/sections/location_header.dart';
 
@@ -45,10 +46,8 @@ class _OtpPaymentState extends State<OtpPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
 
           /// 🔹 HEADER

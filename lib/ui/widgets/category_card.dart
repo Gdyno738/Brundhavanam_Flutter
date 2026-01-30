@@ -34,21 +34,18 @@ class CategoryCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              /// RESPONSIVE IMAGE
-              ClipRRect(
-                borderRadius: const BorderRadius.vertical(
-                  top: Radius.circular(16),
-                ),
-                child: AspectRatio(
-                  aspectRatio: 16 / 9,
+
+              /// IMAGE (flexible)
+              Expanded(
+                child: ClipRRect(
+                  borderRadius: const BorderRadius.vertical(
+                    top: Radius.circular(16),
+                  ),
                   child: Image.network(
                     category.image,
                     fit: BoxFit.cover,
-
-                    /// Loading placeholder
                     loadingBuilder: (context, child, progress) {
                       if (progress == null) return child;
-
                       return Container(
                         color: AppColors.lightGrey.withValues(alpha: 0.3),
                         alignment: Alignment.center,
@@ -58,8 +55,6 @@ class CategoryCard extends StatelessWidget {
                         ),
                       );
                     },
-
-                    /// Error fallback
                     errorBuilder: (context, error, stackTrace) {
                       return Container(
                         color: AppColors.lightGrey.withValues(alpha: 0.3),
@@ -75,12 +70,9 @@ class CategoryCard extends StatelessWidget {
                 ),
               ),
 
-              /// RESPONSIVE TITLE
+              /// TITLE (fixed height)
               Container(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 12,
-                  horizontal: 8,
-                ),
+                height: 48,
                 alignment: Alignment.center,
                 decoration: const BoxDecoration(
                   color: AppColors.primary,
@@ -102,6 +94,7 @@ class CategoryCard extends StatelessWidget {
               ),
             ],
           ),
+
         ),
       ),
     );

@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../../data/dummy_products.dart';
@@ -21,13 +22,13 @@ class _MostPopularProductsScreenState
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+
+      child: Column(
         children: [
           /// 🔝 HEADER
           LocationHeader(
-            title: 'Most Popular Products',
+            title: 'Popular Products',
             subtitle: '',
             showBack: true,
             showDropdown: false,
@@ -35,20 +36,20 @@ class _MostPopularProductsScreenState
           ),
 
           const SizedBox(height: 12),
-          const HomeSearchBar(),
-          const SizedBox(height: 12),
 
-          /// 🏷 CATEGORY FILTER
-          CategoryHorizontalList(
-            selectedCategory: selectedCategory ?? 'ALL',
-            onCategorySelected: (category) {
-              setState(() {
-                selectedCategory = category == 'ALL' ? null : category;
-              });
-            },
-          ),
+         // const SizedBox(height: 12),
+          //
+          // /// 🏷 CATEGORY FILTER
+          // CategoryHorizontalList(
+          //   selectedCategory: selectedCategory ?? 'ALL',
+          //   onCategorySelected: (category) {
+          //     setState(() {
+          //       selectedCategory = category == 'ALL' ? null : category;
+          //     });
+          //   },
+          // ),
 
-          const SizedBox(height: 16),
+          // const SizedBox(height: 16),
 
           /// 🧺 PRODUCTS GRID
           Expanded(child: _buildProductsGrid()),

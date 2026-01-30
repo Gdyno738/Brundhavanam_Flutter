@@ -16,7 +16,7 @@ class _BannerCarouselState extends State<BannerCarousel> {
 
   /// ✅ LOCAL ASSET IMAGES
   final List<String> banners = [
-    'assets/bannerImages/banner1.png',
+    'assets/bannerImages/home_banner1.png',
     'assets/bannerImages/banner2.png',
     'assets/bannerImages/banner3.png',
   ];

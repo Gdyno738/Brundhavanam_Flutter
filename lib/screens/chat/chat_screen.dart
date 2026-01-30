@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 
@@ -8,9 +9,9 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final topPadding = MediaQuery.of(context).padding.top;
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+
+      child: Column(
         children: [
           /// 🔝 CHAT HEADER
           Container(
@@ -31,7 +32,7 @@ class ChatScreen extends StatelessWidget {
                   onTap: () => Navigator.pop(context),
                   borderRadius: BorderRadius.circular(20),
                   child: const Icon(
-                    Icons.arrow_back_ios_new,
+                    Icons.arrow_back,
                     color: AppColors.white,
                     size: 20,
                   ),

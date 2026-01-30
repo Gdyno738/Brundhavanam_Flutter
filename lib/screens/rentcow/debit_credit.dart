@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../home/sections/location_header.dart';
 import '../rentcow/otp_payment.dart';
@@ -7,10 +8,10 @@ class DebitCredit extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
+    return BaseScreen(
 
-      body: Column(
+
+      child: Column(
         children: [
 
           LocationHeader(
