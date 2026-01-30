@@ -1,154 +1,183 @@
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 
 class OrderTrackingScreen extends StatelessWidget {
   const OrderTrackingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
+    return BaseScreen(
 
-      /// 🔝 APP BAR
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Your Orders',
-          style: TextStyle(color: AppColors.black),
-        ),
-      ),
-
-      body: Column(
+      statusBarColor: AppColors.white,
+      statusBarIconBrightness: Brightness.dark,
+      child: Column(
         children: [
-          /// 🗺 MAP SECTION
-          SizedBox(
-            height: 280,
-            width: double.infinity,
-            child: Stack(
-              children: [
-                /// MAP IMAGE (VISUAL ONLY)
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/images/map_placeholder.png',
-                    fit: BoxFit.cover,
+
+          /// 🔹 HEADER
+          SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFE7E7E7)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back,
+                        color: AppColors.black),
                   ),
-                ),
-
-                /// ROUTE LINE (DUMMY)
-                CustomPaint(
-                  size: Size.infinite,
-                  painter: _RoutePainter(),
-                ),
-
-                /// 📍 DESTINATION PIN
-                const Positioned(
-                  top: 60,
-                  left: 120,
-                  child: Icon(
-                    Icons.location_pin,
-                    color: Colors.red,
-                    size: 34,
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Your Orders',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-
-                /// 🚚 DELIVERY ICON
-                const Positioned(
-                  bottom: 70,
-                  right: 120,
-                  child: Icon(
-                    Icons.delivery_dining,
-                    color: AppColors.primary,
-                    size: 36,
-                  ),
-                ),
-              ],
-            ),
-          ),
-
-          /// ⏱ ETA & CALL DRIVER
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            decoration: const BoxDecoration(
-              border: Border(
-                bottom: BorderSide(color: Color(0xFFE7E7E7)),
+                ],
               ),
             ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          ),
+
+          /// 🔹 BODY
+          Expanded(
+            child: Column(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Estimated arrival at 7:00 AM',
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+
+                /// 🗺 MAP SECTION
+                SizedBox(
+                  height: 280,
+                  width: double.infinity,
+                  child: Stack(
+                    children: [
+                      Positioned.fill(
+                        child: Image.asset(
+                          'assets/images/map_placeholder.png',
+                          fit: BoxFit.cover,
+                        ),
                       ),
-                    ),
-                    SizedBox(height: 4),
-                    Text(
-                      '⏱ On the way',
-                      style: TextStyle(fontSize: 12, color: Colors.grey),
-                    ),
-                  ],
-                ),
-                Text(
-                  '📞 Call Driver\n1234567890',
-                  textAlign: TextAlign.right,
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: AppColors.primary,
-                    fontWeight: FontWeight.w500,
+                      CustomPaint(
+                        size: Size.infinite,
+                        painter: _RoutePainter(),
+                      ),
+                      const Positioned(
+                        top: 60,
+                        left: 120,
+                        child: Icon(
+                          Icons.location_pin,
+                          color: Colors.red,
+                          size: 34,
+                        ),
+                      ),
+                      const Positioned(
+                        bottom: 70,
+                        right: 120,
+                        child: Icon(
+                          Icons.delivery_dining,
+                          color: AppColors.primary,
+                          size: 36,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
-            ),
-          ),
 
-          /// 📦 ORDER STATUS
-          Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                _statusRow(
-                  label: 'Order Placed',
-                  value: '23 Dec 2025',
-                ),
-                const SizedBox(height: 12),
-                _statusRow(
-                  label: 'OTP',
-                  value: '1234',
-                  highlight: true,
-                ),
-              ],
-            ),
-          ),
-
-          const Divider(height: 1),
-
-          /// 📄 ORDER DETAILS
-          const Padding(
-            padding: EdgeInsets.all(16),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'Order Details',
-                  style: TextStyle(
-                    fontSize: 16,
-                    fontWeight: FontWeight.w500,
+                /// ⏱ ETA
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16, vertical: 12),
+                  decoration: const BoxDecoration(
+                    border: Border(
+                      bottom: BorderSide(color: Color(0xFFE7E7E7)),
+                    ),
+                  ),
+                  child: const Row(
+                    mainAxisAlignment:
+                    MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        crossAxisAlignment:
+                        CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Estimated arrival at 7:00 AM',
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                          SizedBox(height: 4),
+                          Text(
+                            '⏱ On the way',
+                            style: TextStyle(
+                                fontSize: 12,
+                                color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                      Text(
+                        '📞 Call Driver\n1234567890',
+                        textAlign: TextAlign.right,
+                        style: TextStyle(
+                          fontSize: 12,
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                SizedBox(height: 12),
-                DetailField('Sriya'),
-                SizedBox(height: 8),
-                DetailField('1234567890'),
+
+                /// 📦 ORDER STATUS
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Column(
+                    children: [
+                      _statusRow(
+                        label: 'Order Placed',
+                        value: '23 Dec 2025',
+                      ),
+                      const SizedBox(height: 12),
+                      _statusRow(
+                        label: 'OTP',
+                        value: '1234',
+                        highlight: true,
+                      ),
+                    ],
+                  ),
+                ),
+
+                const Divider(height: 1),
+
+                /// 📄 ORDER DETAILS
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Column(
+                    crossAxisAlignment:
+                    CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Order Details',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                      SizedBox(height: 12),
+                      DetailField('Sriya'),
+                      SizedBox(height: 8),
+                      DetailField('1234567890'),
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -156,6 +185,7 @@ class OrderTrackingScreen extends StatelessWidget {
       ),
     );
   }
+
 
   /// STATUS ROW
   Widget _statusRow({

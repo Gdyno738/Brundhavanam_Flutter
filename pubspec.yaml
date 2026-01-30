@@ -95,6 +95,8 @@ flutter:
      - assets/images/paytm.png
      - assets/images/upi.png
      - assets/images/arrow_right.png
+     - assets/images/cow-calf.png
+     - assets/images/onboarding_milk.png
 
 
 
@@ -107,6 +109,7 @@ flutter:
      - assets/bannerImages/banner1.png
      - assets/bannerImages/banner2.png
      - assets/bannerImages/banner3.png
+     - assets/bannerImages/home_banner1.png
      - assets/bannerImages/schedule_visit_banner.png
      - assets/icons/cow.png
 

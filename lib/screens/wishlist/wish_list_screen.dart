@@ -4,7 +4,8 @@ import 'package:provider/provider.dart';
 import '../../models/product.dart';
 import '../../ui/common/app_colors.dart';
 import '../../providers/wish_list_provider.dart';
-import '../../screens/products/product_details_screen.dart'; // your existing screen
+import '../../screens/products/product_details_screen.dart';
+import '../../ui/common/base_screen.dart'; // your existing screen
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -13,33 +14,79 @@ class WishlistScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final wishlist = context.watch<WishlistProvider>();
 
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.primary,
-        title: const Text('Wishlist'),
-      ),
-      body: wishlist.items.isEmpty
-          ? _emptyState()
-          : Padding(
-        padding: const EdgeInsets.all(16),
-        child: GridView.builder(
-          itemCount: wishlist.items.length,
-          gridDelegate:
-          const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            mainAxisSpacing: 16,
-            crossAxisSpacing: 16,
-            childAspectRatio: 0.72,
+    return BaseScreen(
+
+      child: Column(
+        children: [
+
+          /// 🔹 HEADER
+          SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFE7E7E7)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(Icons.arrow_back,
+                        color: AppColors.black),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Wishlist',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
-          itemBuilder: (context, index) {
-            final product = wishlist.items[index];
-            return _WishlistCard(product: product);
-          },
-        ),
+
+          /// 🔹 BODY
+          Expanded(
+            child: wishlist.items.isEmpty
+                ? const Center(
+              child: Text(
+                'No items in wishlist',
+                style: TextStyle(
+                  color: AppColors.grey,
+                  fontSize: 16,
+                ),
+              ),
+            )
+                : Padding(
+              padding: const EdgeInsets.all(16),
+              child: GridView.builder(
+                itemCount: wishlist.items.length,
+                gridDelegate:
+                const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  childAspectRatio: 0.72,
+                ),
+                itemBuilder: (context, index) {
+                  final product = wishlist.items[index];
+                  return _WishlistCard(product: product);
+                },
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _emptyState() {
     return const Center(

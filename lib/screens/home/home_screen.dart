@@ -22,6 +22,7 @@ import '../../ui/widgets/farm_to_home_section.dart';
 import '../../ui/widgets/why_trust_us_section.dart';
 
 import '../category/category_grid_screen.dart';
+import '../category/category_products_screen.dart';
 import '../donate/donate_screen.dart';
 
 
@@ -95,10 +96,18 @@ class _HomeScreenState extends State<HomeScreen> {
                   CategoryHorizontalList(
                     selectedCategory: selectedCategory ?? 'ALL',
                     onCategorySelected: (category) {
-                      setState(() {
-                        selectedCategory = category == 'ALL' ? null : category;
-                      });
+                      if (category == 'ALL') {
+                        MainNavigation.navKey.currentState?.switchTab(2);
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CategoryProductsScreen(category: category),
+                          ),
+                        );
+                      }
                     },
+
                   ),
 
 

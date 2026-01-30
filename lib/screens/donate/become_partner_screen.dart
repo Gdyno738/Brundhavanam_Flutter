@@ -1,4 +1,5 @@
 import 'package:brundhavanam_app/screens/rentcow/cart_payment.dart';
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../home/sections/location_header.dart';
@@ -43,9 +44,9 @@ class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.scaffoldBackground,
-      body: Column(
+    return BaseScreen(
+
+      child: Column(
         children: [
           /// 🔝 HEADER
           LocationHeader(

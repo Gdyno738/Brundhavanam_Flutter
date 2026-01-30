@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../ui/common/app_colors.dart';
+import '../../../ui/common/base_screen.dart';
 
 
 class SettingsScreen extends StatefulWidget {
@@ -16,64 +17,91 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
+    return BaseScreen(
 
-      /// 🔝 APP BAR
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Settings',
-          style: TextStyle(
-            color: AppColors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-      ),
-
-      /// 🧾 SETTINGS LIST
-      body: Column(
+      statusBarColor: AppColors.white,
+      statusBarIconBrightness: Brightness.dark,
+      child: Column(
         children: [
-          _settingTile(
-            title: 'Receive updates on WhatsApp',
-            subtitle: 'Receive order details and updates on WhatsApp',
-            value: whatsappUpdates,
-            onChanged: (val) {
-              setState(() => whatsappUpdates = val);
-            },
+
+          /// 🔹 HEADER
+          SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEAEAEA)),
+                ),
+              ),
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.black,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Settings',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ),
 
-          _divider(),
+          /// 🔹 SETTINGS LIST
+          Expanded(
+            child: Column(
+              children: [
+                _settingTile(
+                  title: 'Receive updates on WhatsApp',
+                  subtitle:
+                  'Receive order details and updates on WhatsApp',
+                  value: whatsappUpdates,
+                  onChanged: (val) {
+                    setState(() => whatsappUpdates = val);
+                  },
+                ),
 
-          _settingTile(
-            title: 'Receive offer alerts',
-            subtitle: 'Receive alerts in notifications',
-            value: offerAlerts,
-            onChanged: (val) {
-              setState(() => offerAlerts = val);
-            },
-          ),
+                _divider(),
 
-          _divider(),
+                _settingTile(
+                  title: 'Receive offer alerts',
+                  subtitle: 'Receive alerts in notifications',
+                  value: offerAlerts,
+                  onChanged: (val) {
+                    setState(() => offerAlerts = val);
+                  },
+                ),
 
-          _settingTile(
-            title: 'Push Notification',
-            subtitle: '',
-            value: pushNotification,
-            onChanged: (val) {
-              setState(() => pushNotification = val);
-            },
+                _divider(),
+
+                _settingTile(
+                  title: 'Push Notification',
+                  subtitle: '',
+                  value: pushNotification,
+                  onChanged: (val) {
+                    setState(() => pushNotification = val);
+                  },
+                ),
+              ],
+            ),
           ),
         ],
       ),
     );
   }
+
 
   /// 🔹 SETTINGS TILE
   Widget _settingTile({

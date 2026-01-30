@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../ui/common/app_colors.dart';
+import '../../ui/common/base_screen.dart';
 
 class FeedbackScreen extends StatefulWidget {
   const FeedbackScreen({super.key});
@@ -190,107 +191,153 @@ class _FeedbackScreenState extends State<FeedbackScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Feedback',
-          style: TextStyle(color: AppColors.black),
-        ),
-      ),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return BaseScreen(
 
-            const Center(
-              child: Text(
-                'Rate your overall experience',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
+      statusBarColor: AppColors.white,
+      statusBarIconBrightness: Brightness.dark,
+      child: Column(
+        children: [
+
+          /// 🔹 HEADER
+          SafeArea(
+            bottom: false,
+            child: Container(
+              height: 56,
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              decoration: const BoxDecoration(
+                color: AppColors.white,
+                border: Border(
+                  bottom: BorderSide(color: Color(0xFFEAEAEA)),
+                ),
               ),
-            ),
-
-            const SizedBox(height: 16),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(5, (index) {
-                return GestureDetector(
-                  onTap: () => setState(() => rating = index + 1),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 6),
-                    child: Icon(
-                      Icons.star,
-                      size: 30,
-                      color: index < rating
-                          ? Colors.amber
-                          : Colors.grey.shade400,
+              child: Row(
+                children: [
+                  GestureDetector(
+                    onTap: () => Navigator.pop(context),
+                    child: const Icon(
+                      Icons.arrow_back,
+                      color: AppColors.black,
                     ),
                   ),
-                );
-              }),
-            ),
-
-            const SizedBox(height: 20),
-
-            Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                border: Border.all(color: const Color(0xFFB7B1B1)),
-              ),
-              child: TextField(
-                controller: overallCtrl,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  hintText: 'Write a review (Optional)',
-                  border: InputBorder.none,
-                ),
-              ),
-            ),
-
-            const SizedBox(height: 24),
-
-            SizedBox(
-              width: double.infinity,
-              height: 56,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.primary,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20),
+                  const SizedBox(width: 12),
+                  const Text(
+                    'Feedback',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: AppColors.black,
+                    ),
                   ),
-                ),
-                onPressed: submitFeedback,
-                child: const Text(
-                  'Submit Feedback',
-                  style: TextStyle(fontSize: 18, color: Colors.white),
-                ),
+                ],
               ),
             ),
+          ),
 
-            const SizedBox(height: 30),
+          /// 🔹 BODY
+          Expanded(
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
 
-            const Text(
-              'Write a review on your purchase',
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
+                  const Center(
+                    child: Text(
+                      'Rate your overall experience',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: List.generate(5, (index) {
+                      return GestureDetector(
+                        onTap: () => setState(() => rating = index + 1),
+                        child: Padding(
+                          padding:
+                          const EdgeInsets.symmetric(horizontal: 6),
+                          child: Icon(
+                            Icons.star,
+                            size: 30,
+                            color: index < rating
+                                ? Colors.amber
+                                : Colors.grey.shade400,
+                          ),
+                        ),
+                      );
+                    }),
+                  ),
+
+                  const SizedBox(height: 20),
+
+                  Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(20),
+                      border:
+                      Border.all(color: const Color(0xFFB7B1B1)),
+                    ),
+                    child: TextField(
+                      controller: overallCtrl,
+                      maxLines: 4,
+                      decoration: const InputDecoration(
+                        hintText: 'Write a review (Optional)',
+                        border: InputBorder.none,
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 24),
+
+                  SizedBox(
+                    width: double.infinity,
+                    height: 56,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                          BorderRadius.circular(20),
+                        ),
+                      ),
+                      onPressed: submitFeedback,
+                      child: const Text(
+                        'Submit Feedback',
+                        style: TextStyle(
+                          fontSize: 18,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 30),
+
+                  const Text(
+                    'Write a review on your purchase',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+
+                  const SizedBox(height: 16),
+
+                  _productCard(),
+                ],
+              ),
             ),
-
-            const SizedBox(height: 16),
-
-            _productCard(),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
+
 
   Widget _productCard() {
     return Container(

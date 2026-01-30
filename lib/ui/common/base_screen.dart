@@ -6,14 +6,12 @@ class BaseScreen extends StatelessWidget {
   final Widget child;
   final Color statusBarColor;
   final Brightness statusBarIconBrightness;
-  final Color backgroundColor;
 
   const BaseScreen({
     super.key,
     required this.child,
-    this.statusBarColor = AppColors.primary,
-    this.statusBarIconBrightness = Brightness.light,
-    this.backgroundColor = AppColors.scaffoldBackground,
+    this.statusBarColor = Colors.transparent,
+    this.statusBarIconBrightness = Brightness.dark,
   });
 
   @override
@@ -24,12 +22,26 @@ class BaseScreen extends StatelessWidget {
         statusBarIconBrightness: statusBarIconBrightness,
         statusBarBrightness: statusBarIconBrightness == Brightness.light
             ? Brightness.dark
-            : Brightness.light, // iOS
+            : Brightness.light,
       ),
       child: Scaffold(
-        extendBodyBehindAppBar: true, // 🔥 NORMALIZED
-        backgroundColor: backgroundColor,
-        body: child,
+        extendBodyBehindAppBar: true,
+        backgroundColor: Colors.transparent, // IMPORTANT
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: RadialGradient(
+              center: Alignment(0.0, 0.0),
+              radius: 1.4,
+              colors: [
+                Color(0xFFB2CDDD),
+                Color(0xFFFDF7FD),
+                Color(0xFFE7F6FF),
+                Color(0xFFF8F4FE),
+              ],
+            ),
+          ),
+          child: SafeArea(child: child),
+        ),
       ),
     );
   }

@@ -331,13 +331,14 @@ class _CancelOrderBottomSheetState extends State<CancelOrderBottomSheet> {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFF049150),
+                    foregroundColor: Colors.white, // 👈 THIS makes text white
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
-                    padding:
-                    const EdgeInsets.symmetric(vertical: 14),
+                    padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
                   child: const Text('Cancel order'),
+
                 ),
               ),
             ],

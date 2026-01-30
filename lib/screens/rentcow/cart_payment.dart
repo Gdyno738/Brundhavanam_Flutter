@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../models/SavedAddress.dart';
 import '../../ui/common/app_colors.dart';
@@ -52,9 +53,9 @@ class _CartPaymentState extends State<CartPayment> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      body: Column(
+    return BaseScreen(
+
+      child: Column(
         children: [
           /// 🔹 HEADER
           LocationHeader(

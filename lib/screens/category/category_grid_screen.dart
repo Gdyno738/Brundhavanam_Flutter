@@ -1,3 +1,4 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../data/dummy_categories.dart';
 import '../../ui/common/app_colors.dart';
@@ -17,9 +18,9 @@ class CategoryGridScreen extends StatelessWidget {
         // Always go to Home tab instead of popping
         MainNavigation.navKey.currentState?.switchTab(0);
       },
-      child: Scaffold(
-        backgroundColor: AppColors.white,
-        body: Column(
+      child: BaseScreen(
+
+        child: Column(
           children: [
             /// HEADER
             SafeArea(
