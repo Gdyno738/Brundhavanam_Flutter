@@ -29,19 +29,21 @@ class BaseScreen extends StatelessWidget {
         backgroundColor: Colors.transparent, // IMPORTANT
         body: Container(
           decoration: const BoxDecoration(
-            gradient: RadialGradient(
-              center: Alignment(0.0, 0.0),
-              radius: 1.4,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
               colors: [
                 Color(0xFFB2CDDD),
                 Color(0xFFFDF7FD),
                 Color(0xFFE7F6FF),
                 Color(0xFFF8F4FE),
               ],
+              stops: [0.0, 0.35, 0.7, 1.0],
             ),
           ),
           child: SafeArea(child: child),
         ),
+
       ),
     );
   }

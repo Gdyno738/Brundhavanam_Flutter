@@ -26,8 +26,8 @@ class BottomNavBar extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 57,
-              height: 57,
+              width: 50,
+              height: 50,
               decoration: BoxDecoration(
                 color: isActive ? AppColors.primary : Colors.transparent,
                 shape: BoxShape.circle,
@@ -35,12 +35,13 @@ class BottomNavBar extends StatelessWidget {
               child: Center(
                 child: Image.asset(
                   icon,
-                  width: 24,
-                  height: 24,
+                  width: 22,
+                  height: 22,
                   color: isActive ? Colors.white : AppColors.grey,
                 ),
               ),
             ),
+
             const SizedBox(height: 2),
             Text(
               label,
@@ -59,46 +60,92 @@ class BottomNavBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 115, // 👈 SAME AS FIGMA
-      padding: const EdgeInsets.only(top: 15),
-      decoration: BoxDecoration(
-        color: AppColors.white,
+    return Stack(
+      children: [
 
-        // ✅ ONLY TOP GREEN STROKE
-        border: const Border(
-          top: BorderSide(
-            color: Color(0xFF049150),
-            width: 4,
+        /// MAIN NAV CONTAINER
+        Container(
+          height: 90,
+          padding: const EdgeInsets.only(top: 10),
+          decoration: BoxDecoration(
+            color: AppColors.white,
+            border: const Border(
+              top: BorderSide(
+                color: Color(0xFF049150),
+                width: 1.5,
+              ),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: AppColors.shadow,
+                blurRadius: 8,
+                offset: const Offset(0, -2),
+              ),
+            ],
           ),
-          left: BorderSide(
-            color: Color(0xFF049150),
-            width: 0.8,
-          ),
-          right: BorderSide(
-            color: Color(0xFF049150),
-            width: 2.0,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: [
+              _navItem(index: 0, icon: 'assets/icons/home.png', label: 'Home'),
+              _navItem(index: 1,
+                  icon: 'assets/icons/rent_cow.png',
+                  label: 'Rent Cow'),
+              _navItem(index: 2,
+                  icon: 'assets/icons/products.png',
+                  label: 'Products'),
+              _navItem(index: 3, icon: 'assets/icons/cart.png', label: 'Cart'),
+              _navItem(
+                  index: 4, icon: 'assets/icons/profile.png', label: 'Profile'),
+            ],
           ),
         ),
 
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow,
-            blurRadius: 8,
-            offset: const Offset(0, -2),
+        /// LEFT GRADIENT BORDER
+        /// LEFT GRADIENT BORDER
+        Positioned(
+          left: 0,
+          top: 0,
+          bottom: 0,
+          child: Container(
+            width: 2,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                stops: [0.0, 0.5, 1.0],
+                colors: [
+                  Colors.white,          // bottom
+                  Color(0xFF6FCF97),     // middle light green
+                  Color(0xFF049150),     // top dark green
+                ],
+              ),
+            ),
           ),
-        ],
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: [
-          _navItem(index: 0, icon: 'assets/icons/home.png', label: 'Home'),
-          _navItem(index: 1, icon: 'assets/icons/rent_cow.png', label: 'Rent Cow'),
-          _navItem(index: 2, icon: 'assets/icons/products.png', label: 'Products'),
-          _navItem(index: 3, icon: 'assets/icons/cart.png', label: 'Cart'),
-          _navItem(index: 4, icon: 'assets/icons/profile.png', label: 'Profile'),
-        ],
-      ),
+        ),
+
+        /// RIGHT GRADIENT BORDER
+        Positioned(
+          right: 0,
+          top: 0,
+          bottom: 0,
+          child: Container(
+            width: 2,
+            decoration: const BoxDecoration(
+              gradient: LinearGradient(
+                begin: Alignment.bottomCenter,
+                end: Alignment.topCenter,
+                stops: [0.0, 0.5, 1.0],
+                colors: [
+                  Colors.white,
+                  Color(0xFF6FCF97),
+                  Color(0xFF049150),
+                ],
+              ),
+            ),
+          ),
+        ),
+
+      ],
     );
   }
 }
