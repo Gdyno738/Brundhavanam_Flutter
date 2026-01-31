@@ -213,8 +213,23 @@ void showLanguageSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => LanguageBottomSheet(
-      rootContext: context,
-    ),
+    showDragHandle: true,
+    useSafeArea: true,
+    builder: (_) {
+      return TweenAnimationBuilder<double>(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+        tween: Tween(begin: 40, end: 0),
+        builder: (context, value, child) {
+          return Transform.translate(
+            offset: Offset(0, value),
+            child: child,
+          );
+        },
+        child: LanguageBottomSheet(
+          rootContext: context,
+        ),
+      );
+    },
   );
 }

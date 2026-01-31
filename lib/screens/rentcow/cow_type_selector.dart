@@ -89,9 +89,8 @@ class CowTypeSelector extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  /// 🐄 IMAGE (BIG + FIXED AT TOP)
-                  SizedBox(
-                    height: 160, // 🔥 controls image size
+                  /// IMAGE
+                  Expanded(
                     child: ClipRRect(
                       borderRadius: const BorderRadius.only(
                         topLeft: Radius.circular(16),
@@ -99,17 +98,21 @@ class CowTypeSelector extends StatelessWidget {
                       ),
                       child: Image.asset(
                         (cow['images'] as List<String>).first,
-                        fit: BoxFit.cover, // fills width nicely
+                        fit: BoxFit.cover,
                       ),
                     ),
                   ),
 
-                  /// 🐄 NAME (NO EXTRA SPACE)
+                  const SizedBox(height: 6),
+
+                  /// NAME
                   Padding(
-                    padding: const EdgeInsets.only(top: 6),
+                    padding: const EdgeInsets.symmetric(horizontal: 4),
                     child: Text(
                       cow['name'] as String,
                       textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 14,
@@ -117,9 +120,11 @@ class CowTypeSelector extends StatelessWidget {
                     ),
                   ),
 
-                  /// 💰 PRICE (GREEN + BOLD)
+                  const SizedBox(height: 4),
+
+                  /// PRICE
                   Padding(
-                    padding: const EdgeInsets.only(bottom: 8, top: 2),
+                    padding: const EdgeInsets.only(bottom: 8),
                     child: Text(
                       'Price : ₹${cow['price'] as int}',
                       textAlign: TextAlign.center,
@@ -129,14 +134,13 @@ class CowTypeSelector extends StatelessWidget {
                         color: Colors.green,
                       ),
                     ),
-
                   ),
                 ],
               ),
             ),
 
 
-          );
+            );
         },
       ),
     );

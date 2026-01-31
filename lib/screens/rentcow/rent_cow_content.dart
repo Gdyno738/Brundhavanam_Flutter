@@ -440,48 +440,48 @@ class _RentCowContentState extends State<RentCowContent> {
 
 
 
-                const SizedBox(height: 10),
+                const SizedBox(height: 40),
 
-                GestureDetector(
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      isScrollControlled: true,
-                      backgroundColor: Colors.transparent,
-                      builder: (_) => const TotalBillBottomSheet(),
-                    );
-                  },
-                  child: Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 16, vertical: 14),
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFEDEDED),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: const Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text('Total',
-                                style:
-                                TextStyle(fontWeight: FontWeight.w600)),
-                            SizedBox(height: 4),
-                            Text(
-                              '₹470 + Delivery Charges',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                        Icon(Icons.keyboard_arrow_up),
-                      ],
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     showModalBottomSheet(
+                //       context: context,
+                //       isScrollControlled: true,
+                //       backgroundColor: Colors.transparent,
+                //       builder: (_) => const TotalBillBottomSheet(),
+                //     );
+                //   },
+                //   child: Container(
+                //     padding: const EdgeInsets.symmetric(
+                //         horizontal: 16, vertical: 14),
+                //     decoration: BoxDecoration(
+                //       color: const Color(0xFFEDEDED),
+                //       borderRadius: BorderRadius.circular(10),
+                //     ),
+                //     child: const Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //       children: [
+                //         Column(
+                //           crossAxisAlignment: CrossAxisAlignment.start,
+                //           children: [
+                //             Text('Total',
+                //                 style:
+                //                 TextStyle(fontWeight: FontWeight.w600)),
+                //             SizedBox(height: 4),
+                //             Text(
+                //               '₹470 + Delivery Charges',
+                //               style: TextStyle(
+                //                   fontSize: 12, color: Colors.grey),
+                //             ),
+                //           ],
+                //         ),
+                //         Icon(Icons.keyboard_arrow_up),
+                //       ],
+                //     ),
+                //   ),
+                // ),
 
-                const SizedBox(height: 20),
+                //const SizedBox(height: 20),
 
                 SizedBox(
                   width: double.infinity,
@@ -515,14 +515,30 @@ class _RentCowContentState extends State<RentCowContent> {
 
                       Provider.of<CartProvider>(context, listen: false)
                           .addCowToCart(selectedCow, image, cowPrice);
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Cow added to cart')),
-                      );
                     },
-                    child: Text(
-                      cart.cowItem != null ? 'Added to Cart' : 'Add to Cart',
-                      style: const TextStyle(
+                    child: cart.cowItem != null
+                        ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: const [
+                        Icon(
+                          Icons.check_circle,
+                          color: Colors.white,
+                          size: 22,
+                        ),
+                        SizedBox(width: 8),
+                        Text(
+                          'Added to Cart',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ],
+                    )
+                        : const Text(
+                      'Add to Cart',
+                      style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
                         color: Colors.white,
