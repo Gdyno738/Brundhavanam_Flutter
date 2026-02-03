@@ -102,6 +102,7 @@ flutter:
 
      - assets/icons/edit.png
      - assets/icons/star_outlined.png
+     - assets/icons/star_filled.png
      - assets/images/map_placeholder.png
      - assets/icons/wishlist_filled.png
      - assets/icons/wishlist_outlined.png
