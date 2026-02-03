@@ -353,25 +353,25 @@ class ProductCard extends StatelessWidget {
                         return GestureDetector(
                           onTap: () => wishlist.toggle(product),
                           child: Container(
-                            padding: const EdgeInsets.all(6),
+                            padding: const EdgeInsets.all(10),
                             decoration: BoxDecoration(
-                              color: AppColors.white,
-                              borderRadius: BorderRadius.circular(8),
-                              boxShadow: const [
-                                BoxShadow(
-                                  color: Colors.black26,
-                                  blurRadius: 4,
-                                ),
-                              ],
+                              shape: BoxShape.circle,
+                              color: const Color(0xFFF3EBDD).withValues(alpha: 0.85),
                             ),
-                            child: Icon(
+
+                            child: Image.asset(
                               isWishlisted
-                                  ? Icons.bookmark
-                                  : Icons.bookmark_border,
-                              color: AppColors.primary,
-                              size: 20,
+                                  ? 'assets/icons/wishlist_filled.png'
+                                  : 'assets/icons/wishlist_outlined.png',
+                              width: 22,
+                              height: 22,
+                              fit: BoxFit.contain,
                             ),
                           ),
+
+
+
+
                         );
                       },
                     ),
@@ -381,8 +381,9 @@ class ProductCard extends StatelessWidget {
             ),
 
             /// 📄 CONTENT (FIXED — Wrapped in Expanded)
-            Expanded(
-              child: Padding(
+            // Expanded(
+            //   child:
+        Padding(
                 padding:
                 const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
                 child: Column(
@@ -469,7 +470,7 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
               ),
-            ),
+            // ),
 
             /// 🛒 ADD TO CART
             Consumer<CartProvider>(

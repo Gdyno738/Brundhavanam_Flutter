@@ -179,7 +179,7 @@ class _LocationHeaderState extends State<LocationHeader>
                       ),
                       const SizedBox(width: 14),
                       _iconButton(
-                        iconPath: 'assets/icons/wishlist.png',
+                        iconPath: 'assets/icons/wishlist_outlined.png',
                         onTap: () {
                           Navigator.push(
                             context,

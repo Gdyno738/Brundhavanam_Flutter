@@ -103,7 +103,8 @@ flutter:
      - assets/icons/edit.png
      - assets/icons/star_outlined.png
      - assets/images/map_placeholder.png
-     - assets/icons/wishlist.png
+     - assets/icons/wishlist_filled.png
+     - assets/icons/wishlist_outlined.png
      - assets/icons/rent_cow.png
      - assets/icons/chat.png
      - assets/bannerImages/banner1.png

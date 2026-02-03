@@ -26,8 +26,26 @@ class MostPopularProductsSection extends StatelessWidget {
         const SizedBox(height: 12),
 
         /// 🛒 PRODUCTS LIST
+        // SizedBox(
+        //   height: MediaQuery.of(context).size.height * 0.48,
+        //   child: ListView.separated(
+        //     scrollDirection: Axis.horizontal,
+        //     padding: const EdgeInsets.symmetric(horizontal: 16),
+        //     itemCount: popularProducts.length,
+        //     separatorBuilder: (_, __) => const SizedBox(width: 20),
+        //     itemBuilder: (_, index) {
+        //       return SizedBox(
+        //         width: 185,
+        //         child: ProductCard(
+        //           product: popularProducts[index],
+        //         ),
+        //       );
+        //     },
+        //   ),
+        // ),
+
         SizedBox(
-          height: MediaQuery.of(context).size.height * 0.48,
+          height: 335,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -43,6 +61,7 @@ class MostPopularProductsSection extends StatelessWidget {
             },
           ),
         ),
+
 
       ],
     );
