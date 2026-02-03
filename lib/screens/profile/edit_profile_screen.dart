@@ -3,6 +3,7 @@ import '../../../ui/common/app_colors.dart';
 import '../../models/profile_model.dart';
 import '../../services/mock_profile_service.dart';
 import '../../screens/profile/settings/SavedAddressSection.dart';
+import '../../ui/common/base_screen.dart';
 
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
@@ -60,42 +61,61 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.white,
-      appBar: AppBar(
-        backgroundColor: AppColors.white,
-        elevation: 0.5,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: AppColors.black),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text(
-          'Account details',
-          style: TextStyle(color: AppColors.black),
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.check, color: AppColors.black),
-            onPressed: saveProfile,
+    return BaseScreen(
+      statusBarIconBrightness: Brightness.dark,
+      child: Column(
+        children: [
+          const SizedBox(height: 8),
+
+          // Custom AppBar Row
+          Row(
+            children: [
+              IconButton(
+                icon: const Icon(Icons.arrow_back, color: AppColors.black),
+                onPressed: () => Navigator.pop(context),
+              ),
+              const Expanded(
+                child: Text(
+                  'Account details',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: AppColors.black,
+                    fontSize: 18,
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+              ),
+              IconButton(
+                icon: const Icon(Icons.check, color: AppColors.black),
+                onPressed: saveProfile,
+              ),
+            ],
+          ),
+
+          const SizedBox(height: 10),
+
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _field(nameController, true),
+                    _field(phoneController, false),
+                    _field(emailController, true),
+                    _field(addressController, true),
+                    const SizedBox(height: 12),
+                    const SavedAddressSection(),
+                  ],
+                ),
+              ),
+            ),
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: Column(
-          children: [
-            _field(nameController, true),
-            _field(phoneController, false),
-            _field(emailController, true),
-            _field(addressController, true),
-            const SizedBox(height: 12),
-            const SavedAddressSection(),
-
-          ],
-        ),
-      ),
     );
   }
+
 
   Widget _field(TextEditingController controller, bool enabled) {
     return TextField(

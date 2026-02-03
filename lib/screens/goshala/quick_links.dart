@@ -72,7 +72,7 @@ class _QuickLinksState extends State<QuickLinks> {
 
     return Container(
       key: _keys[section],
-      margin: const EdgeInsets.only(right: 12),
+      margin: const EdgeInsets.only(right: 10),
       child: GestureDetector(
         onTap: () {
           widget.onChanged(section);
@@ -80,18 +80,33 @@ class _QuickLinksState extends State<QuickLinks> {
         },
         child: AnimatedContainer(
           duration: const Duration(milliseconds: 200),
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+          height: 48,
+          padding: const EdgeInsets.symmetric(horizontal: 20),
+          alignment: Alignment.center,
           decoration: BoxDecoration(
-            color: isSelected ? Colors.green : Colors.white,
-            borderRadius: BorderRadius.circular(26),
-            border: Border.all(color: Colors.green),
+            color: isSelected ? const Color(0xFF049150) : Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            border: isSelected
+                ? null
+                : Border.all(
+              width: 1,
+              color: const Color(0xFFB7B1B1),
+            ),
+            boxShadow: isSelected
+                ? const [
+              BoxShadow(
+                color: Color(0x3F000000),
+                blurRadius: 25,
+              )
+            ]
+                : [],
           ),
           child: Text(
             label,
             style: TextStyle(
               color: isSelected ? Colors.white : Colors.black,
-              fontWeight: FontWeight.w600,
               fontSize: 16,
+              fontWeight: FontWeight.w400,
             ),
           ),
         ),
