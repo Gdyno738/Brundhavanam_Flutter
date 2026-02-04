@@ -319,11 +319,11 @@ class ProductCard extends StatelessWidget {
           children: [
 
             /// 🖼 IMAGE SECTION
-            SizedBox(
-              height: 180,
-              width: double.infinity,
+            AspectRatio(
+              aspectRatio: 1,
               child: Stack(
-                children: [
+
+              children: [
                   ClipRRect(
                     borderRadius: const BorderRadius.vertical(
                       top: Radius.circular(16),
@@ -383,12 +383,13 @@ class ProductCard extends StatelessWidget {
             /// 📄 CONTENT (FIXED — Wrapped in Expanded)
             // Expanded(
             //   child:
-        Padding(
-                padding:
-                const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
-                child: Column(
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.fromLTRB(8, 6, 8, 4),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
                   crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
+                  //mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.size,
@@ -397,7 +398,7 @@ class ProductCard extends StatelessWidget {
                         color: AppColors.primary,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(height: 4),
 
                     Text(
                       product.title,
@@ -409,6 +410,8 @@ class ProductCard extends StatelessWidget {
                         color: AppColors.black,
                       ),
                     ),
+
+                    const SizedBox(height: 4),
 
                     Text(
                       product.description,
@@ -443,7 +446,7 @@ class ProductCard extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(height: 6),
+                     const SizedBox(height: 4),
 
                     Row(
                       children: [
@@ -456,7 +459,7 @@ class ProductCard extends StatelessWidget {
                             TextDecoration.lineThrough,
                           ),
                         ),
-                        const SizedBox(width: 6),
+                        const SizedBox(width: 4),
                         Text(
                           '₹${product.price}',
                           style: const TextStyle(
@@ -470,7 +473,7 @@ class ProductCard extends StatelessWidget {
                   ],
                 ),
               ),
-            // ),
+             ),
 
             /// 🛒 ADD TO CART
             Consumer<CartProvider>(
