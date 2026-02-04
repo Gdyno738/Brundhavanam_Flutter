@@ -30,7 +30,7 @@ class _EventDropdownState extends State<EventDropdown> {
 
         // ✅ BACKGROUND COLOR (NOT DEFAULT WHITE)
         decoration: BoxDecoration(
-          color: const Color(0xFFF2F2F2), // 👈 change color here
+          color: Colors.transparent, // 👈 change color here
           border: Border.all(color: const Color(0xFFB7B1B1)),
           borderRadius: BorderRadius.circular(20),
         ),

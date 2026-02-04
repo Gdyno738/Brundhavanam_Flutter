@@ -204,7 +204,7 @@ class _RentCowContentState extends State<RentCowContent> {
                             height: 36,
                             padding: const EdgeInsets.symmetric(horizontal: 12),
                             decoration: BoxDecoration(
-                              color: const Color(0xFFF2F2F2), // 👈 same as EventDropdown / CowTypeSelector
+                              color: Colors.transparent, // 👈 same as EventDropdown / CowTypeSelector
                               border: Border.all(color: Colors.grey),
                               borderRadius: BorderRadius.circular(20),
                             ),
@@ -219,7 +219,7 @@ class _RentCowContentState extends State<RentCowContent> {
                                 ),
 
                                 // ✅ DROPDOWN MENU BACKGROUND COLOR
-                                dropdownColor: const Color(0xFFF2F2F2),
+                                dropdownColor: Colors.white,
 
                                 icon: const Icon(
                                   Icons.keyboard_arrow_down,
