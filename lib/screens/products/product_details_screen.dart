@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../data/dummy_reviews.dart';
 import '../../models/product.dart';
 import '../../providers/cart_provider.dart';
 import '../../providers/wish_list_provider.dart';
@@ -7,6 +8,7 @@ import '../../ui/common/app_colors.dart';
 import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/about_us_section.dart';
 import '../../ui/widgets/most_popular_products_section.dart';
+import '../../ui/widgets/reviews_horizontal_list.dart';
 import '../home/sections/location_header.dart';
 import '../popularproducts/popular_products_screen.dart';
 import '../../screens/products/premiumTag.dart';
@@ -173,21 +175,28 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                         children: [
                           ...List.generate(
                             5,
-                                (i) => Icon(
-                              Icons.star,
-                              size: 14,
-                              color: i < product.rating.round()
-                                  ? Colors.amber
-                                  : AppColors.lightGrey,
+                                (i) => Padding(
+                              padding: const EdgeInsets.only(right: 3),
+                              child: Image.asset(
+                                i < product.rating.round()
+                                    ? 'assets/icons/star_filled.png'
+                                    : 'assets/icons/star_outlined.png',
+                                width: 14,
+                                height: 14,
+                              ),
                             ),
                           ),
                           const SizedBox(width: 6),
                           Text(
                             product.rating.toString(),
-                            style: const TextStyle(fontSize: 12),
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),
+
 
                       const SizedBox(height: 12),
 
@@ -316,6 +325,32 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     },
                   ),
 
+                  const SizedBox(height: 24),
+
+                  /// ⭐ CUSTOMER REVIEWS TITLE
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Customer Reviews',
+                        style: TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w600,
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  const SizedBox(height: 12),
+
+                  ReviewsHorizontalList(
+                    reviews: dummyReviews,
+                  ),
+
+                  const SizedBox(height: 32),
+
+
 
 
 
@@ -404,5 +439,9 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
         ),
       ),
     );
+
+
   }
+
+
 }
