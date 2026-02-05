@@ -333,7 +333,7 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: Text(
-                        'Customer Reviews',
+                        'Ratings & Reviews',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w600,

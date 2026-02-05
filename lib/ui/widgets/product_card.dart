@@ -391,14 +391,14 @@ class ProductCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   //mainAxisSize: MainAxisSize.min,
                   children: [
-                    Text(
-                      product.size,
-                      style: const TextStyle(
-                        fontSize: 10,
-                        color: AppColors.primary,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
+                    // Text(
+                    //   product.size,
+                    //   style: const TextStyle(
+                    //     fontSize: 10,
+                    //     color: AppColors.primary,
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 4),
 
                     Text(
                       product.title,
