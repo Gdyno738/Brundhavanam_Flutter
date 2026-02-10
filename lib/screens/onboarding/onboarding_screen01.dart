@@ -16,7 +16,7 @@ class OnboardingScreen extends StatefulWidget {
 class _OnboardingScreenState extends State<OnboardingScreen> {
   final PageController _controller = PageController();
   int _index = 0;
-  late BuildContext rootContext;
+  //late BuildContext rootContext;
 
   final List<OnboardingModel> pages = [
     OnboardingModel(
@@ -52,27 +52,37 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void _next() async {
     if (_index < pages.length - 1) {
-      _controller.nextPage(
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeInOut,
+      _controller.animateToPage(
+        _index + 1,
+        duration: const Duration(milliseconds: 400),
+        curve: Curves.easeInOutCubic,
       );
     } else {
       await _markOnboardingSeen();
-      showLanguageSheet(rootContext);
+
+      if (!mounted) return;
+
+      showLanguageSheet(context);
     }
   }
 
+
   void _skip() async {
     await _markOnboardingSeen();
-    showLanguageSheet(rootContext);
+
+    if (!mounted) return;
+
+    showLanguageSheet(context);
   }
+
 
   @override
   Widget build(BuildContext context) {
-    rootContext = context;
+    //rootContext = context;
 
     return BaseScreen(
       child: PageView.builder(
+        reverse: true,
         controller: _controller,
         itemCount: pages.length,
         onPageChanged: (i) => setState(() => _index = i),
@@ -130,7 +140,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       Text(
                         data.title,
                         style: const TextStyle(
-                          fontSize: 22,
+                          fontSize: 28,
                           fontWeight: FontWeight.w600,
                           height: 1.2,
                         ),
@@ -166,58 +176,108 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
                       const Spacer(),
 
-                      /// 🔘 BOTTOM NAVIGATION ROW
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      /// 🔹 NAVIGATION SECTION
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
 
-                          /// BACK BUTTON
-                          if (_index > 0)
-                            GestureDetector(
-                              onTap: () {
-                                _controller.previousPage(
-                                  duration: const Duration(milliseconds: 300),
-                                  curve: Curves.easeInOut,
-                                );
-                              },
-                              child: const Icon(
-                                Icons.arrow_back,
-                                size: 28,
-                                color: AppColors.primary,
-                              ),
-                            )
-                          else
-                            const SizedBox(width: 28),
-
-                          /// DOTS (CENTERED)
+                          /// 🔸 ARROWS + DOTS (Always visible)
                           Row(
-                            children: List.generate(
-                              pages.length,
-                                  (dotIndex) => Container(
-                                margin: const EdgeInsets.symmetric(horizontal: 4),
-                                width: _index == dotIndex ? 20 : 8,
-                                height: 8,
-                                decoration: BoxDecoration(
-                                  color: _index == dotIndex
-                                      ? AppColors.primary
-                                      : AppColors.lightGrey,
-                                  borderRadius: BorderRadius.circular(20),
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+
+                              /// BACK BUTTON
+                              if (_index > 0)
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.animateToPage(
+                                      _index - 1,
+                                      duration: const Duration(milliseconds: 400),
+                                      curve: Curves.easeInOutCubic,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_back,
+                                    size: 28,
+                                    color: AppColors.primary,
+                                  ),
+                                )
+                              else
+                                const SizedBox(width: 28),
+
+                              /// DOTS (Always visible)
+                              Row(
+                                children: List.generate(
+                                  pages.length,
+                                      (dotIndex) => AnimatedContainer(
+                                    duration: const Duration(milliseconds: 300),
+                                    margin: const EdgeInsets.symmetric(horizontal: 4),
+                                    width: _index == dotIndex ? 20 : 8,
+                                    height: 8,
+                                    decoration: BoxDecoration(
+                                      color: _index == dotIndex
+                                          ? AppColors.primary
+                                          : AppColors.lightGrey,
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              /// FORWARD BUTTON (Hidden only on last screen)
+                              if (!isLast)
+                                GestureDetector(
+                                  onTap: () {
+                                    _controller.animateToPage(
+                                      _index + 1,
+                                      duration: const Duration(milliseconds: 400),
+                                      curve: Curves.easeInOutCubic,
+                                    );
+                                  },
+                                  child: const Icon(
+                                    Icons.arrow_forward,
+                                    size: 28,
+                                    color: AppColors.primary,
+                                  ),
+                                )
+                              else
+                                const SizedBox(width: 28),
+                            ],
+                          ),
+
+                          const SizedBox(height: 28),
+
+                          /// 🔸 GET STARTED BUTTON (Only Last Screen)
+                          if (isLast)
+                            SizedBox(
+                              width: double.infinity,
+                              height: 52,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: AppColors.primary,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(30),
+                                  ),
+                                ),
+                                onPressed: () async {
+                                  await _markOnboardingSeen();
+                                  if (!mounted) return;
+                                  showLanguageSheet(context);
+                                },
+                                child: const Text(
+                                  "Get Started",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-
-                          /// FORWARD BUTTON
-                          GestureDetector(
-                            onTap: _next,
-                            child: const Icon(
-                              Icons.arrow_forward,
-                              size: 28,
-                              color: AppColors.primary,
-                            ),
-                          ),
                         ],
                       ),
+
+
 
                     ],
                   ),

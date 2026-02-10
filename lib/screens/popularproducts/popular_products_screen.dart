@@ -56,7 +56,7 @@ class _MostPopularProductsScreenState
                       crossAxisCount: 2,
                       crossAxisSpacing: 16,
                       mainAxisSpacing: 16,
-                      mainAxisExtent: 340,
+                      mainAxisExtent: 320,
                     ),
                     itemBuilder: (_, index) {
                       return ProductCard(product: products[index]);

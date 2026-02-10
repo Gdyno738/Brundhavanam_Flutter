@@ -42,6 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
   String? selectedCategory;
 
 
+
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
@@ -84,8 +85,14 @@ class _HomeScreenState extends State<HomeScreen> {
                   SectionHeader(
                     title: 'Dairy Products',
                     onViewAll: () {
-                      MainNavigation.navKey.currentState?.switchTab(2); // 👈 Products tab index
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (_) => const MainNavigation(initialIndex: 2),
+                        ),
+                      );
                     },
+
+
                   ),
 
 
@@ -93,22 +100,75 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
                   /// 🧀 Category icons
+                  // CategoryHorizontalList(
+                  //   selectedCategory: selectedCategory ?? 'ALL',
+                  //   onCategorySelected: (category) {
+                  //     Navigator.of(context).pushReplacement(
+                  //       MaterialPageRoute(
+                  //         builder: (_) => const MainNavigation(
+                  //           initialIndex: 2,
+                  //         ),
+                  //       ),
+                  //     );
+                  //   },
+                  // ),
+
                   CategoryHorizontalList(
                     selectedCategory: selectedCategory ?? 'ALL',
                     onCategorySelected: (category) {
                       if (category == 'ALL') {
-                        MainNavigation.navKey.currentState?.switchTab(2);
+                        Navigator.of(context).pushReplacement(
+                          PageRouteBuilder(
+                            transitionDuration: const Duration(milliseconds: 450),
+                            pageBuilder: (_, animation, secondaryAnimation) =>
+                            const MainNavigation(initialIndex: 2),
+                            transitionsBuilder: (_, animation, __, child) {
+                              final curved = CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCubic,
+                              );
+
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0), // 👇 from bottom
+                                  end: Offset.zero,
+                                ).animate(curved),
+                                child: child,
+                              );
+                            },
+                          ),
+                        );
                       } else {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(
-                            builder: (_) => CategoryProductsScreen(category: category),
+                          PageRouteBuilder(
+                            transitionDuration: const Duration(milliseconds: 450),
+                            pageBuilder: (_, animation, secondaryAnimation) =>
+                                CategoryProductsScreen(category: category),
+                            transitionsBuilder: (_, animation, __, child) {
+                              final curved = CurvedAnimation(
+                                parent: animation,
+                                curve: Curves.easeOutCubic,
+                              );
+
+                              return SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(0.0, 1.0), // 👇 from bottom
+                                  end: Offset.zero,
+                                ).animate(curved),
+                                child: child,
+                              );
+                            },
                           ),
                         );
                       }
                     },
-
                   ),
+
+
+
+
+
 
 
 
@@ -130,10 +190,31 @@ class _HomeScreenState extends State<HomeScreen> {
                     onViewAll: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const MostPopularProductsScreen(),
+                        PageRouteBuilder(
+                          transitionDuration: const Duration(milliseconds: 450),
+                          reverseTransitionDuration: const Duration(milliseconds: 450),
+                          pageBuilder: (_, animation, secondaryAnimation) =>
+                          const MostPopularProductsScreen(),
+                          transitionsBuilder: (_, animation, __, child) {
+                            final curved = CurvedAnimation(
+                              parent: animation,
+                              curve: Curves.easeOutCubic,
+                            );
+
+                            return FadeTransition(
+                              opacity: animation,
+                              child: SlideTransition(
+                                position: Tween<Offset>(
+                                  begin: const Offset(1.0, 0.0), // 👉 from right
+                                  end: Offset.zero,
+                                ).animate(curved),
+                                child: child,
+                              ),
+                            );
+                          },
                         ),
                       );
+
                     },
                   ),
 
@@ -187,9 +268,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     onDonateTap: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (_) => const DonateScreen(),
-                        ),
+                        _leftToRightRoute(const DonateScreen()),
                       );
                     },
                   ),
@@ -225,4 +304,26 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+Route _leftToRightRoute(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 450),
+    reverseTransitionDuration: const Duration(milliseconds: 450),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOutCubic,
+      );
+
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(-1.0, 0.0), // from left
+          end: Offset.zero,
+        ).animate(curved),
+        child: child,
+      );
+    },
+  );
 }

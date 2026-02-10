@@ -46,7 +46,7 @@ class CategoryProductsScreen extends StatelessWidget {
                 crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                mainAxisExtent: 340, // 🔥 FIXED (no overflow)
+                mainAxisExtent: 320, // 🔥 FIXED (no overflow)
               ),
               itemBuilder: (_, index) {
                 return ProductCard(

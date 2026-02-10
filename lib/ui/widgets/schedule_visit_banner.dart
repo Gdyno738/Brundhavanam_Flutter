@@ -5,21 +5,27 @@ class ScheduleVisitBanner extends StatelessWidget {
   const ScheduleVisitBanner({super.key});
 
   Future<void> _openCalendar(BuildContext context) async {
-    final selectedDate = await showDatePicker(
+    final selectedDate = await showGeneralDialog(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime.now().add(const Duration(days: 365)),
-      builder: (context, child) {
-        return Theme(
-          data: Theme.of(context).copyWith(
-            colorScheme: ColorScheme.light(
-              primary: AppColors.primary,
-              onPrimary: AppColors.white,
-              onSurface: AppColors.black,
-            ),
+      barrierDismissible: true,
+      barrierLabel: "Calendar",
+      barrierColor: Colors.black54,
+      transitionDuration: const Duration(milliseconds: 300),
+      pageBuilder: (context, animation, secondaryAnimation) {
+        return const SizedBox(); // required but unused
+      },
+      transitionBuilder: (context, animation, secondaryAnimation, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        );
+
+        return FadeTransition(
+          opacity: curved,
+          child: ScaleTransition(
+            scale: Tween(begin: 0.92, end: 1.0).animate(curved),
+            child: _calendarDialog(context),
           ),
-          child: child!,
         );
       },
     );
@@ -28,6 +34,7 @@ class ScheduleVisitBanner extends StatelessWidget {
       _showSuccessDialog(context);
     }
   }
+
 
   void _showSuccessDialog(BuildContext context) {
     showDialog(
@@ -173,4 +180,24 @@ class ScheduleVisitBanner extends StatelessWidget {
       ),
     );
   }
+}
+
+Widget _calendarDialog(BuildContext context) {
+  return Center(
+    child: Material(
+      borderRadius: BorderRadius.circular(20),
+      clipBehavior: Clip.antiAlias,
+      child: SizedBox(
+        width: MediaQuery.of(context).size.width * 0.9,
+        child: CalendarDatePicker(
+          initialDate: DateTime.now(),
+          firstDate: DateTime.now(),
+          lastDate: DateTime.now().add(const Duration(days: 365)),
+          onDateChanged: (date) {
+            Navigator.of(context).pop(date);
+          },
+        ),
+      ),
+    ),
+  );
 }

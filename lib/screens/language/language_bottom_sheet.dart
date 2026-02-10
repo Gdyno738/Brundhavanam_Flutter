@@ -213,19 +213,18 @@ void showLanguageSheet(BuildContext context) {
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    showDragHandle: true,
     useSafeArea: true,
-    builder: (_) {
-      return TweenAnimationBuilder<double>(
-        duration: const Duration(milliseconds: 350),
+    transitionAnimationController: AnimationController(
+      vsync: Navigator.of(context),
+      duration: const Duration(milliseconds: 450),
+    ),
+    builder: (context) {
+      return AnimatedPadding(
+        duration: const Duration(milliseconds: 300),
         curve: Curves.easeOutCubic,
-        tween: Tween(begin: 40, end: 0),
-        builder: (context, value, child) {
-          return Transform.translate(
-            offset: Offset(0, value),
-            child: child,
-          );
-        },
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.of(context).viewInsets.bottom,
+        ),
         child: LanguageBottomSheet(
           rootContext: context,
         ),
@@ -233,3 +232,4 @@ void showLanguageSheet(BuildContext context) {
     },
   );
 }
+

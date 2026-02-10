@@ -183,7 +183,6 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
       duration: const Duration(seconds: 4),
     )..repeat(reverse: true);
 
-    // 🔧 Only opacity animates (blur stays static)
     _opacityAnim = Tween<double>(begin: 0.16, end: 0.20).animate(
       CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
     );
@@ -197,7 +196,10 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
 
   @override
   Widget build(BuildContext context) {
-    return RepaintBoundary( // 🚀 isolates blur repaint
+    final screenWidth = MediaQuery.of(context).size.width;
+    final cardWidth = screenWidth * 0.55;
+
+    return RepaintBoundary(
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
         child: BackdropFilter(
@@ -208,8 +210,8 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
               return Stack(
                 children: [
                   Container(
-                    width: 198,
-                    padding: const EdgeInsets.all(10),
+                    width: cardWidth,
+                    padding: EdgeInsets.all(screenWidth * 0.03),
                     decoration: BoxDecoration(
                       color: AppColors.white.withValues(
                         alpha: _opacityAnim.value,
@@ -231,7 +233,6 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
                     ),
                   ),
 
-                  /// ✨ LIGHT SWEEP (cheap transform only)
                   Positioned.fill(
                     child: IgnorePointer(
                       child: AnimatedBuilder(
@@ -270,6 +271,7 @@ class _GlassPartnerCardState extends State<_GlassPartnerCard>
   }
 }
 
+
 ////////////////////////////////////////////////////////////////
 /// 📝 GLASS CONTENT
 ////////////////////////////////////////////////////////////////
@@ -282,39 +284,43 @@ class _GlassContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        const Text(
+        Text(
           'Be Part of Goshala',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.white,
-            fontSize: 16,
+            fontSize: screenWidth < 360 ? 14 : 16,
             fontWeight: FontWeight.w700,
           ),
         ),
         const SizedBox(height: 8),
-        const Text(
+        Text(
           'Your contribution helps care for cows, support daily needs, '
               'and preserve a living tradition.',
           textAlign: TextAlign.center,
           style: TextStyle(
             color: AppColors.white,
-            fontSize: 12,
+            fontSize: screenWidth < 360 ? 11 : 12,
             fontWeight: FontWeight.w500,
             height: 1.25,
           ),
         ),
         const SizedBox(height: 12),
 
-        /// 💚 DONATE BUTTON
         ElevatedButton(
           onPressed: onDonateTap,
           style: ElevatedButton.styleFrom(
             backgroundColor: AppColors.white,
             elevation: 3,
-            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 6),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.08,
+              vertical: screenWidth < 360 ? 5 : 6,
+            ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(20),
             ),
@@ -332,3 +338,4 @@ class _GlassContent extends StatelessWidget {
     );
   }
 }
+

@@ -172,9 +172,9 @@ class _LocationHeaderState extends State<LocationHeader>
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => const ChatScreen()),
+                            _leftToRightRoute(const ChatScreen()),
                           );
+
                         },
                       ),
                       const SizedBox(width: 14),
@@ -183,9 +183,9 @@ class _LocationHeaderState extends State<LocationHeader>
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => const WishlistScreen()),
+                            _leftToRightRoute(const WishlistScreen()),
                           );
+
                         },
                       ),
                       const SizedBox(width: 14),
@@ -193,9 +193,9 @@ class _LocationHeaderState extends State<LocationHeader>
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
-                                builder: (_) => const GoshalaInfoScreen()),
+                            _leftToRightRoute(const GoshalaInfoScreen()),
                           );
+
                         },
                       ),
                     ],
@@ -246,4 +246,25 @@ class _LocationHeaderState extends State<LocationHeader>
     );
 
   }
+}
+Route _leftToRightRoute(Widget page) {
+  return PageRouteBuilder(
+    transitionDuration: const Duration(milliseconds: 450),
+    reverseTransitionDuration: const Duration(milliseconds: 450),
+    pageBuilder: (context, animation, secondaryAnimation) => page,
+    transitionsBuilder: (context, animation, secondaryAnimation, child) {
+      final curved = CurvedAnimation(
+        parent: animation,
+        curve: Curves.easeInOutCubic,
+      );
+
+      return SlideTransition(
+        position: Tween<Offset>(
+          begin: const Offset(-1.0, 0.0), // 👈 from left
+          end: Offset.zero,
+        ).animate(curved),
+        child: child,
+      );
+    },
+  );
 }

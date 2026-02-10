@@ -62,14 +62,16 @@ class EmptyCartView extends StatelessWidget {
                     borderRadius: BorderRadius.circular(16),
                   ),
                 ),
-                onPressed:() {
-            final navState = MainNavigation.navKey.currentState;
-            if (navState != null) {
-            navState.switchTab(2);
-            }
-            },
+                onPressed: () {
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const MainNavigation(initialIndex: 2),
+                    ),
+                  );
+                },
 
-              child: const Text(
+
+                child: const Text(
                   'Browse Products',
                   style: TextStyle(
                     color: Colors.white,

@@ -37,12 +37,17 @@ class CartScreen extends StatelessWidget {
               subtitle: 'Indira Nagar, Gachibowli, Hyder...',
               showBack: true,
               showDropdown: false,
-                onBack: () {
-                  MainNavigation.navKey.currentState?.switchTab(0);
-                },
+          onBack: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const MainNavigation(initialIndex: 0),
+              ),
+            );
+          },
 
 
-            ),
+
+        ),
 
 
           const SizedBox(height: 12),
@@ -58,8 +63,13 @@ class CartScreen extends StatelessWidget {
 
                 ? EmptyCartView(
               onBrowse: () {
-                MainNavigation.navKey.currentState?.switchTab(2); // Products tab
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigation(initialIndex: 2),
+                  ),
+                );
               },
+
 
             )
                 : ListView(
@@ -122,7 +132,11 @@ class CartScreen extends StatelessWidget {
                               /// 🔵 VIEW BUTTON (Primary Filled)
                               GestureDetector(
                                 onTap: () {
-                                  MainNavigation.navKey.currentState?.switchTab(1);
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => const MainNavigation(initialIndex: 1),
+                                    ),
+                                  );
                                 },
 
                                 child: Container(
@@ -190,7 +204,11 @@ class CartScreen extends StatelessWidget {
                 /// ➕ ADD MORE PRODUCTS
                 GestureDetector(
                   onTap: () {
-                    MainNavigation.navKey.currentState?.switchTab(2); // Products tab
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => const MainNavigation(initialIndex: 2),
+                      ),
+                    );
                   },
 
                   child: Container(

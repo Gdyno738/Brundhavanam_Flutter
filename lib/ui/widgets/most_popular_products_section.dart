@@ -45,7 +45,7 @@ class MostPopularProductsSection extends StatelessWidget {
         // ),
 
         SizedBox(
-          height: 335,
+          height: 320,
           child: ListView.separated(
             scrollDirection: Axis.horizontal,
             padding: const EdgeInsets.symmetric(horizontal: 16),

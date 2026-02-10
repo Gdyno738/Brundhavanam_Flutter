@@ -1,40 +1,37 @@
 import 'package:brundhavanam_app/screens/category/category_grid_screen.dart';
-
 import 'package:flutter/material.dart';
 
 import '../../ui/widgets/bottom_nav_bar.dart';
 import '../../screens/home/home_screen.dart';
-
 import '../rentcow/RentCowScreen.dart';
 import '../../screens/cart/cart_screen.dart';
 import '../../screens/profile/profile_screen.dart';
 
 class MainNavigation extends StatefulWidget {
   final int initialIndex;
+  final String? initialCategory; // 👈 add this
 
   const MainNavigation({
     super.key,
     this.initialIndex = 0,
+    this.initialCategory,
   });
-
-  static final GlobalKey<MainNavigationState> navKey =
-  GlobalKey<MainNavigationState>();
 
   @override
   State<MainNavigation> createState() => MainNavigationState();
 
+  /// Navigate directly to Products tab
   static void goToProductsTab(BuildContext context) {
-    // Pop any open screens first
     if (Navigator.canPop(context)) {
       Navigator.of(context).pop();
     }
 
-    // Then switch to products tab
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      final navState = MainNavigation.navKey.currentState;
-      if (navState != null && navState.mounted) {
-        navState.switchTab(2);
-      }
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const MainNavigation(initialIndex: 2),
+        ),
+      );
     });
   }
 }
@@ -42,8 +39,7 @@ class MainNavigation extends StatefulWidget {
 class MainNavigationState extends State<MainNavigation> {
   late int currentIndex;
   late final List<Widget> pages;
-  String? productsInitialCategory;
-
+  int previousIndex = 0;
 
   @override
   void initState() {
@@ -54,25 +50,18 @@ class MainNavigationState extends State<MainNavigation> {
     pages = [
       const HomeScreen(),
       const RentCowScreen(),
-
-      /// ✅ CORRECT: null = ALL PRODUCTS
       const CategoryGridScreen(),
-
       const CartScreen(),
       const ProfileScreen(),
     ];
   }
 
-  void switchTab(int index, {String? initialCategory}) {
+    void switchTab(int index) {
     setState(() {
+      previousIndex = currentIndex;
       currentIndex = index;
-
-      if (index == 2) {
-        productsInitialCategory = initialCategory;
-      }
     });
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -86,19 +75,51 @@ class MainNavigationState extends State<MainNavigation> {
         }
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: currentIndex,
-          children: List.generate(pages.length, (index) {
-            return Navigator(
-              onGenerateRoute: (_) {
-                return MaterialPageRoute(
-                  builder: (_) => pages[index],
-                );
-              },
+        body: AnimatedSwitcher(
+          duration: const Duration(milliseconds: 600),
+          layoutBuilder: (currentChild, previousChildren) {
+            return Stack(
+              alignment: Alignment.center,
+              children: [
+                ...previousChildren,
+                if (currentChild != null) currentChild,
+              ],
             );
-          }),
-        ),
+          },
+          transitionBuilder: (child, animation) {
+            final curved = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeInOutCubic,
+            );
 
+            final isProducts = currentIndex == 2;
+
+            Offset beginOffset;
+
+            if (isProducts) {
+              beginOffset = const Offset(0, 0.25); // bottom
+            } else if (currentIndex > previousIndex) {
+              beginOffset = const Offset(0.25, 0); // right → left
+            } else {
+              beginOffset = const Offset(-0.25, 0); // left → right
+            }
+
+            return FadeTransition(
+              opacity: curved,
+              child: SlideTransition(
+                position: Tween(
+                  begin: beginOffset,
+                  end: Offset.zero,
+                ).animate(curved),
+                child: child,
+              ),
+            );
+          },
+          child: KeyedSubtree(
+            key: ValueKey(currentIndex),
+            child: pages[currentIndex],
+          ),
+        ),
         bottomNavigationBar: BottomNavBar(
           currentIndex: currentIndex,
           onTap: switchTab,

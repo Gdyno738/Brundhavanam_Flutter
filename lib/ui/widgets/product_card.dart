@@ -296,8 +296,13 @@ class ProductCard extends StatelessWidget {
         );
 
         if (result == 'VIEW_ALL_PRODUCTS') {
-          MainNavigation.navKey.currentState?.switchTab(2);
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(
+              builder: (_) => const MainNavigation(initialIndex: 2),
+            ),
+          );
         }
+
       },
       child: Container(
         decoration: BoxDecoration(
