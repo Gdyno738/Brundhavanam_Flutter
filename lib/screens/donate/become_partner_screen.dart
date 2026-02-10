@@ -13,6 +13,8 @@ class BecomePartnerScreen extends StatefulWidget {
 
 class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
   final _formKey = GlobalKey<FormState>();
+  bool _isDropdownOpen = false;
+
 
   final _nameCtrl = TextEditingController();
   final _mobileCtrl = TextEditingController();
@@ -35,12 +37,29 @@ class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
     if (_formKey.currentState!.validate()) {
       Navigator.push(
         context,
-        MaterialPageRoute(
-          builder: (_) => const CartPayment(),
+        PageRouteBuilder(
+          transitionDuration: const Duration(milliseconds: 400),
+          pageBuilder: (_, animation, secondaryAnimation) =>
+          const CartPayment(),
+          transitionsBuilder: (_, animation, _, child) {
+            final curved = CurvedAnimation(
+              parent: animation,
+              curve: Curves.easeOutCubic,
+            );
+
+            return SlideTransition(
+              position: Tween<Offset>(
+                begin: const Offset(-1.0, 0.0), // 👈 from left
+                end: Offset.zero,
+              ).animate(curved),
+              child: child,
+            );
+          },
         ),
       );
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +67,7 @@ class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
 
       child: Column(
         children: [
+
           /// 🔝 HEADER
           LocationHeader(
             title: 'Donations',
@@ -197,68 +217,110 @@ class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
 
   /// ================= CATEGORY FIELD =================
   Widget _categoryField() {
-    return GestureDetector(
-      onTap: () async {
-        final result = await showModalBottomSheet<String>(
-          context: context,
-          backgroundColor: Colors.transparent,
-          builder: (_) => _categorySheet(),
-        );
-
-        if (result != null) {
-          setState(() => _category = result);
-        }
-      },
-      child: Container(
-        height: 54,
-        padding: const EdgeInsets.symmetric(horizontal: 20),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: const Color(0xFFB7B1B1)),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              _category,
-              style: const TextStyle(
-                color: Color(0xFF888888),
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-            const Icon(Icons.keyboard_arrow_down),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _categorySheet() {
     final categories = [
-      'Cow Care',
+      'Donate for Green Grass - Rs 1000',
       'Feed Support',
       'Medical Help',
       'General Donation',
+      'Adopt a cow - Rs 21,000 per year',
+      'Goshala Maintanence - Rs 1000 per month',
     ];
 
-    return Container(
-      padding: const EdgeInsets.all(20),
-      decoration: const BoxDecoration(
-        color: AppColors.white,
-        borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: categories
-            .map(
-              (c) => ListTile(
-            title: Text(c),
-            onTap: () => Navigator.pop(context, c),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        GestureDetector(
+          onTap: () {
+            setState(() {
+              _isDropdownOpen = !_isDropdownOpen;
+            });
+          },
+          child: Container(
+            height: 54,
+            padding: const EdgeInsets.symmetric(horizontal: 20),
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(20),
+              border: Border.all(color: const Color(0xFFB7B1B1)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  _category,
+                  style: const TextStyle(
+                    color: Color(0xFF888888),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                AnimatedRotation(
+                  turns: _isDropdownOpen ? 0.5 : 0,
+                  duration: const Duration(milliseconds: 250),
+                  child: const Icon(Icons.keyboard_arrow_down),
+                ),
+              ],
+            ),
           ),
-        )
-            .toList(),
-      ),
+        ),
+
+        /// 🔽 Smooth Expand
+        AnimatedSize(
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeInOutCubic,
+          child: _isDropdownOpen
+              ? Container(
+            margin: const EdgeInsets.only(top: 8),
+            padding: const EdgeInsets.symmetric(vertical: 4),
+            decoration: BoxDecoration(
+              color: Colors.grey.shade50,
+              borderRadius: BorderRadius.circular(16),
+              boxShadow: [
+                BoxShadow(
+                  color: AppColors.shadow.withValues(alpha: 0.15),
+                  blurRadius: 10,
+                  offset: const Offset(0, 4),
+                ),
+              ],
+            ),
+            child: RadioGroup<String>(
+              groupValue: _category,
+              onChanged: (value) {
+                setState(() {
+                  _category = value!;
+                  _isDropdownOpen = false;
+                });
+              },
+              child: Column(
+                children: categories.map((c) {
+                  return Column(
+                    children: [
+                      RadioListTile<String>(
+                        value: c,
+                        activeColor: AppColors.primary,
+                        title: Text(
+                          c,
+                          style: const TextStyle(
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                      if (c != categories.last)
+                        Divider(
+                          height: 1,
+                          thickness: 0.8,
+                          color: Colors.grey.shade300,
+                        ),
+                    ],
+                  );
+                }).toList(),
+              ),
+            ),
+          )
+              : const SizedBox(),
+        ),
+
+      ],
     );
   }
+
 }

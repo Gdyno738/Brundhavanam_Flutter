@@ -14,6 +14,7 @@ import '../home/sections/location_header.dart';
 import '../navigation/main_navigation.dart';
 
 import '../products/products_screen.dart';
+import '../rentcow/rent_cow_content.dart';
 
 class CartScreen extends StatelessWidget {
   const CartScreen({super.key});
@@ -36,12 +37,17 @@ class CartScreen extends StatelessWidget {
               subtitle: 'Indira Nagar, Gachibowli, Hyder...',
               showBack: true,
               showDropdown: false,
-                onBack: () {
-                  MainNavigation.navKey.currentState?.switchTab(0);
-                },
+          onBack: () {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (_) => const MainNavigation(initialIndex: 0),
+              ),
+            );
+          },
 
 
-            ),
+
+        ),
 
 
           const SizedBox(height: 12),
@@ -57,8 +63,13 @@ class CartScreen extends StatelessWidget {
 
                 ? EmptyCartView(
               onBrowse: () {
-                MainNavigation.navKey.currentState?.switchTab(2); // Products tab
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigation(initialIndex: 2),
+                  ),
+                );
               },
+
 
             )
                 : ListView(
@@ -113,20 +124,61 @@ class CartScreen extends StatelessWidget {
                             ),
                           ),
 
-                          GestureDetector(
-                            onTap: () {
-                              cart.removeCowFromCart();
-                            },
-                            child: const Text(
-                              'Remove',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
+                          Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+
+                              /// 🔵 VIEW BUTTON (Primary Filled)
+                              GestureDetector(
+                                onTap: () {
+                                  Navigator.of(context).pushReplacement(
+                                    MaterialPageRoute(
+                                      builder: (_) => const MainNavigation(initialIndex: 1),
+                                    ),
+                                  );
+                                },
+
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 14,
+                                    vertical: 6,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: AppColors.primary,
+                                    borderRadius: BorderRadius.circular(12),
+                                  ),
+                                  child: const Text(
+                                    'View',
+                                    style: TextStyle(
+                                      color: AppColors.white,
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
+
+                              const SizedBox(height: 8),
+
+                              /// 🔴 REMOVE (Keep simple text)
+                              GestureDetector(
+                                onTap: () {
+                                  cart.removeCowFromCart();
+                                },
+                                child: const Text(
+                                  'Remove',
+                                  style: TextStyle(
+                                    color: AppColors.primary,
+                                    fontSize: 13,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
+
+
 
                         ],
                       ),
@@ -152,7 +204,11 @@ class CartScreen extends StatelessWidget {
                 /// ➕ ADD MORE PRODUCTS
                 GestureDetector(
                   onTap: () {
-                    MainNavigation.navKey.currentState?.switchTab(2); // Products tab
+                    Navigator.of(context).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (_) => const MainNavigation(initialIndex: 2),
+                      ),
+                    );
                   },
 
                   child: Container(

@@ -26,109 +26,114 @@ class _ProfileScreenState extends State<ProfileScreen> {
       child: Column(
         children: [
           LocationHeader(
-              title: 'Your profile',
-              subtitle: '',
-              showBack: true,
-              showDropdown: false,
-              onBack: () {
-                final state = MainNavigation.navKey.currentState;
-                if (state is MainNavigationState) {
-                  state.switchTab(0);
-                }
-              },
-            ),
+            title: 'Your profile',
+            subtitle: '',
+            showBack: true,
+            showDropdown: false,
+            onBack: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const MainNavigation(initialIndex: 0),
+                ),
+              );
+            },
 
-            /// 🔽 CONTENT (SCROLLABLE)
-            Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    const ProfileHeader(),
-                    const SizedBox(height: 8),
+          ),
 
-                    profileMenuItem(
-                      title: 'Your Orders',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const YourOrdersScreen(),
-                          ),
-                        );
-                      },
-                    ),
+          /// 🔽 CONTENT (SCROLLABLE)
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  const ProfileHeader(),
+                  const SizedBox(height: 8),
 
-                    profileMenuItem(
-                      title: 'Settings',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const SettingsScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                  profileMenuItem(
+                    title: 'Your Orders',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        _rightToLeftRoute(const YourOrdersScreen()),
+                      );
+                    },
+                  ),
 
-                    profileMenuItem(
-                      title: 'Feedback',
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (_) => const FeedbackScreen(),
-                          ),
-                        );
-                      },
-                    ),
+                  profileMenuItem(
+                    title: 'Settings',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        _rightToLeftRoute(const SettingsScreen()),
+                      );
+                    },
+                  ),
 
-                    /// 👇 INVITE A FRIEND (INLINE)
-                    profileMenuItem(
-                      title: 'Invite a Friend',
-                      trailing: Icon(
-                        _showInviteBox
-                            ? Icons.keyboard_arrow_up
-                            : Icons.keyboard_arrow_down,
+                  profileMenuItem(
+                    title: 'Feedback',
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        _rightToLeftRoute(const FeedbackScreen()),
+                      );
+                    },
+                  ),
+
+                  /// 👇 INVITE A FRIEND (INLINE)
+                  profileMenuItem(
+                    title: 'Invite a Friend',
+                    trailing: AnimatedRotation(
+                      turns: _showInviteBox ? 0.5 : 0.0,
+                      duration: const Duration(milliseconds: 250),
+                      child: const Icon(
+                        Icons.keyboard_arrow_down,
                         color: AppColors.grey,
                       ),
-                      onTap: () {
-                        setState(() {
-                          _showInviteBox = !_showInviteBox;
-                        });
-                      },
                     ),
-
-                    if (_showInviteBox)
-                      const Padding(
-                        padding: EdgeInsets.symmetric(horizontal: 16),
-                        child: InviteFriendInline(),
-                      ),
-                  ],
-                ),
-              ),
-            ),
-
-            /// 🔻 LOGOUT BUTTON
-            Padding(
-              padding: const EdgeInsets.all(16),
-              child: OutlinedButton.icon(
-                style: OutlinedButton.styleFrom(
-                  minimumSize: const Size(double.infinity, 48),
-                  side: const BorderSide(color: AppColors.grey),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                    onTap: () {
+                      setState(() {
+                        _showInviteBox = !_showInviteBox;
+                      });
+                    },
                   ),
-                ),
-                onPressed: () {},
-                icon: const Icon(Icons.logout, color: AppColors.black),
-                label: const Text(
-                  'Logout',
-                  style: TextStyle(color: AppColors.black),
-                ),
+
+
+                  AnimatedSize(
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOutCubic,
+                    child: _showInviteBox
+                        ? const Padding(
+                      padding: EdgeInsets.symmetric(horizontal: 16),
+                      child: InviteFriendInline(),
+                    )
+                        : const SizedBox(),
+                  ),
+
+                ],
               ),
             ),
-          ],
-        ),
+          ),
+
+          /// 🔻 LOGOUT BUTTON
+          Padding(
+            padding: const EdgeInsets.all(16),
+            child: OutlinedButton.icon(
+              style: OutlinedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 48),
+                side: const BorderSide(color: AppColors.grey),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
+              onPressed: () {},
+              icon: const Icon(Icons.logout, color: AppColors.black),
+              label: const Text(
+                'Logout',
+                style: TextStyle(color: AppColors.black),
+              ),
+            ),
+          ),
+        ],
+      ),
 
     );
   }
@@ -159,6 +164,27 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ),
         const Divider(height: 1, color: AppColors.lightGrey),
       ],
+    );
+  }
+
+  Route _rightToLeftRoute(Widget page) {
+    return PageRouteBuilder(
+      transitionDuration: const Duration(milliseconds: 400),
+      pageBuilder: (_, animation, secondaryAnimation) => page,
+      transitionsBuilder: (_, animation, __, child) {
+        final curved = CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeOutCubic,
+        );
+
+        return SlideTransition(
+          position: Tween<Offset>(
+            begin: const Offset(1.0, 0.0), // 👉 from right
+            end: Offset.zero,
+          ).animate(curved),
+          child: child,
+        );
+      },
     );
   }
 }

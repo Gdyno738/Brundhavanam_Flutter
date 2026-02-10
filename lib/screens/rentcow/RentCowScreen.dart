@@ -21,17 +21,13 @@ class RentCowScreen extends StatelessWidget {
               showBack: true,
               showDropdown: false,
             onBack: () {
-              if (Navigator.canPop(context)) {
-                Navigator.pop(context);
-              }
-
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                final navState = MainNavigation.navKey.currentState;
-                if (navState != null) {
-                  navState.switchTab(0); // 👈 Home tab
-                }
-              });
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const MainNavigation(initialIndex: 0),
+                ),
+              );
             },
+
 
           ),
 

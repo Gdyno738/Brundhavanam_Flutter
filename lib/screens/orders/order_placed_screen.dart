@@ -19,14 +19,14 @@ class OrderPlacedScreen extends StatelessWidget {
   void _goToHome(BuildContext context) {
     Navigator.of(context).pushAndRemoveUntil(
       MaterialPageRoute(
-        builder: (_) => MainNavigation(
-          key: MainNavigation.navKey,
+        builder: (_) => const MainNavigation(
           initialIndex: 0,
         ),
       ),
           (route) => false,
     );
   }
+
 
   @override
   Widget build(BuildContext context) {

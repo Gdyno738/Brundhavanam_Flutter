@@ -159,22 +159,37 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
                   return;
                 }
 
-                final parentContext = widget.rootContext;
-                Navigator.pop(context);
+                Navigator.of(context).pop(); // Close sheet
 
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  Navigator.push(
-                    parentContext,
-                    MaterialPageRoute(
-                      builder: (_) => OtpScreen(
-                        mobileNumber: mobile,
-                        parentContext: parentContext,
-                      ),
-                    ),
-                  );
-                });
+                Navigator.of(context, rootNavigator: true).push(
+                  PageRouteBuilder(
+                    transitionDuration: const Duration(milliseconds: 400),
+                    pageBuilder: (_, animation, secondaryAnimation) =>
+                        OtpScreen(
+                          mobileNumber: mobile,
+                          parentContext: context,
+                        ),
+                    transitionsBuilder: (_, animation, secondaryAnimation, child) {
+                      const begin = Offset(0, 1);
+                      const end = Offset.zero;
+
+                      var tween = Tween(begin: begin, end: end)
+                          .chain(CurveTween(curve: Curves.easeOutCubic));
+
+                      return FadeTransition(
+                        opacity: animation,
+                        child: SlideTransition(
+                          position: animation.drive(tween),
+                          child: child,
+                        ),
+                      );
+                    },
+
+                  ),
+                );
               },
-              child: const Text(
+
+                child: const Text(
                 'Get OTP',
                 style: TextStyle(
                   color: AppColors.white,
@@ -189,25 +204,33 @@ class _LoginBottomSheetState extends State<LoginBottomSheet> {
           const SizedBox(height: 12),
 
           /// SKIP
-          GestureDetector(
-            onTap: () {
-              final parentContext = widget.rootContext;
+          GestureDetector(onTap: () {
+            Navigator.of(context).pushAndRemoveUntil(
+              PageRouteBuilder(
+                transitionDuration: const Duration(milliseconds: 500),
+                pageBuilder: (_, animation, secondaryAnimation) =>
+                const MainNavigation(initialIndex: 0),
+                transitionsBuilder: (_, animation, secondaryAnimation, child) {
+                  final curved = CurvedAnimation(
+                    parent: animation,
+                    curve: Curves.easeInOutCubic,
+                  );
 
-              // Close bottom sheet
-              Navigator.pop(context);
+                  return SlideTransition(
+                    position: Tween(
+                      begin: const Offset(-1.0, 0.0), // from left
+                      end: Offset.zero,
+                    ).animate(curved),
+                    child: child,
+                  );
+                },
+              ),
+                  (route) => false,
+            );
 
-              // Navigate after sheet closes
-              WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.pushAndRemoveUntil(
-                  parentContext,
-                  MaterialPageRoute(
-                    builder: (_) => MainNavigation(key: MainNavigation.navKey),
-                  ),
-                      (route) => false,
-                );
+          },
 
-              });
-            },
+
             child: const Text(
               'Skip',
               style: TextStyle(
@@ -264,8 +287,25 @@ void showLoginBottomSheet(BuildContext rootContext) {
     context: rootContext,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
-    builder: (_) => LoginBottomSheet(
-      rootContext: rootContext,
-    ),
+    showDragHandle: true,
+    useSafeArea: true,
+    builder: (context) {
+      return TweenAnimationBuilder<double>(
+        duration: const Duration(milliseconds: 350),
+        curve: Curves.easeOutCubic,
+        tween: Tween(begin: 40, end: 0),
+        builder: (context, value, child) {
+          return Transform.translate(
+            offset: Offset(0, value),
+            child: child,
+          );
+        },
+        child: LoginBottomSheet(
+          rootContext: rootContext,
+        ),
+      );
+    },
   );
 }
+
+

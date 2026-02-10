@@ -53,7 +53,35 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
           const SizedBox(height: 12),
 
           /// 📦 CONTENT
-          Expanded(child: _buildContent()),
+          Expanded(
+            child: AnimatedSwitcher(
+              duration: const Duration(milliseconds: 450),
+              switchInCurve: Curves.easeOutCubic,
+              switchOutCurve: Curves.easeInCubic,
+              transitionBuilder: (child, animation) {
+                final curved = CurvedAnimation(
+                  parent: animation,
+                  curve: Curves.easeOutCubic,
+                );
+
+                return FadeTransition(
+                  opacity: animation,
+                  child: SlideTransition(
+                    position: Tween<Offset>(
+                      begin: const Offset(0.2, 0), // 👉 slide from right
+                      end: Offset.zero,
+                    ).animate(curved),
+                    child: child,
+                  ),
+                );
+              },
+              child: KeyedSubtree(
+                key: ValueKey(_current),
+                child: _buildContent(),
+              ),
+            ),
+          ),
+
         ],
       ),
     );

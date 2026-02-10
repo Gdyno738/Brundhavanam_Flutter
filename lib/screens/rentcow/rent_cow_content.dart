@@ -36,6 +36,19 @@ class _RentCowContentState extends State<RentCowContent> {
   String selectedHouseType = '';
   final TextEditingController customFloorController = TextEditingController();
 
+  @override
+  void initState() {
+    super.initState();
+
+    final cart = Provider.of<CartProvider>(context, listen: false);
+
+    if (cart.cowItem != null) {
+      selectedCow = cart.cowItem!.name;
+      selectedCowImages = cart.cowItem!.image.isNotEmpty
+          ? [cart.cowItem!.image]
+          : [];
+    }
+  }
 
 
   @override

@@ -42,12 +42,11 @@ class CategoryProductsScreen extends StatelessWidget {
             child: GridView.builder(
               padding: const EdgeInsets.all(16),
               itemCount: filteredProducts.length,
-              gridDelegate:
-              const SliverGridDelegateWithMaxCrossAxisExtent(
-                maxCrossAxisExtent: 200,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                childAspectRatio: 0.55,
+                mainAxisExtent: 320, // 🔥 FIXED (no overflow)
               ),
               itemBuilder: (_, index) {
                 return ProductCard(
@@ -56,6 +55,7 @@ class CategoryProductsScreen extends StatelessWidget {
               },
             ),
           ),
+
         ],
       ),
     );

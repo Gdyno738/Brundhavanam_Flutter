@@ -6,12 +6,32 @@ class FullWidthBanner extends StatelessWidget {
   const FullWidthBanner({super.key});
 
   void _goToBook(BuildContext context) {
-    final navState = MainNavigation.navKey.currentState;
+    Navigator.of(context).pushReplacement(
+      PageRouteBuilder(
+        transitionDuration: const Duration(milliseconds: 450),
+        pageBuilder: (_, animation, secondaryAnimation) =>
+        const MainNavigation(initialIndex: 1),
+        transitionsBuilder: (_, animation, secondaryAnimation, child) {
+          final curved = CurvedAnimation(
+            parent: animation,
+            curve: Curves.easeOutCubic,
+          );
 
-    if (navState != null && navState.mounted) {
-      navState.switchTab(1);
-    }
+          return SlideTransition(
+            position: Tween<Offset>(
+              begin: const Offset(-1.0, 0.0), // 👈 from left
+              end: Offset.zero,
+            ).animate(curved),
+            child: child,
+          );
+        },
+      ),
+    );
   }
+
+
+
+
 
 
   @override

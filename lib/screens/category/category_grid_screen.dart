@@ -15,8 +15,13 @@ class CategoryGridScreen extends StatelessWidget {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) {
-        // Always go to Home tab instead of popping
-        MainNavigation.navKey.currentState?.switchTab(0);
+        if (didPop) return;
+
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (_) => const MainNavigation(initialIndex: 0),
+          ),
+        );
       },
       child: BaseScreen(
 
@@ -31,8 +36,13 @@ class CategoryGridScreen extends StatelessWidget {
                 showBack: true,
                 showDropdown: false,
                 onBack: () {
-                  MainNavigation.navKey.currentState?.switchTab(0);
+                  Navigator.of(context).pushReplacement(
+                    MaterialPageRoute(
+                      builder: (_) => const MainNavigation(initialIndex: 0),
+                    ),
+                  );
                 },
+
               ),
             ),
 

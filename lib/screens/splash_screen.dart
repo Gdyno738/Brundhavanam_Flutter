@@ -48,12 +48,14 @@ class _SplashScreenState extends State<SplashScreen>
     Navigator.pushReplacement(
       context,
       MaterialPageRoute(
-        builder: (_) => hasSeenOnboarding
-            ? MainNavigation(key: MainNavigation.navKey)
+        builder: (_) =>
+        hasSeenOnboarding
+            ? const MainNavigation() // 👈 Home (default index 0)
             : const OnboardingScreen(),
       ),
     );
   }
+
 
   @override
   void dispose() {

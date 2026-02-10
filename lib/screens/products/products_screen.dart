@@ -53,7 +53,9 @@ class _ProductsScreenState extends State<ProductsScreen> {
             subtitle: '',
             showBack: true,
             showDropdown: false,
-            onBack: _goHome,
+            onBack: () => _goHome(context),
+
+
           ),
 
           const SizedBox(height: 12),
@@ -79,12 +81,14 @@ class _ProductsScreenState extends State<ProductsScreen> {
     );
   }
 
-  void _goHome() {
-    final navState = MainNavigation.navKey.currentState;
-    if (navState != null && navState.mounted) {
-      navState.switchTab(0);
-    }
+  void _goHome(BuildContext context) {
+    Navigator.of(context).pushReplacement(
+      MaterialPageRoute(
+        builder: (_) => const MainNavigation(initialIndex: 0),
+      ),
+    );
   }
+
 
   Widget _buildProductsGrid() {
     final products = selectedCategory == null
