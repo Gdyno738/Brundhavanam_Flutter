@@ -5,7 +5,7 @@ import '../../../data/dummy_products.dart';
 import '../../../data/dummy_reviews.dart';
 import '../../../ui/widgets/reviews_horizontal_list.dart';
 import '../../../ui/widgets/product_card.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 
 class MostPopularProductsScreen extends StatefulWidget {
   const MostPopularProductsScreen({super.key});

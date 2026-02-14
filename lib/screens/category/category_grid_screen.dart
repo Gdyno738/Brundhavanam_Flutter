@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../data/dummy_categories.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_card.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import '../navigation/main_navigation.dart';
 import 'category_products_screen.dart';
 
@@ -24,26 +24,21 @@ class CategoryGridScreen extends StatelessWidget {
         );
       },
       child: BaseScreen(
-
         child: Column(
           children: [
             /// HEADER
-            SafeArea(
-              bottom: false,
-              child: LocationHeader(
-                title: 'Products',
-                subtitle: '',
-                showBack: true,
-                showDropdown: false,
-                onBack: () {
-                  Navigator.of(context).pushReplacement(
-                    MaterialPageRoute(
-                      builder: (_) => const MainNavigation(initialIndex: 0),
-                    ),
-                  );
-                },
-
-              ),
+            LocationHeader(
+              title: 'Products',
+              subtitle: '',
+              showBack: true,
+              showDropdown: false,
+              onBack: () {
+                Navigator.of(context).pushReplacement(
+                  MaterialPageRoute(
+                    builder: (_) => const MainNavigation(initialIndex: 0),
+                  ),
+                );
+              },
             ),
 
             const SizedBox(height: 16),

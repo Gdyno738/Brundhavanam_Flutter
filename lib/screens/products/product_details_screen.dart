@@ -9,7 +9,7 @@ import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/about_us_section.dart';
 import '../../ui/widgets/most_popular_products_section.dart';
 import '../../ui/widgets/reviews_horizontal_list.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import '../popularproducts/popular_products_screen.dart';
 import '../../screens/products/premiumTag.dart';
 
@@ -27,6 +27,8 @@ class ProductDetailsScreen extends StatefulWidget {
 
 class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
   String selectedSize = '1 liter';
+  TextEditingController customQtyController = TextEditingController();
+
 
   final List<String> sizes = [
     '500 ml',
@@ -109,113 +111,113 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
 
                   const SizedBox(height: 16),
 
-                  /// 🐄 TITLE + SIZE
                   const SizedBox(height: 16),
 
-                  /// 🧾 PRODUCT DETAILS CARD
-                  Column(
+                  /// 🧾 PRODUCT DETAILS SECTION
+                  Row(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /// TITLE
-                      Text(
-                        product.title,
-                        style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.black,
-                        ),
-                      ),
 
-                      const SizedBox(height: 6),
+                      /// LEFT SIDE (TITLE + PRICE + CATEGORY + RATING)
+                      Expanded(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
 
-                      /// PRICE ROW
-                      Row(
-                        children: [
-                          Text(
-                            '₹${product.originalPrice}/-',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              color: AppColors.grey,
-                              decoration: TextDecoration.lineThrough,
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            '₹${product.price}',
-                            style: const TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                        ],
-                      ),
-
-                      const SizedBox(height: 6),
-
-                      /// CATEGORY TAG
-                      Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                        decoration: BoxDecoration(
-                          color: AppColors.primary.withValues(alpha: 0.1),
-                          borderRadius: BorderRadius.circular(6),
-                        ),
-                        child: Text(
-                          product.category,
-                          style: const TextStyle(
-                            fontSize: 10,
-                            color: AppColors.primary,
-                          ),
-                        ),
-                      ),
-
-                      const SizedBox(height: 8),
-
-                      /// ⭐ RATING
-                      Row(
-                        children: [
-                          ...List.generate(
-                            5,
-                                (i) => Padding(
-                              padding: const EdgeInsets.only(right: 3),
-                              child: Image.asset(
-                                i < product.rating.round()
-                                    ? 'assets/icons/star_filled.png'
-                                    : 'assets/icons/star_outlined.png',
-                                width: 14,
-                                height: 14,
+                            /// TITLE
+                            Text(
+                              product.title,
+                              style: const TextStyle(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.black,
                               ),
                             ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            product.rating.toString(),
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+
+                            const SizedBox(height: 5),
+
+                            /// PRICE ROW
+                            Row(
+                              children: [
+                                Text(
+                                  '₹${product.originalPrice}/-',
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    color: AppColors.grey,
+                                    decoration: TextDecoration.lineThrough,
+                                  ),
+                                ),
+                                const SizedBox(width: 6),
+                                Text(
+                                  '₹${product.price}',
+                                  style: const TextStyle(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
                             ),
-                          ),
-                        ],
+
+                            const SizedBox(height: 5),
+
+                            /// CATEGORY
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withValues(alpha: 0.1),
+                                borderRadius: BorderRadius.circular(6),
+                              ),
+                              child: Text(
+                                product.category,
+                                style: const TextStyle(
+                                  fontSize: 10,
+                                  color: AppColors.primary,
+                                ),
+                              ),
+                            ),
+
+                            const SizedBox(height: 5),
+
+                            /// RATING
+                            Row(
+                              children: [
+                                ...List.generate(
+                                  5,
+                                      (i) => Padding(
+                                    padding: const EdgeInsets.only(right: 3),
+                                    child: Image.asset(
+                                      i < product.rating.round()
+                                          ? 'assets/icons/star_filled.png'
+                                          : 'assets/icons/star_outlined.png',
+                                      width: 14,
+                                      height: 14,
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 5),
+                                Text(
+                                  product.rating.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
                       ),
 
+                      const SizedBox(width:16),
 
-                      const SizedBox(height: 12),
+                      /// RIGHT SIDE (QUANTITY DROPDOWN)
+                      _sizeDropdown(),
+                    ],
+                  ),
 
-                      /// SIZE SELECTOR
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          const Text(
-                            'Quantity',
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                          _sizeDropdown(),
-                        ],
-                      ),
 
-                      const SizedBox(height: 12),
+                  const SizedBox(height: 10),
+
 
                       /// DESCRIPTION
                       Text(
@@ -226,13 +228,12 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                           color: AppColors.grey,
                         ),
                       ),
-                    ],
-                  ),
 
-                  const SizedBox(height: 12),
+
+                  const SizedBox(height: 10),
 
                   const PremiumTag(),
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 15),
 
                   /// 🛒 ADD TO CART / QUANTITY
                   Consumer<CartProvider>(
@@ -351,73 +352,87 @@ class _ProductDetailsScreenState extends State<ProductDetailsScreen> {
                   const SizedBox(height: 32),
 
 
-
-
-
-                  const SizedBox(height: 32),
-                ],
+        ],
+              ),
               ),
             ),
-          ),
+
         ],
       ),
     );
   }
+  @override
+  void dispose() {
+    customQtyController.dispose();
+    super.dispose();
+  }
+
 
   /// 🔽 SIZE DROPDOWN (THEMED)
   Widget _sizeDropdown() {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 12),
-      decoration: BoxDecoration(
-        color: AppColors.lightGrey,
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: AppColors.grey),
-      ),
-      child: DropdownButtonHideUnderline(
-        child: DropdownButton<String>(
-          value: selectedSize,
-          icon: const Icon(
-            Icons.keyboard_arrow_down,
-            color: AppColors.black,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Container(
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          decoration: BoxDecoration(
+            color: AppColors.lightGrey,
+            borderRadius: BorderRadius.circular(10),
+            border: Border.all(color: AppColors.grey),
           ),
-          dropdownColor: AppColors.white, // ✅ dropdown background
-          borderRadius: BorderRadius.circular(14), // ✅ rounded popup
-          items: sizes.map((size) {
-            return DropdownMenuItem<String>(
-              value: size,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  vertical: 10,
-                  horizontal: 6,
-                ),
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.local_drink,
-                      size: 16,
-                      color: AppColors.primary,
-                    ),
-                    const SizedBox(width: 10),
-                    Text(
-                      size,
-                      style: const TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
-                        color: AppColors.black,
-                      ),
-                    ),
-                  ],
-                ),
+          child: DropdownButtonHideUnderline(
+            child: DropdownButton<String>(
+              value: selectedSize,
+              icon: const Icon(
+                Icons.keyboard_arrow_down,
+                color: AppColors.black,
               ),
-            );
-          }).toList(),
-          onChanged: (value) {
-            setState(() => selectedSize = value!);
-          },
+              dropdownColor: AppColors.white,
+              borderRadius: BorderRadius.circular(14),
+              items: sizes.map((size) {
+                return DropdownMenuItem<String>(
+                  value: size,
+                  child: Text(
+                    size,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                );
+              }).toList(),
+              onChanged: (value) {
+                setState(() => selectedSize = value!);
+              },
+            ),
+          ),
         ),
-      ),
+
+        /// 🔥 SHOW INPUT IF CUSTOM SELECTED
+        if (selectedSize == 'Custom quantity') ...[
+          const SizedBox(height: 8),
+          SizedBox(
+            width: 100,
+            height: 40,
+            child: TextField(
+              controller: customQtyController,
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                hintText: "Enter qty",
+                contentPadding:
+                const EdgeInsets.symmetric(horizontal: 10),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                isDense: true,
+              ),
+            ),
+          ),
+        ],
+      ],
     );
   }
+
 
 
   /// ➖➕ ROUND BUTTON

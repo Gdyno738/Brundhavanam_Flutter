@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../../providers/cart_provider.dart';
 import '../../screens/rentcow/cart_payment.dart';
+import '../../ui/widgets/payment_success_screen.dart';
 
 class TotalBillBottomSheet extends StatelessWidget {
   const TotalBillBottomSheet({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final cart = context.watch<CartProvider>();
+
+    final cowPrice = cart.cowItem?.price ?? 0.0;
+    const deliveryCharge = 100.0;
+
+    final total = cowPrice + deliveryCharge;
+
     return Container(
       padding: const EdgeInsets.fromLTRB(20, 20, 20, 30),
       decoration: const BoxDecoration(
@@ -37,9 +47,9 @@ class TotalBillBottomSheet extends StatelessWidget {
 
           const SizedBox(height: 30),
 
-          _row('Cow', '₹470/-'),
+          _row('Cow', '₹${cowPrice.toStringAsFixed(0)}/-'),
           const SizedBox(height: 12),
-          _row('Delivery Charges', '₹100/-'),
+          _row('Delivery Charges', '₹${deliveryCharge.toStringAsFixed(0)}/-'),
 
           const SizedBox(height: 25),
 
@@ -54,18 +64,20 @@ class TotalBillBottomSheet extends StatelessWidget {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context); // close bottom sheet
+                Navigator.pop(context);
 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => CartPayment(),
+                    builder: (context) => const CartPayment(
+                      type: PaymentType.rentCow,
+                    ),
                   ),
                 );
               },
-              child: const Text(
-                'Pay ₹570',
-                style: TextStyle(
+              child: Text(
+                'Pay ₹${total.toStringAsFixed(0)}',
+                style: const TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -73,7 +85,6 @@ class TotalBillBottomSheet extends StatelessWidget {
               ),
             ),
           ),
-
         ],
       ),
     );

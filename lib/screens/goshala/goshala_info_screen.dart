@@ -1,7 +1,7 @@
 import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import 'goshala_live_tabs_screen.dart';
 import '../goshala/ViewLiveBadge.dart';
 import '../donate/donate_screen.dart';
@@ -13,18 +13,14 @@ class GoshalaInfoScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-
       child: Column(
         children: [
           /// HEADER
-          const SafeArea(
-            bottom: false,
-            child: LocationHeader(
-              title: 'Goshala',
-              subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
-              showBack: true,
-              showDropdown: false,
-            ),
+          const LocationHeader(
+            title: 'Goshala',
+            subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
+            showBack: true,
+            showDropdown: false,
           ),
 
           Expanded(

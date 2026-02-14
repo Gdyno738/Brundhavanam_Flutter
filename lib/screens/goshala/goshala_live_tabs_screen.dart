@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../donate/donate_tab.dart';
 import '../gallery/goshala_gallery_layout.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import 'donate/donate_history_layout.dart';
 import 'quick_links.dart';
 import 'goshala_section.dart';
@@ -29,8 +29,8 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
   Widget build(BuildContext context) {
     return BaseScreen(
       child: Column(
+        mainAxisSize: MainAxisSize.max,
         children: [
-          /// 🔝 HEADER
           LocationHeader(
             title: 'Goshala',
             subtitle: 'Indira Nagar, Gachibowli',
@@ -38,21 +38,20 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
             showDropdown: false,
           ),
 
+          const SizedBox(height: 12), // 👈 reduced tight spacing
+
+      QuickLinks(
+        selected: _current,
+        onChanged: (section) {
+          setState(() {
+            _current = section;
+          });
+        },
+      ),
+
+// REMOVE THIS
           const SizedBox(height: 12),
 
-          /// 🔗 QUICK TABS
-          QuickLinks(
-            selected: _current,
-            onChanged: (section) {
-              setState(() {
-                _current = section;
-              });
-            },
-          ),
-
-          const SizedBox(height: 12),
-
-          /// 📦 CONTENT
           Expanded(
             child: AnimatedSwitcher(
               duration: const Duration(milliseconds: 450),
@@ -68,7 +67,7 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
                   opacity: animation,
                   child: SlideTransition(
                     position: Tween<Offset>(
-                      begin: const Offset(0.2, 0), // 👉 slide from right
+                      begin: const Offset(0.2, 0),
                       end: Offset.zero,
                     ).animate(curved),
                     child: child,
@@ -81,11 +80,11 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
               ),
             ),
           ),
-
         ],
       ),
     );
   }
+
 
   /// ================= CONTENT SWITCH =================
 
@@ -112,43 +111,43 @@ class _GoshalaLiveScreenState extends State<GoshalaLiveScreen> {
   /// ================= LIVE CAMERA LAYOUT =================
 
   Widget _liveCameraLayout() {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(16),
-      child: Column(
-        children: [
-          /// 🔝 BIG CAMERA
-          _cameraTile(
-            label: 'Cam 1',
-            image:
-            'https://images.unsplash.com/photo-1593179357196-ea11a2e7c119',
-            height: 230,
-          ),
-
-          const SizedBox(height: 14),
-
-          /// 🔽 TWO SMALL CAMERAS
-          Row(
-            children: [
-              Expanded(
-                child: _cameraTile(
-                  label: 'Cam 2',
-                  image:
-                  'https://images.unsplash.com/photo-1546443046-ed1ce6ffd1ab',
-                  height: 160,
+    return Align(
+      alignment: Alignment.topCenter, // 👈 IMPORTANT
+      child: SingleChildScrollView(
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+        child: Column(
+          mainAxisSize: MainAxisSize.min, // 👈 IMPORTANT
+          children: [
+            _cameraTile(
+              label: 'Cam 1',
+              image:
+              'https://images.unsplash.com/photo-1593179357196-ea11a2e7c119',
+              height: 230,
+            ),
+            const SizedBox(height: 14),
+            Row(
+              children: [
+                Expanded(
+                  child: _cameraTile(
+                    label: 'Cam 2',
+                    image:
+                    'https://images.unsplash.com/photo-1546443046-ed1ce6ffd1ab',
+                    height: 160,
+                  ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: _cameraTile(
-                  label: 'Cam 3',
-                  image:
-                  'https://images.unsplash.com/photo-1500595046743-cd271d694d30',
-                  height: 160,
+                const SizedBox(width: 12),
+                Expanded(
+                  child: _cameraTile(
+                    label: 'Cam 3',
+                    image:
+                    'https://images.unsplash.com/photo-1500595046743-cd271d694d30',
+                    height: 160,
+                  ),
                 ),
-              ),
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

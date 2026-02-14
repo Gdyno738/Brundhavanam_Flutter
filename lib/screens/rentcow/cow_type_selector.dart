@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CowTypeSelector extends StatelessWidget {
-  final Function(String, List<String>) onSelect;
+  final Function(String name, List<String> images, double price) onSelect;
+
 
 
   const CowTypeSelector({super.key, required this.onSelect});
@@ -75,7 +76,9 @@ class CowTypeSelector extends StatelessWidget {
               onSelect(
                 cow['name'] as String,
                 List<String>.from(cow['images'] as List),
+                (cow['price'] as int).toDouble(),
               );
+
               Navigator.pop(context);
             },
 

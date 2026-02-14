@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../ui/common/base_screen.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import '../navigation/main_navigation.dart';
 import '../rentcow/rent_cow_content.dart';
 

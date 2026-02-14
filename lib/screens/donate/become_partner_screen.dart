@@ -2,7 +2,8 @@ import 'package:brundhavanam_app/screens/rentcow/cart_payment.dart';
 import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
-import '../home/sections/location_header.dart';
+import '../../ui/widgets/payment_success_screen.dart';
+import '../location/location_header.dart';
 
 class BecomePartnerScreen extends StatefulWidget {
   const BecomePartnerScreen({super.key});
@@ -40,7 +41,10 @@ class _BecomePartnerScreenState extends State<BecomePartnerScreen> {
         PageRouteBuilder(
           transitionDuration: const Duration(milliseconds: 400),
           pageBuilder: (_, animation, secondaryAnimation) =>
-          const CartPayment(),
+              CartPayment(
+                type: PaymentType.donation,
+              ),
+
           transitionsBuilder: (_, animation, _, child) {
             final curved = CurvedAnimation(
               parent: animation,

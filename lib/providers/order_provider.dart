@@ -1,31 +1,108 @@
 import 'package:flutter/material.dart';
-
-import '../screens/orders/orders_model.dart';
+import '../models/orders_model.dart';
+import '../services/order_service.dart';
 
 class OrderProvider extends ChangeNotifier {
+  final OrderService _orderService = OrderService();
+
   final List<OrderModel> _orders = [];
 
-  List<OrderModel> get orders => _orders;
+  bool _isLoading = false;
+  String? _error;
 
-  void setOrders(List<OrderModel> orders) {
-    _orders
-      ..clear()
-      ..addAll(orders);
-    notifyListeners();
+  List<OrderModel> get orders => List.unmodifiable(_orders);
+  bool get isLoading => _isLoading;
+  String? get error => _error;
+
+  // ================= FETCH ORDERS =================
+
+  Future<void> fetchOrders() async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      final fetchedOrders = await _orderService.fetchOrders();
+
+      _orders
+        ..clear()
+        ..addAll(fetchedOrders);
+
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  void cancelOrder(OrderModel order) {
-    order.status = OrderStatus.cancelled;
-    notifyListeners();
+  // ================= CREATE ORDER =================
+
+  Future<void> addOrder(OrderModel order) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      await _orderService.createOrder(order);
+
+      _orders.insert(0, order); // newest first
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  void initiateRefund(OrderModel order) {
-    order.refundStatus = RefundStatus.initiated;
-    notifyListeners();
+  // ================= CANCEL ORDER =================
+
+  Future<void> cancelOrder(String orderId) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+
+      await _orderService.cancelOrder(orderId);
+
+      final order =
+      _orders.firstWhere((o) => o.orderId == orderId);
+
+      order.status = OrderStatus.cancelled;
+
+      _error = null;
+    } catch (e) {
+      _error = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
-  void completeRefund(OrderModel order) {
-    order.refundStatus = RefundStatus.completed;
-    notifyListeners();
+  // ================= REFUND =================
+
+  Future<void> initiateRefund(String orderId) async {
+    try {
+      await _orderService.initiateRefund(orderId);
+
+      final order =
+      _orders.firstWhere((o) => o.orderId == orderId);
+
+      order.refundStatus = RefundStatus.initiated;
+
+      notifyListeners();
+    } catch (_) {}
+  }
+
+  Future<void> completeRefund(String orderId) async {
+    try {
+      await _orderService.completeRefund(orderId);
+
+      final order =
+      _orders.firstWhere((o) => o.orderId == orderId);
+
+      order.refundStatus = RefundStatus.completed;
+
+      notifyListeners();
+    } catch (_) {}
   }
 }

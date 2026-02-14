@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
-import 'orders_model.dart';
+import '../../models/orders_model.dart';
 import 'order_total_bill_screen.dart';
 
 
@@ -116,38 +116,51 @@ class OrderDetailsScreen extends StatelessWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          order.title,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
 
-                        const SizedBox(height: 4),
+                        /// 🔹 SHOW ALL ORDER ITEMS
+                        ...order.items.map((item) {
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.title,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
 
-                        Text(
-                          order.subtitle,
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: AppColors.grey,
-                          ),
-                        ),
+                                const SizedBox(height: 4),
+
+                                Text(
+                                  item.subtitle,
+                                  style: const TextStyle(
+                                    fontSize: 11,
+                                    color: AppColors.grey,
+                                  ),
+                                ),
+
+                                const SizedBox(height: 4),
+
+                                Text(
+                                  "${item.price} x${item.quantity}",
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          );
+                        }).toList(),
 
                         const SizedBox(height: 6),
 
+                        /// 🔹 ORDER STATUS
                         Text(
-                          order.price,
-                          style: const TextStyle(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-
-                        const SizedBox(height: 6),
-
-                        Text(
-                          order.completed
+                          order.status == OrderStatus.completed
                               ? 'Delivered on ${_formatDate(order.orderDate)}'
                               : 'On the way',
                           style: const TextStyle(
@@ -158,6 +171,7 @@ class OrderDetailsScreen extends StatelessWidget {
 
                         const SizedBox(height: 2),
 
+                        /// 🔹 ADDRESS
                         Text(
                           order.address,
                           maxLines: 1,
@@ -170,6 +184,7 @@ class OrderDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
+
 
                   GestureDetector(
                     onTap: () => _showTotalBillSheet(context),

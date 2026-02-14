@@ -1,5 +1,5 @@
 
-import 'package:brundhavanam_app/screens/home/sections/location_picker_screen.dart';
+import 'package:brundhavanam_app/screens/location/location_picker_screen.dart';
 import 'package:flutter/material.dart';
 
 
@@ -29,7 +29,7 @@ import '../donate/donate_screen.dart';
 
 import '../navigation/main_navigation.dart';
 import '../popularproducts/popular_products_screen.dart';
-import 'sections/location_header.dart';
+import '../location/location_header.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -74,12 +74,12 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 10),
 
                   /// 🔍 Search bar
                   const HomeSearchBar(),
 
-                  const SizedBox(height: 12),
+                  const SizedBox(height: 10),
 
                   /// 🥛 Section title
                   SectionHeader(
@@ -173,17 +173,17 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// 🎯 Banner carousel
                   const BannerCarousel(),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// 🔘 Filters
                   const FilterHorizontalList(),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// ⭐ MOST POPULAR PRODUCTS
                   MostPopularProductsSection(
@@ -222,32 +222,32 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// 🟩 FULL WIDTH PROMO BANNER
                   const FullWidthBanner(),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   /// 🌱 FARM TO HOME TEXT
                   const FarmToHomeSection(),
 
 
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   FarmVideoBanner(
                     videoUrl: 'https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4',
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   const WhyTrustUsSection(),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   ContactSupportSection(),
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -262,7 +262,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   BecomePartnerCard(
                     onDonateTap: () {
@@ -275,7 +275,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
@@ -290,11 +290,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                   ),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                   ReviewsHorizontalList(reviews: dummyReviews),
 
-                  const SizedBox(height: 20),
+                  const SizedBox(height: 10),
 
                 ],
               ),

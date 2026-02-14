@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 
+import '../location/location_screen.dart';
 import '../login/login_bottom_sheet.dart';
 import '../navigation/main_navigation.dart';
 
@@ -159,13 +160,13 @@ class _OtpScreenState extends State<OtpScreen> {
                   ),
                   onPressed: isOtpComplete
                       ? () {
-                    Navigator.pushAndRemoveUntil(
+                    Navigator.pushReplacement(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const MainNavigation(),
+                        builder: (_) => const LocationScreen(),
                       ),
-                          (route) => false, // clears Splash, Login, OTP
                     );
+
                   }
                       : null,
 
