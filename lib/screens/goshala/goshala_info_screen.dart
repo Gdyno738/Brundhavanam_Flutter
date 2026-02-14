@@ -80,11 +80,7 @@ class GoshalaInfoScreen extends StatelessWidget {
                   const Padding(
                     padding: EdgeInsets.symmetric(horizontal: 16),
                     child: Text(
-                      'We are a dedicated goshala committed to the care, '
-                          'protection, and well-being of cows while preserving '
-                          'traditional values. We provide pure dairy products, '
-                          'support rituals, and allow devotees to stay connected '
-                          'through live monitoring.',
+                      'We are a dedicated goshala committed to the care, protection, and well-being of cows while preserving traditional values. Through our services, we support sacred rituals, provide pure and high-quality milk products, and create a transparent way for people to stay connected with our cows. By combining tradition with technology, we invite families and devotees to become part of our mission supporting cows with compassion, responsibility, and respect.',
                       style: TextStyle(
                         fontSize: 13,
                         height: 1.6,

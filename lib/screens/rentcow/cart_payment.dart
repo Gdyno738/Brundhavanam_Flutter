@@ -1,9 +1,16 @@
 import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../models/SavedAddress.dart';
+import '../../models/billing_details.dart';
+import '../../models/order_item.dart';
+import '../../providers/cart_provider.dart';
+import '../../providers/order_provider.dart';
+import '../../services/order_service.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/payment_success_screen.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
+import '../../models/orders_model.dart';
 import '../rentcow/debit_credit.dart';
 import '../rentcow/UpiVerificationField.dart';
 import '../../services/mock_profile_service.dart';
@@ -13,18 +20,19 @@ import '../../services/mock_profile_service.dart';
 class CartPayment extends StatefulWidget {
   final String? cowName;
   final String? cowImage;
+  final PaymentType type; // ✅ ADD THIS
 
   const CartPayment({
     super.key,
     this.cowName,
     this.cowImage,
+    required this.type, // ✅ REQUIRED
   });
-
-
 
   @override
   State<CartPayment> createState() => _CartPaymentState();
 }
+
 
 class _CartPaymentState extends State<CartPayment> {
   String selectedMethod = '';
@@ -216,35 +224,96 @@ class _CartPaymentState extends State<CartPayment> {
                         if (selectedMethod.isEmpty) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             const SnackBar(
-                              content:
-                              Text('Please select a payment method'),
+                              content: Text('Please select a payment method'),
                             ),
                           );
                           return;
                         }
 
-                        showDialog(
-                          context: context,
-                          barrierDismissible: false,
-                          builder: (_) => const Center(
-                            child: CircularProgressIndicator(
-                              color: AppColors.primary,
+                        final cartProvider =
+                        Provider.of<CartProvider>(context, listen: false);
+
+                        final orderProvider =
+                        Provider.of<OrderProvider>(context, listen: false);
+
+                        final orderService = OrderService(); // ✅ ADDED
+
+                        /// 🔹 Convert PRODUCTS to OrderItems
+                        final List<OrderItem> productOrderItems =
+                        cartProvider.items.entries.map((entry) {
+                          final product = entry.key;
+                          final quantity = entry.value;
+
+                          return OrderItem(
+                            title: product.title,
+                            subtitle: product.description,
+                            price: "₹${product.price}",
+                            image: product.image,
+                            quantity: quantity,
+                          );
+                        }).toList();
+
+                        /// 🔹 Convert COW to OrderItem
+                        final List<OrderItem> cowOrderItem =
+                        cartProvider.cowItem != null
+                            ? [
+                          OrderItem(
+                            title: cartProvider.cowItem!.name,
+                            subtitle: "Cow Booking",
+                            price: "₹${cartProvider.cowItem!.price}",
+                            image: cartProvider.cowItem!.image,
+                            quantity: 1,
+                          )
+                        ]
+                            : [];
+
+                        /// 🔹 Combine both
+                        final List<OrderItem> allOrderItems = [
+                          ...productOrderItems,
+                          ...cowOrderItem,
+                        ];
+
+                        if (allOrderItems.isEmpty) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text('Your cart is empty'),
                             ),
-                          ),
+                          );
+                          return;
+                        }
+
+                        /// ✅ CENTRAL BILLING ENGINE
+                        final billing = orderService.calculateBilling(
+                          allOrderItems,
+                          adminDiscountPercent: 20, // SAME as CartScreen
                         );
 
-                        await Future.delayed(const Duration(seconds: 2));
+                        /// 🔹 Create OrderModel
+                        final newOrder = OrderModel(
+                          orderId: DateTime.now().millisecondsSinceEpoch.toString(),
+                          address: selectedAddress?.address ?? "",
+                          orderDate: DateTime.now(),
+                          items: allOrderItems,
+                          billing: billing,
+                        );
 
-                        Navigator.pop(context);
+                        await orderProvider.addOrder(newOrder);
+
+                        cartProvider.clearCart();
+                        cartProvider.removeCowFromCart();
 
                         Navigator.pushReplacement(
                           context,
                           MaterialPageRoute(
-                            builder: (_) =>
-                            const PaymentSuccessScreen(),
+                            builder: (_) => PaymentSuccessScreen(
+                              type: PaymentType.order,
+                              orders: [newOrder],
+                            ),
                           ),
                         );
                       },
+
+
                       child: const Text(
                         'Continue',
                         style: TextStyle(
@@ -365,7 +434,7 @@ class _CartPaymentState extends State<CartPayment> {
                   border: Border.all(color: AppColors.grey),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: AppColors.black.withValues(alpha: 0.05),
                       blurRadius: 6,
                       offset: const Offset(0, 3),
                     ),
