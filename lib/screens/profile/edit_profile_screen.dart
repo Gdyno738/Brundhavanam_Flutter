@@ -62,9 +62,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return BaseScreen(
-      statusBarIconBrightness: Brightness.dark,
-      child: Column(
-        children: [
+        statusBarIconBrightness: Brightness.dark,
+        child: SafeArea(
+          child: Column(
+
+          children: [
           const SizedBox(height: 8),
 
           // Custom AppBar Row
@@ -113,6 +115,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ],
       ),
+        ),
     );
   }
 

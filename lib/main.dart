@@ -1,3 +1,5 @@
+import 'package:brundhavanam_app/providers/order_provider.dart';
+import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -11,11 +13,29 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => CartProvider()),
         ChangeNotifierProvider(create: (_) => WishlistProvider()),
+        ChangeNotifierProvider(create: (_) => OrderProvider()),
       ],
       child: const MyApp(),
     ),
   );
 }
+
+
+// void main() {
+//   runApp(
+//     DevicePreview(
+//       enabled: true, // you can use !kReleaseMode if needed
+//       builder: (context) => MultiProvider(
+//         providers: [
+//           ChangeNotifierProvider(create: (_) => CartProvider()),
+//           ChangeNotifierProvider(create: (_) => WishlistProvider()),
+//         ],
+//         child: const MyApp(),
+//       ),
+//     ),
+//   );
+// }
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

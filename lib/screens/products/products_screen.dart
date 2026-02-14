@@ -5,7 +5,7 @@ import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/category_horizontal_list.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import '../navigation/main_navigation.dart';
 
 class ProductsScreen extends StatefulWidget {

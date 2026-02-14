@@ -21,6 +21,8 @@ class RentCowContent extends StatefulWidget {
 
 class _RentCowContentState extends State<RentCowContent> {
   int currentImageIndex = 0;
+  double selectedCowPrice = 0;
+
 
   final ScrollController _scrollController = ScrollController();
   final GlobalKey _scheduleKey = GlobalKey();
@@ -330,15 +332,18 @@ class _RentCowContentState extends State<RentCowContent> {
                       ),
                       builder: (_) {
                         return CowTypeSelector(
-                          onSelect: (name, images) {
+                          onSelect: (name, images, price) {
                             setState(() {
                               selectedCow = name;
                               selectedCowImages = images;
+                              selectedCowPrice = price; // ✅ store price
                               currentImageIndex = 0;
                             });
                           },
+
                         );
                       },
+
                     );
                   },
                   child: Container(
@@ -508,9 +513,7 @@ class _RentCowContentState extends State<RentCowContent> {
                         borderRadius: BorderRadius.circular(20),
                       ),
                     ),
-                    onPressed: cart.cowItem != null
-                        ? null
-                        : () {
+                    onPressed: () {
                       if (selectedCow == 'Type of cow') {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
@@ -524,11 +527,13 @@ class _RentCowContentState extends State<RentCowContent> {
                           ? selectedCowImages[currentImageIndex]
                           : '';
 
-                      const double cowPrice = 470;
-
-                      Provider.of<CartProvider>(context, listen: false)
-                          .addCowToCart(selectedCow, image, cowPrice);
+                      context.read<CartProvider>().addCowToCart(
+                        selectedCow,
+                        image,
+                        selectedCowPrice,
+                      );
                     },
+
                     child: cart.cowItem != null
                         ? Row(
                       mainAxisAlignment: MainAxisAlignment.center,

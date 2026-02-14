@@ -5,15 +5,17 @@ import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/cart_item_card.dart';
 import '../navigation/main_navigation.dart';
-import 'orders_model.dart';
+import '../../models/orders_model.dart';
 import 'order_tracking_screen.dart';
 
 class OrderPlacedScreen extends StatelessWidget {
   final OrderStatus status;
+  final OrderModel order;
 
   const OrderPlacedScreen({
     super.key,
     required this.status,
+    required this.order,
   });
 
   void _goToHome(BuildContext context) {
@@ -132,9 +134,10 @@ class OrderPlacedScreen extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (_) => const OrderTrackingScreen(),
+                        builder: (_) => OrderTrackingScreen(order: order),
                       ),
                     );
+
                   },
                   child: const Text(
                     'Track Order',

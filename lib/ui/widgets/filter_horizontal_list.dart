@@ -5,11 +5,14 @@ class FilterHorizontalList extends StatefulWidget {
   const FilterHorizontalList({super.key});
 
   @override
-  State<FilterHorizontalList> createState() => _FilterHorizontalListState();
+  State<FilterHorizontalList> createState() =>
+      _FilterHorizontalListState();
 }
 
-class _FilterHorizontalListState extends State<FilterHorizontalList> {
-  String selectedFilter = 'Filter';
+class _FilterHorizontalListState
+    extends State<FilterHorizontalList> {
+
+  String? selectedFilter; // ✅ nothing selected initially
 
   final List<String> filters = [
     'Filter',
@@ -17,7 +20,7 @@ class _FilterHorizontalListState extends State<FilterHorizontalList> {
     '20% off',
     'Combo',
     '50% off',
-    '2 Liter',
+    '2 Litr',
   ];
 
   IconData _getIcon(String filter) {
@@ -31,7 +34,7 @@ class _FilterHorizontalListState extends State<FilterHorizontalList> {
         return Icons.percent;
       case 'Combo':
         return Icons.layers;
-      case '2 Liter':
+      case '2 Litr':
         return Icons.water_drop;
       default:
         return Icons.circle;
@@ -41,54 +44,66 @@ class _FilterHorizontalListState extends State<FilterHorizontalList> {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 48,
+      height: 54,
       child: ListView.separated(
         scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: const EdgeInsets.only(
+          left: 16,
+          right: 40,
+          top: 8,
+          bottom: 8,
+        ),
         itemCount: filters.length,
-        separatorBuilder: (_, __) => const SizedBox(width: 20),
+        separatorBuilder: (_, __) =>
+        const SizedBox(width: 12),
         itemBuilder: (_, index) {
           final filter = filters[index];
           final bool isActive = filter == selectedFilter;
 
           return GestureDetector(
             onTap: () {
-              setState(() => selectedFilter = filter);
+              setState(() {
+                selectedFilter = filter;
+              });
             },
-            child: Container(
-              height: 48,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
+            child: AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              width: 93,
+              height: 31,
               decoration: BoxDecoration(
-                color: isActive ? AppColors.primary : AppColors.white,
-                borderRadius: BorderRadius.circular(25),
-                border: isActive
-                    ? null
-                    : Border.all(
-                  color: AppColors.grey,
-                  width: 1,
-                ),
+                color: isActive
+                    ? AppColors.primary
+                    : Colors.white,
+                borderRadius:
+                BorderRadius.circular(25), // ✅ fully rounded
+                boxShadow: const [
+                  BoxShadow(
+                    color: Color(0x3F000000),
+                    blurRadius: 8,
+                    offset: Offset(0, 2),
+                  )
+                ],
               ),
-              alignment: Alignment.center,
               child: Row(
-                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment:
+                MainAxisAlignment.center,
                 children: [
                   Icon(
                     _getIcon(filter),
                     size: 16,
                     color: isActive
-                        ? AppColors.white
-                        : AppColors.black,
+                        ? Colors.white
+                        : const Color(0xFF2D2D2D),
                   ),
                   const SizedBox(width: 6),
                   Text(
                     filter,
                     style: TextStyle(
                       color: isActive
-                          ? AppColors.white
-                          : AppColors.black,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      height: 1,
+                          ? Colors.white
+                          : const Color(0xFF2D2D2D),
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
                     ),
                   ),
                 ],

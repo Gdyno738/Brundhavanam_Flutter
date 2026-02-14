@@ -2,15 +2,17 @@ import 'package:brundhavanam_app/screens/category/category_grid_screen.dart';
 import 'package:brundhavanam_app/screens/rentcow/cart_payment.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../models/order_item.dart';
+import '../../services/order_service.dart';
 import '../../ui/common/base_screen.dart';
 
 
 import '../../providers/cart_provider.dart';
 import '../../ui/common/app_colors.dart';
 import '../../ui/widgets/cart_item_card.dart';
-import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/empty_cart_view.dart';
-import '../home/sections/location_header.dart';
+import '../../ui/widgets/payment_success_screen.dart';
+import '../location/location_header.dart';
 import '../navigation/main_navigation.dart';
 
 import '../products/products_screen.dart';
@@ -22,12 +24,40 @@ class CartScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cart = context.watch<CartProvider>();
-    final items = cart.items.keys.toList();
+    final cartProducts = cart.items.keys.toList();
 
-    final total = cart.totalAmount;
-    const discount = 20.0;
-    const delivery = 50.0;
-    final payable = total - discount + delivery;
+
+    final orderService = OrderService();
+
+    final List<OrderItem> orderItems = [
+      ...cart.items.entries.map((entry) {
+        final product = entry.key;
+        final quantity = entry.value;
+
+        return OrderItem(
+          title: product.title,
+          subtitle: product.description,
+          price: "₹${product.price}",
+          image: product.image,
+          quantity: quantity,
+        );
+      }),
+      if (cart.cowItem != null)
+        OrderItem(
+          title: cart.cowItem!.name,
+          subtitle: "Cow Booking",
+          price: "₹${cart.cowItem!.price}",
+          image: cart.cowItem!.image,
+          quantity: 1,
+        ),
+    ];
+
+    final billing = orderService.calculateBilling(
+      orderItems,
+      adminDiscountPercent: 20,
+    );
+
+
 
     return BaseScreen(
       child: Column(
@@ -50,12 +80,12 @@ class CartScreen extends StatelessWidget {
         ),
 
 
-          const SizedBox(height: 12),
+          //const SizedBox(height: 12),
 
           /// 🔍 SEARCH
-          const HomeSearchBar(),
+          //const HomeSearchBar(),
 
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
 
           /// 🛒 CART BODY
           Expanded(
@@ -186,7 +216,8 @@ class CartScreen extends StatelessWidget {
                   ),
 
                 /// 🛍 CART ITEMS
-                ...items.map((product) {
+                ...cartProducts.map((product) {
+
                   return Padding(
                     padding: const EdgeInsets.symmetric(
                       horizontal: 16,
@@ -200,6 +231,7 @@ class CartScreen extends StatelessWidget {
                     ),
                   );
                 }),
+
 
                 /// ➕ ADD MORE PRODUCTS
                 GestureDetector(
@@ -262,24 +294,28 @@ class CartScreen extends StatelessWidget {
                       ),
                       const SizedBox(height: 12),
 
+                      _billRow("Subtotal", "₹${billing.subTotal.toStringAsFixed(0)}"),
+
+                      if (billing.discount > 0)
+                        _billRow(
+                          "Discount",
+                          "-₹${billing.discount.toStringAsFixed(0)}",
+                          green: true,
+                        ),
+
                       _billRow(
-                        'Total Cart',
-                        '₹${total.toStringAsFixed(0)}',
+                        "Delivery",
+                        "₹${billing.deliveryCharge.toStringAsFixed(0)}",
                       ),
-                      _billRow(
-                        'Discount',
-                        '-₹20 (20%)',
-                        green: true,
-                      ),
-                      _billRow('Delivery charge', '+₹50'),
 
                       const Divider(height: 24),
 
                       _billRow(
-                        'To paid',
-                        '₹${payable.toStringAsFixed(0)}',
+                        "Total",
+                        "₹${billing.totalAmount.toStringAsFixed(0)}",
                         bold: true,
                       ),
+
                     ],
                   ),
                 ),
@@ -290,7 +326,14 @@ class CartScreen extends StatelessWidget {
           Navigator.push(
             context,
             MaterialPageRoute(
-              builder: (_) => const CartPayment(),
+              builder: (_) => CartPayment(
+                type: cart.cowItem != null
+                    ? PaymentType.rentCow
+                    : PaymentType.order,
+                cowName: cart.cowItem?.name,
+                cowImage: cart.cowItem?.image,
+              ),
+
             ),
           );
         },

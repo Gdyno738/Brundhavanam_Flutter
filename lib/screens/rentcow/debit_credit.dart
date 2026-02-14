@@ -1,6 +1,6 @@
 import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 import '../rentcow/otp_payment.dart';
 
 class DebitCredit extends StatelessWidget {

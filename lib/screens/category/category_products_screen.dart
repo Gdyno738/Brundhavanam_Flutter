@@ -6,7 +6,8 @@ import '../../ui/common/app_colors.dart';
 import '../../ui/common/base_screen.dart';
 import '../../ui/widgets/home_search_bar.dart';
 import '../../ui/widgets/product_card.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
+import '../navigation/main_navigation.dart';
 
 class CategoryProductsScreen extends StatelessWidget {
   final String category;
@@ -25,15 +26,18 @@ class CategoryProductsScreen extends StatelessWidget {
     return BaseScreen(
       child: Column(
         children: [
-          SafeArea(
-            bottom: false,
-            child: LocationHeader(
-              title: category,
-              subtitle: '',
-              showBack: true,
-              showDropdown: false,
-              onBack: () => Navigator.pop(context),
-            ),
+          LocationHeader(
+            title: category,
+            subtitle: '',
+            showBack: true,
+            showDropdown: false,
+            onBack: () {
+              Navigator.of(context).pushReplacement(
+                MaterialPageRoute(
+                  builder: (_) => const MainNavigation(initialIndex: 0),
+                ),
+              );
+            },
           ),
 
           const SizedBox(height: 12),

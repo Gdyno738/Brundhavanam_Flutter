@@ -5,7 +5,8 @@ import '../../models/product.dart';
 import '../../ui/common/app_colors.dart';
 import '../../providers/wish_list_provider.dart';
 import '../../screens/products/product_details_screen.dart';
-import '../../ui/common/base_screen.dart'; // your existing screen
+import '../../ui/common/base_screen.dart';
+import '../../ui/widgets/product_card.dart'; // your existing screen
 
 class WishlistScreen extends StatelessWidget {
   const WishlistScreen({super.key});
@@ -15,35 +16,36 @@ class WishlistScreen extends StatelessWidget {
     final wishlist = context.watch<WishlistProvider>();
 
     return BaseScreen(
-
       child: Column(
         children: [
 
           /// 🔹 HEADER
-          SafeArea(
-            bottom: false,
-            child: Container(
-              height: 56,
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              decoration: const BoxDecoration(
-                color: AppColors.white,
-                border: Border(
-                  bottom: BorderSide(color: Color(0xFFE7E7E7)),
-                ),
+          Container(
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).padding.top,
+              left: 16,
+              right: 16,
+            ),
+            decoration: const BoxDecoration(
+              color: AppColors.white,
+              border: Border(
+                bottom: BorderSide(color: Color(0xFFE7E7E7)),
               ),
+            ),
+            child: SizedBox(
+              height: 56,
               child: Row(
                 children: [
                   GestureDetector(
                     onTap: () => Navigator.pop(context),
-                    child: const Icon(Icons.arrow_back,
-                        color: AppColors.black),
+                    child: const Icon(Icons.arrow_back, color: AppColors.black),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 16),
                   const Text(
                     'Wishlist',
                     style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w600,
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
                       color: AppColors.black,
                     ),
                   ),
@@ -51,6 +53,8 @@ class WishlistScreen extends StatelessWidget {
               ),
             ),
           ),
+
+
 
           /// 🔹 BODY
           Expanded(
@@ -64,24 +68,22 @@ class WishlistScreen extends StatelessWidget {
                 ),
               ),
             )
-                : Padding(
-              padding: const EdgeInsets.all(16),
-              child: GridView.builder(
-                itemCount: wishlist.items.length,
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 16,
-                  crossAxisSpacing: 16,
-                  childAspectRatio: 0.72,
-                ),
-                itemBuilder: (context, index) {
-                  final product = wishlist.items[index];
-                  return _WishlistCard(product: product);
-                },
+                : GridView.builder(
+              padding: const EdgeInsets.fromLTRB(16, 6, 16, 16),
+              itemCount: wishlist.items.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 16,
+                mainAxisSpacing: 16,
+                childAspectRatio: 0.57,
               ),
+              itemBuilder: (context, index) {
+                final product = wishlist.items[index];
+                return ProductCard(product: product);
+              },
             ),
           ),
+
         ],
       ),
     );

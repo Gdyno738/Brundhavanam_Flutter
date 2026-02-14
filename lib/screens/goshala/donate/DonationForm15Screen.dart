@@ -1,25 +1,22 @@
+import 'package:brundhavanam_app/ui/common/base_screen.dart';
 import 'package:flutter/material.dart';
-import '../../home/sections/location_header.dart';
+import '../../location/location_header.dart';
 
 class DonationForm15Screen extends StatelessWidget {
   const DonationForm15Screen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.white,
-
-      body: Column(
+    return BaseScreen(
+      child: Column(
         children: [
-          /// ✅ USE LOCATION HEADER DIRECTLY
-          const SafeArea(
-            bottom: false,
-            child: LocationHeader(
-              title: 'Donations',
-              subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
-              showBack: true,
-              showDropdown: false,
-            ),
+
+          /// HEADER (NO extra SafeArea needed)
+          const LocationHeader(
+            title: 'Donations',
+            subtitle: 'Indira Nagar, Gachibowli, Hyderabad',
+            showBack: true,
+            showDropdown: false,
           ),
 
           /// BODY
@@ -29,6 +26,7 @@ class DonationForm15Screen extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+
                   /// FORM 15 BOX
                   Container(
                     padding: const EdgeInsets.symmetric(

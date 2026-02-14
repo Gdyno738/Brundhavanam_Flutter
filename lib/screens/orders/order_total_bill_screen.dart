@@ -1,7 +1,7 @@
 
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
-import 'orders_model.dart';
+import '../../models/orders_model.dart';
 
 class OrderTotalBillScreen extends StatelessWidget {
   final OrderModel order;

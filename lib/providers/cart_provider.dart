@@ -67,6 +67,12 @@ class CartProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearCart() {
+    _items.clear();
+    notifyListeners();
+  }
+
+
   /// ---------------- TOTAL ----------------
 
   double get totalAmount {

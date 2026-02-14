@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../ui/common/app_colors.dart';
 import '../goshala/goshala_live_tabs_screen.dart';
-import '../home/sections/location_header.dart';
+import '../location/location_header.dart';
 
 
 class DonationSuccessViewLiveScreen extends StatelessWidget {

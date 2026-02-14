@@ -30,10 +30,9 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
     final screenWidth = MediaQuery.of(context).size.width;
 
     // 🔧 Responsive cow logic
-    final double cowSize = screenWidth < 360 ? 120 : 155;
-    final double cowLeft = screenWidth < 360 ? -30 : -10;
-    final double cowBottom = screenWidth < 360 ? -6 : 0;
-
+    final double cowSize = screenWidth * 0.32; // was too big before
+    final double cowLeft = 0;
+    final double cowBottom = 0;
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16),
       child: SizedBox(
@@ -89,11 +88,18 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
             ),
 
             /// 🐄 RESPONSIVE BREATHING COW
+            /// 🐄 STATIC COW (No Animation)
             Positioned(
               left: cowLeft,
               bottom: cowBottom,
-              child: _BreathingCow(size: cowSize),
+              child: Image.asset(
+                'assets/images/cow_overlay.png',
+                height: cowSize,
+                fit: BoxFit.contain,
+              ),
             ),
+
+
           ],
         ),
       ),
@@ -103,58 +109,6 @@ class _BecomePartnerCardState extends State<BecomePartnerCard> {
 
 ////////////////////////////////////////////////////////////////
 /// 🐄 BREATHING COW (RESPONSIVE)
-////////////////////////////////////////////////////////////////
-class _BreathingCow extends StatefulWidget {
-  final double size;
-
-  const _BreathingCow({required this.size});
-
-  @override
-  State<_BreathingCow> createState() => _BreathingCowState();
-}
-
-class _BreathingCowState extends State<_BreathingCow>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
-  late Animation<double> _moveAnim;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = AnimationController(
-      vsync: this,
-      duration: const Duration(seconds: 4),
-    )..repeat(reverse: true);
-
-    _moveAnim = Tween<double>(begin: 0, end: 6).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeInOut),
-    );
-  }
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _moveAnim,
-      builder: (_, child) {
-        return Transform.translate(
-          offset: Offset(0, -_moveAnim.value),
-          child: child,
-        );
-      },
-      child: Image.asset(
-        'assets/images/cow_overlay.png',
-        height: widget.size,
-        fit: BoxFit.contain,
-      ),
-    );
-  }
-}
 
 ////////////////////////////////////////////////////////////////
 /// 🧊 GLASS CARD (PERFORMANCE OPTIMIZED)
